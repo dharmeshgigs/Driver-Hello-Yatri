@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="21dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageViewUserProfile"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1"
+            app:riv_corner_radius="@dimen/_50sdp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+            app:layout_constraintEnd_toEndOf="@id/imageViewUserProfile"
+            app:srcCompat="@drawable/ic_edit_profile" />
+
+        <include
+            android:id="@+id/includedFullName"
+            layout="@layout/include_name_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile" />
+
+        <include
+            android:id="@+id/includedUserId"
+            layout="@layout/include_name_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/includedFullName" />
+
+        <include
+            android:id="@+id/includedMobileNumber"
+            layout="@layout/include_mobile_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/includedUserId" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewChangeNumber"
+            style="@style/TextViewLufgaRegularGrey13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/label_change_number"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/includedMobileNumber" />
+
+        <include
+            android:id="@+id/includedPassword"
+            layout="@layout/include_password_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewChangeNumber" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewChangePassword"
+            style="@style/TextViewLufgaRegularGrey13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/label_change_password"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/includedPassword" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="@id/includedPassword"
+            app:layout_constraintEnd_toEndOf="@id/includedPassword"
+            app:srcCompat="@drawable/ic_password_hide" />
+
+        <include
+            android:id="@+id/includedGender"
+            layout="@layout/include_select_category_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewChangePassword" />
+
+        <include
+            android:id="@+id/includedCityYouDriveIn"
+            layout="@layout/include_select_category_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/includedGender" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/buttonUpdate"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_15sdp"
+            android:background="@drawable/bg_top_round_rect_home_blue"
+            android:paddingHorizontal="@dimen/_40sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/btn_update"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/includedCityYouDriveIn"
+            app:layout_constraintVertical_bias="1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

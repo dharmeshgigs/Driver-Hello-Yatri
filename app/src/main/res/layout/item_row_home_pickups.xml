@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainConstraint"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_4sdp"
+    app:cornerAll="@dimen/_10sdp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewMap"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_160sdp"
+        android:scaleType="fitXY"
+        android:src="@drawable/image_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/TextViewLufgaLightWhite15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:background="@drawable/bg_top_bottom_round_rect"
+        android:paddingHorizontal="@dimen/_4sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="@string/dummy_you_have_to_reach_in_45_20min"
+        android:textSize="@dimen/_8ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_9sdp"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/imageViewMap"
+        app:srcCompat="@drawable/ic_route" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewStartLocation"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/dummy_cinemax_rectory_cottage_court_road"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewRoute"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/imageViewRoute"
+        app:layout_constraintTop_toTopOf="@id/imageViewRoute" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewDestinationLocation"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/dummy_101_national_dr_san_bruno_ca_94580"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewDestinationLocation"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/imageViewDestinationLocation"
+        app:layout_constraintTop_toTopOf="@id/imageViewDestinationLocation" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_line"
+        app:layout_constraintBottom_toTopOf="@id/imageViewDestinationLocation"
+        app:layout_constraintEnd_toEndOf="@id/imageViewRoute"
+        app:layout_constraintStart_toStartOf="@id/imageViewRoute"
+        app:layout_constraintTop_toBottomOf="@id/imageViewRoute" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewDestinationLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_9sdp"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/imageViewRoute"
+        app:srcCompat="@drawable/ic_location" />
+
+    <View
+        android:id="@+id/viewDividerLocation"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewDestinationLocation" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imageViewUserProfile"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_made_in_india"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/viewDividerLocation"
+        app:riv_corner_radius="@dimen/_50sdp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewUserName"
+        style="@style/TextViewLufgaMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/textViewPaymentType"
+        app:layout_constraintEnd_toStartOf="@id/imageViewCall"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:text="Aesha Mehta" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewPaymentType"
+        style="@style/TextViewLufgaRegularGrey13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/label_online_payment"
+        android:textSize="@dimen/_8ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toStartOf="@id/imageViewCall"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+        app:layout_constraintTop_toBottomOf="@id/textViewUserName" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+        app:srcCompat="@drawable/ic_call_pickup" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewCancelRide"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:background="@drawable/bg_stroke_grey"
+        android:elevation="@dimen/_1sdp"
+        android:paddingHorizontal="@dimen/_13sdp"
+        android:paddingVertical="@dimen/_8sdp"
+        android:text="@string/label_cancel_ride"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textViewNavigateTo"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewNavigateTo"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:background="@drawable/bg_top_round_rect_home_blue"
+        android:elevation="@dimen/_1sdp"
+        android:paddingHorizontal="@dimen/_13sdp"
+        android:paddingVertical="@dimen/_8sdp"
+        android:text="@string/label_navigate_to"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/textViewCancelRide"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toEndOf="@id/textViewCancelRide"
+        app:layout_constraintTop_toTopOf="@id/textViewCancelRide" />
+
+</com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>

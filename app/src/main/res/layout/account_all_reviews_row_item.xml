@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_10sdp">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imageViewUserProfile"
+        android:layout_width="@dimen/_54sdp"
+        android:layout_height="@dimen/_54sdp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="@dimen/_50sdp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewUserName"
+        style="@style/TextViewLufgaMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintBottom_toTopOf="@id/textViewDateAndTime"
+        app:layout_constraintEnd_toStartOf="@id/textViewRatings"
+        app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Pooja Patel" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewDateAndTime"
+        style="@style/TextViewLufgaRegularGrey13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toEndOf="@id/textViewUserName"
+        app:layout_constraintStart_toStartOf="@id/textViewUserName"
+        app:layout_constraintTop_toBottomOf="@id/textViewUserName"
+        tools:text="Pooja Patel" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewRatings"
+        style="@style/TextViewLufgaRegularBlack10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_round_rect_radius_10_stroke_blue"
+        android:drawableStart="@drawable/ic_yellow_star_filled"
+        android:drawablePadding="@dimen/_5sdp"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+        tools:text="4.0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewReviewDetails"
+        style="@style/TextViewLufgaRegularGrey15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile"
+        tools:text="Pooja Patel" />
+
+    <View
+        android:id="@+id/viewDivider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewReviewDetails" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

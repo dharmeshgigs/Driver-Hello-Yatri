@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:paddingHorizontal="@dimen/_14sdp"
+            android:paddingVertical="@dimen/_14sdp"
+            app:backgroundColor="@color/black"
+            app:cornerAll="@dimen/_9sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewLabelWheretoStartRide"
+                style="@style/TextViewLufgaRegularBlack15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/_30sdp"
+                android:text="@string/label_where_do_you_want_to_start_your_ride"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toStartOf="@id/imageViewGallery"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageViewGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_gallary" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/selector_edittext"
+                android:backgroundTint="@color/backgroundColor"
+                android:drawablePadding="@dimen/_10sdp"
+                android:fontFamily="@font/lufga_regular"
+                android:hint="@string/hint_ride_start_from"
+                android:imeOptions="actionDone"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintColor"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintTop_toBottomOf="@id/textViewLabelWheretoStartRide" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewSearchByLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editText"
+                tools:itemCount="4"
+                tools:listitem="@layout/row_item_search_ride_from_location" />
+        </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLabelPickLocationNearBy"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:text="@string/label_pick_location_near_by"
+            android:textColor="@color/black"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLabelSelectLocationForMoreRide"
+            style="@style/TextViewLufgaRegularGrey13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_select_pick_location_to_get_more_ride"
+            android:textColor="@color/hintColor"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewLabelPickLocationNearBy" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewNearByLocation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/bg_dialog_round_rect_10"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:scrollbarSize="@dimen/_3sdp"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewLabelSelectLocationForMoreRide"
+            tools:itemCount="4"
+            tools:listitem="@layout/row_item_near_by_location" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLabelYourSavedLocation"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:text="@string/label_your_saved_location"
+            android:textColor="@color/black"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/textViewLabelManage"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewNearByLocation" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLabelManage"
+            style="@style/TextViewLufgaRegularGrey13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_manage"
+            android:textColor="@color/homeBgBlueColor"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/textViewLabelYourSavedLocation"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toEndOf="@id/textViewLabelYourSavedLocation"
+            app:layout_constraintTop_toTopOf="@id/textViewLabelYourSavedLocation" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSavedAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewLabelManage"
+            tools:itemCount="1"
+            tools:listitem="@layout/fragment_start_ride_saved_location_row_item" />
+
+        <!--<include
+            android:id="@+id/includeAddNew"
+            layout="@layout/include_saved_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewLabelYourSavedLocation"
+            app:layout_constraintVertical_bias="0" />
+
+        <include
+            android:id="@+id/includeSave1"
+            layout="@layout/include_saved_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            app:layout_constraintBottom_toBottomOf="@id/includeAddNew"
+            app:layout_constraintStart_toEndOf="@id/includeAddNew"
+            app:layout_constraintTop_toTopOf="@id/includeAddNew" />
+
+        <include
+            android:id="@+id/includeSave2"
+            layout="@layout/include_saved_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            app:layout_constraintBottom_toBottomOf="@id/includeAddNew"
+            app:layout_constraintStart_toEndOf="@id/includeSave1"
+            app:layout_constraintTop_toTopOf="@id/includeAddNew" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

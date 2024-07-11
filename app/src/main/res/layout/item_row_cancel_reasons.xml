@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_round_rect_radius_10_stroke_grey"
+        android:paddingVertical="@dimen/_16sdp"
+        app:layout_constraintBottom_toTopOf="@id/editTextDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginBottom="@dimen/_10sdp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewTitle"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_18sdp"
+            android:gravity="start"
+            android:maxLines="2"
+            android:textColor="@color/secondaryBlack"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewCheckBox"
+            app:layout_constraintEnd_toStartOf="@id/imageViewCheckBox"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="It's Spam" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_9sdp"
+            app:layout_constraintBottom_toBottomOf="@id/textViewTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textViewTitle"
+            app:srcCompat="@drawable/selector_round_checkbox" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/selector_edittext"
+        android:fontFamily="@font/lufga_regular"
+        android:gravity="top"
+        android:hint="@string/hint_cancel_ride"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="false"
+        android:inputType="textImeMultiLine"
+        android:lines="4"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_14sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

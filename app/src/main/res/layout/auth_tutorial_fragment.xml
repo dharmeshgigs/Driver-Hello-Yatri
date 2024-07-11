@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/image_cover">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewAppLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_25sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image_app_logo_small" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewMadeInIndia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_minus10sdp"
+        android:layout_marginEnd="@dimen/_minus10sdp"
+        app:layout_constraintEnd_toEndOf="@id/imageViewAppLogo"
+        app:layout_constraintTop_toTopOf="@id/imageViewAppLogo"
+        app:srcCompat="@drawable/image_made_in_india" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonGetStarted"
+        style="@style/PrimaryButtonStylePurpleColor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_25sdp"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:text="@string/btn_get_started"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewAppContent"
+        style="@style/TextViewLufgaSemiBoldWhite30"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:text="@string/label_we_provide_nprofessional_taxi_nservices_for_you"
+        app:layout_constraintBottom_toTopOf="@id/textViewAppContentDescription"
+        app:layout_constraintEnd_toEndOf="@id/buttonGetStarted"
+        app:layout_constraintStart_toStartOf="@id/buttonGetStarted"
+        app:layout_constraintTop_toBottomOf="@id/imageViewAppLogo"
+        app:layout_constraintVertical_bias="1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewAppContentDescription"
+        style="@style/TextViewLufgaLightWhite15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:text="@string/label_the_best_taxi_booking_app_of_the_ncentury_to_make_your_day_great"
+        app:layout_constraintBottom_toTopOf="@id/buttonGetStarted"
+        app:layout_constraintEnd_toEndOf="@id/buttonGetStarted"
+        app:layout_constraintStart_toStartOf="@id/buttonGetStarted" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

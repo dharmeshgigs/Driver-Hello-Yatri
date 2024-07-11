@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_12sdp"
+            app:backgroundColor="@color/black"
+            app:cornerAll="@dimen/_8sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewTitle"
+                style="@style/TextViewLufgaMedium.18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/label_congratulations"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toStartOf="@id/imageViewSuccess"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewStaticMap" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewSubTitle"
+                style="@style/TextViewLufgaLightWhite15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/bg_top_bottom_round_rect"
+                android:maxLines="2"
+                android:text="@string/label_you_have_drop_poojas_at_their_destination_nsee_you_on_the_next_trip"
+                android:textSize="@dimen/_8ssp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/imageViewSuccess"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+                app:layout_constraintVertical_bias="0" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageViewSuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/image_reached" />
+        </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageViewUserProfile"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_made_in_india"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout"
+            app:riv_corner_radius="@dimen/_50sdp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewUserName"
+            style="@style/TextViewLufgaMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/dummy_aesha_mehta"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/textViewPaymentType"
+            app:layout_constraintEnd_toStartOf="@id/imageViewCall"
+            app:layout_constraintHorizontal_bias="0"
+
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+            app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewPaymentType"
+            style="@style/TextViewLufgaRegularGrey13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/label_online_payment"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+            app:layout_constraintEnd_toStartOf="@id/imageViewCall"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+            app:layout_constraintTop_toBottomOf="@id/textViewUserName" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+            app:srcCompat="@drawable/ic_blue_call_pickup" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewNote"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/dummy_note_note_message_show_here"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile" />
+
+        <View
+            android:id="@+id/viewDividerNotes"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewNote" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewRideDetails"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@string/label_ride_details"
+            android:textColor="@color/black"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/viewDividerNotes" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewRideDetails"
+            app:srcCompat="@drawable/ic_route" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewStartLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/dummy_cinemax_rectory_cottage_court_road"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewRoute"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewRoute"
+            app:layout_constraintTop_toTopOf="@id/imageViewRoute" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/viewVerticalLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_line"
+            app:layout_constraintBottom_toTopOf="@id/imageViewAddLocation"
+            app:layout_constraintEnd_toEndOf="@id/imageViewRoute"
+            app:layout_constraintStart_toStartOf="@id/imageViewRoute"
+            app:layout_constraintTop_toBottomOf="@id/imageViewRoute" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewAddLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/imageViewRoute"
+            app:srcCompat="@drawable/ic_location_add" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewAddLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/dummy_101_national_dr_san_bruno_ca_94580"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewAddLocation"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewAddLocation"
+            app:layout_constraintTop_toTopOf="@id/imageViewAddLocation" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/viewVerticalSecondLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_line"
+            app:layout_constraintBottom_toTopOf="@id/imageViewDestinationLocation"
+            app:layout_constraintEnd_toEndOf="@id/imageViewAddLocation"
+            app:layout_constraintStart_toStartOf="@id/imageViewAddLocation"
+            app:layout_constraintTop_toBottomOf="@id/imageViewAddLocation" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewDestinationLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/imageViewAddLocation"
+            app:srcCompat="@drawable/ic_location" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDestinationLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/dummy_1901_thornridge_cir_shiloh_ca_94580"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewDestinationLocation"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewDestinationLocation"
+            app:layout_constraintTop_toTopOf="@id/imageViewDestinationLocation" />
+
+
+        <View
+            android:id="@+id/viewDividerRideDetails"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/imageViewDestinationLocation" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDistance"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:text="@string/dummy_distance_n25_5_km"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintEnd_toStartOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+
+        <View
+            android:id="@+id/viewVerticalFirstDivider"
+            android:layout_width="0.5dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toStartOf="@id/textViewDuration"
+            app:layout_constraintStart_toEndOf="@id/textViewDistance"
+            app:layout_constraintTop_toBottomOf="@id/viewDividerRideDetails" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDuration"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:text="@string/dummy_duration_n45_min"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintEnd_toStartOf="@id/viewVerticalSecondDivider"
+            app:layout_constraintStart_toEndOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+
+        <View
+            android:id="@+id/viewVerticalSecondDivider"
+            android:layout_width="0.5dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toStartOf="@id/textViewFairPrice"
+            app:layout_constraintStart_toEndOf="@id/textViewDuration"
+            app:layout_constraintTop_toBottomOf="@id/viewDividerRideDetails" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewFairPrice"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:text="@string/dummy_fare_price_n_780"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/viewVerticalSecondDivider"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toEndOf="@id/viewVerticalSecondDivider"
+            app:layout_constraintTop_toTopOf="@id/viewVerticalSecondDivider" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewCustomerSetTip"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@drawable/bg_light_round_rect_radius_10_stroke_blue"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:maxLines="2"
+            android:paddingVertical="@dimen/_10sdp"
+            android:text="@string/dummy_customer_set_70_tip_for_you"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/constraintYouHaveCollect"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewDistance"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+            android:id="@+id/constraintYouHaveCollect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_12sdp"
+            app:backgroundColor="@color/black"
+            app:cornerAll="@dimen/_8sdp"
+            app:layout_constraintBottom_toTopOf="@id/textViewCollected"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewCustomerSetTip">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewYouHaveToCollect"
+                style="@style/TextViewLufgaMedium.18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/label_you_have_to_collect"
+                android:textColor="@color/white"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="@id/textViewPrice"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@id/guideLineStart"
+                app:layout_constraintTop_toTopOf="@id/textViewPrice" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewPrice"
+                style="@style/TextViewLufgaMedium.18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dummy_550"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_23ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewCollected"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@drawable/bg_top_round_rect_home_blue"
+            android:elevation="@dimen/_1sdp"
+            android:paddingHorizontal="@dimen/_25sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/label_collected"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/constraintYouHaveCollect" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

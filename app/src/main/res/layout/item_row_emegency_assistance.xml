@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/_10sdp"
+    android:paddingHorizontal="@dimen/_10sdp"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:backgroundColor="@color/colorRed"
+    android:layout_marginBottom="@dimen/_8sdp"
+    app:cornerAll="@dimen/_7sdp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_call_support"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewTitle"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_14sdp"
+        android:gravity="start"
+        android:maxLines="2"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/imageViewIcon"
+        app:layout_constraintTop_toTopOf="@id/imageViewIcon"
+        tools:text="It's Spam" />
+
+</com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>

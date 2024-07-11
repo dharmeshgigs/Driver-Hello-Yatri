@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_cancel_side_menu" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSideMenu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintBottom_toTopOf="@id/viewDividerRecycler"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/imageViewCancel"
+        tools:itemCount="5"
+        tools:listitem="@layout/layout_side_menu_row_item" />
+
+    <View
+        android:id="@+id/viewDividerRecycler"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toTopOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewSideMenu"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imageViewUserProfile"
+        android:layout_width="@dimen/_54sdp"
+        android:layout_height="@dimen/_54sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/viewDividerRecycler"
+        app:riv_corner_radius="@dimen/_50sdp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewUserName"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_6sdp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="@string/dummy_username"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toStartOf="@id/textViewCoins"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewCoins"
+        style="@style/TextViewLufgaRegularWhite15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_round_rect_black_10"
+        android:drawableStart="@drawable/image_coins"
+        android:drawablePadding="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_1sdp"
+        android:text="@string/dummy_20"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewRatings"
+        style="@style/TextViewLufgaRegularBlack10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@drawable/bg_round_rect_radius_10_stroke_blue"
+        android:drawableStart="@drawable/ic_yellow_star_filled"
+        android:drawablePadding="@dimen/_5sdp"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:text="@string/dummy_4_0"
+        app:layout_constraintBottom_toTopOf="@id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintTop_toBottomOf="@id/textViewCoins" />
+
+    <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:backgroundColor="@color/black"
+        app:cornerAll="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/textViewRatings"
+        app:layout_constraintVertical_bias="1">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLabelTodayEarn"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:text="@string/label_today_earn"
+            android:textColor="@color/white"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/textViewPrice"
+            app:layout_constraintStart_toStartOf="@id/viewDivider"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDateAndTime"
+            style="@style/TextViewLufgaLightWhite15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:text="@string/dummy_15_february_2024_9_41_pm"
+            android:textSize="@dimen/_8ssp"
+            app:layout_constraintStart_toStartOf="@id/textViewLabelTodayEarn"
+            app:layout_constraintTop_toBottomOf="@id/textViewLabelTodayEarn" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewPrice"
+            style="@style/TextViewLufgaMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:gravity="end"
+            android:text="@string/dummy_1_780"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_23ssp"
+            app:layout_constraintBottom_toBottomOf="@id/textViewDateAndTime"
+            app:layout_constraintEnd_toEndOf="@id/viewDivider"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/textViewLabelTodayEarn"
+            app:layout_constraintTop_toTopOf="@id/textViewLabelTodayEarn" />
+
+        <View
+            android:id="@+id/viewDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewDateAndTime" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewRide"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:text="@string/dummy_ride_n3"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintEnd_toStartOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="@id/viewDivider"
+            app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+
+        <View
+            android:id="@+id/viewVerticalFirstDivider"
+            android:layout_width="0.5dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textViewDistance"
+            app:layout_constraintStart_toEndOf="@id/textViewRide"
+            app:layout_constraintTop_toBottomOf="@id/viewDivider" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDistance"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:text="@string/dummy_distance_n105_5_km"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintEnd_toStartOf="@id/viewVerticalSecondDivider"
+            app:layout_constraintStart_toEndOf="@id/viewVerticalFirstDivider"
+            app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+
+        <View
+            android:id="@+id/viewVerticalSecondDivider"
+            android:layout_width="0.5dp"
+            android:layout_height="@dimen/_40sdp"
+
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textViewDuration"
+            app:layout_constraintStart_toEndOf="@id/textViewDistance"
+            app:layout_constraintTop_toBottomOf="@id/viewDivider" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDuration"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:text="@string/dummy_duration_n02_40_hr"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/viewVerticalSecondDivider"
+            app:layout_constraintEnd_toEndOf="@id/viewDivider"
+            app:layout_constraintStart_toEndOf="@id/viewVerticalSecondDivider"
+            app:layout_constraintTop_toTopOf="@id/viewVerticalSecondDivider" />
+
+    </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

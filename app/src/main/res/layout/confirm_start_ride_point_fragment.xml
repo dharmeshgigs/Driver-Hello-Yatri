@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <com.helloyatri.utils.toolbar.CustomToolbar
+        android:id="@+id/customToolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showBackButton="false" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewStaticMap"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/layoutConfirmStartPoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:srcCompat="@drawable/image_pin_map" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewCurrentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewStaticMap"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_current_location" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutConfirmStartPoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewStaticMap">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.08" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewMovePin"
+            style="@style/TextViewLufgaLightWhite15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/label_move_pin_to_adjust_your_start_point"
+            android:textColor="@color/hintColor"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
+
+        <View
+            android:id="@+id/viewDividerLocation"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewMovePin" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewConfirmPoint"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Confirm your start point"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/viewDividerLocation" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editTextLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/selector_edittext"
+            android:drawablePadding="@dimen/_10sdp"
+            android:fontFamily="@font/lufga_regular"
+            android:hint="@string/hint_loading"
+            android:includeFontPadding="false"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_14sdp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintColor"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewConfirmPoint" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnConfirmPoint"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@drawable/bg_top_round_rect_home_blue"
+            android:drawableStart="@drawable/ic_pin_map"
+            android:drawablePadding="@dimen/_10sdp"
+            android:elevation="@dimen/_1sdp"
+            android:paddingHorizontal="@dimen/_25sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/label_confirm_start_point"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/editTextLocation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

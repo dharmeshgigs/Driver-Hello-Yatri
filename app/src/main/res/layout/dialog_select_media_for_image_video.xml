@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_10"
+    android:padding="@dimen/_10sdp">
+
+    <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+        android:id="@+id/layoutTakePhoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_5sdp"
+        app:cornerLeftBottom="@dimen/_5sdp"
+        app:cornerLeftTop="@dimen/_5sdp"
+        app:cornerRightBottom="@dimen/_5sdp"
+        app:cornerRightTop="@dimen/_5sdp"
+        app:layout_constraintEnd_toStartOf="@id/layoutSelectPhoto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewTakePhoto"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/textCameraImage"
+            app:layout_constraintStart_toStartOf="@id/textCameraImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/take_photo" />
+
+        <TextView
+            android:id="@+id/textCameraImage"
+            style="@style/TextViewLufgaRegularBlack13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/label_take_photo"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewTakePhoto" />
+    </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+    <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+        android:id="@+id/layoutSelectPhoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        app:cornerLeftBottom="@dimen/_5sdp"
+        app:cornerLeftTop="@dimen/_5sdp"
+        app:cornerRightBottom="@dimen/_5sdp"
+        app:cornerRightTop="@dimen/_5sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/layoutTakePhoto"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewSelectPhoto"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/textSelectPhoto"
+            app:layout_constraintStart_toStartOf="@id/textSelectPhoto"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/select_image" />
+
+        <TextView
+            android:id="@+id/textSelectPhoto"
+            style="@style/TextViewLufgaRegularBlack13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/label_select_photo"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewSelectPhoto" />
+    </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+    <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+        android:id="@+id/layoutTakeVideo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        app:cornerLeftBottom="@dimen/_5sdp"
+        app:cornerLeftTop="@dimen/_5sdp"
+        app:cornerRightBottom="@dimen/_5sdp"
+        app:cornerRightTop="@dimen/_5sdp"
+        app:layout_constraintEnd_toStartOf="@id/layoutSelectVideo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTakePhoto">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewTakeVideo"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/textTakeVideo"
+            app:layout_constraintStart_toStartOf="@id/textTakeVideo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/take_video" />
+
+        <TextView
+            android:id="@+id/textTakeVideo"
+            style="@style/TextViewLufgaRegularBlack13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/label_take_video"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewTakeVideo" />
+    </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+    <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+        android:id="@+id/layoutSelectVideo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:cornerLeftBottom="@dimen/_5sdp"
+        app:cornerLeftTop="@dimen/_5sdp"
+        app:cornerRightBottom="@dimen/_5sdp"
+        app:cornerRightTop="@dimen/_5sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/layoutTakeVideo"
+        app:layout_constraintTop_toBottomOf="@id/layoutTakePhoto">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewSelectVideo"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/textSelectVideo"
+            app:layout_constraintStart_toStartOf="@id/textSelectVideo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/select_video" />
+
+        <TextView
+            android:id="@+id/textSelectVideo"
+            style="@style/TextViewLufgaRegularBlack13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/label_select_video"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewSelectVideo" />
+    </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

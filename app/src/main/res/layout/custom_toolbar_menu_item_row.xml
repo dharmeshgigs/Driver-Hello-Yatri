@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/_36sdp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewMenuIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginEnd="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="@dimen/_5sdp"
+        tools:srcCompat="@drawable/ic_notification" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewMenuIcon"
+        app:layout_constraintCircle="@id/imageViewMenuIcon"
+        app:layout_constraintCircleAngle="40"
+        app:layout_constraintCircleRadius="@dimen/_11sdp"
+        app:layout_constraintTop_toTopOf="@+id/imageViewMenuIcon"
+        tools:ignore="MissingConstraints"
+        tools:text="99+" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/_15ssp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewMenuIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageViewMenuIcon"
+        app:layout_constraintTop_toTopOf="@id/imageViewMenuIcon"
+        tools:text="Hello Yatri" />
+</androidx.constraintlayout.widget.ConstraintLayout>

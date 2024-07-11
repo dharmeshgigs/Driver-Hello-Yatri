@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:padding="@dimen/_10sdp"
+    app:cornerAll="@dimen/_8sdp"
+    app:strokeLineColor="@color/grey"
+    app:strokeLineWidth="@dimen/_1sdp">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imageViewUserProfile"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_made_in_india"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="@dimen/_50sdp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewUserName"
+        style="@style/TextViewLufgaMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_9sdp"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/textViewPaymentType"
+        app:layout_constraintEnd_toStartOf="@id/textViewWasMinutesAway"
+        app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+        android:text="@string/dummy_aesha_mehta" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewPaymentType"
+        style="@style/TextViewLufgaRegularGrey13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/dummy_cash_payment"
+        android:textSize="@dimen/_8ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toEndOf="@id/textViewUserName"
+        app:layout_constraintStart_toStartOf="@id/textViewUserName"
+        app:layout_constraintTop_toBottomOf="@id/textViewUserName" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewWasMinutesAway"
+        style="@style/TextViewLufgaRegularGrey13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/textViewUserName"
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+        android:text="@string/dummy_was_5_mins_away" />
+
+    <View
+        android:id="@+id/viewDivider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:layout_constraintStart_toStartOf="@id/imageViewUserProfile"
+        app:layout_constraintTop_toBottomOf="@id/viewDivider"
+        app:srcCompat="@drawable/ic_route" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewStartLocation"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/dummy_cinemax_rectory_cottage_court_road"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewRoute"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageViewRoute"
+        app:layout_constraintTop_toTopOf="@id/imageViewRoute" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewDestinationLocation"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/dummy_101_national_dr_san_bruno_ca_94580"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewDestinationLocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageViewDestinationLocation"
+        app:layout_constraintTop_toTopOf="@id/imageViewDestinationLocation" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_line"
+        app:layout_constraintBottom_toTopOf="@id/imageViewDestinationLocation"
+        app:layout_constraintEnd_toEndOf="@id/imageViewRoute"
+        app:layout_constraintStart_toStartOf="@id/imageViewRoute"
+        app:layout_constraintTop_toBottomOf="@id/imageViewRoute" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewDestinationLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_9sdp"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/imageViewRoute"
+        app:srcCompat="@drawable/ic_location" />
+
+    <View
+        android:id="@+id/viewDividerLocation"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewDestinationLocation" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewDistance"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/_2sdp"
+        android:text="@string/dummy_distance_n105_5_km"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"
+        app:layout_constraintEnd_toStartOf="@id/viewVerticalFirstDivider"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+
+    <View
+        android:id="@+id/viewVerticalFirstDivider"
+        android:layout_width="0.5dp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textViewDuration"
+        app:layout_constraintStart_toEndOf="@id/textViewDistance"
+        app:layout_constraintTop_toBottomOf="@id/viewDividerLocation" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewDuration"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/_2sdp"
+        android:text="@string/dummy_duration_n02_40_hr"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"
+        app:layout_constraintEnd_toStartOf="@id/viewVerticalSecondDivider"
+        app:layout_constraintStart_toEndOf="@id/viewVerticalFirstDivider"
+        app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+
+    <View
+        android:id="@+id/viewVerticalSecondDivider"
+        android:layout_width="0.5dp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toStartOf="@id/textViewFairPrice"
+        app:layout_constraintStart_toEndOf="@id/textViewDuration"
+        app:layout_constraintTop_toBottomOf="@id/viewDividerLocation" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewFairPrice"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/_2sdp"
+        android:text="@string/dummy_fare_price_n_780"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/viewVerticalSecondDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/viewVerticalSecondDivider"
+        app:layout_constraintTop_toTopOf="@id/viewVerticalSecondDivider" />
+
+
+</com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>

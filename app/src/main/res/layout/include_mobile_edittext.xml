@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewTitle"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Mobile Number" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@drawable/selector_edittext"
+        android:fontFamily="@font/lufga_regular"
+        android:hint="@string/hiint_987654321"
+        android:includeFontPadding="false"
+        android:inputType="number"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_14sdp"
+        android:paddingStart="@dimen/_65sdp"
+        android:paddingEnd="0dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/hintColor"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewVerify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editText"
+        app:srcCompat="@drawable/ic_mobile_verify" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewCountryCode"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:fontFamily="@font/lufga_regular"
+        android:gravity="center_vertical|center"
+        android:minWidth="@dimen/_40sdp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/hintColor"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@id/editText"
+        app:layout_constraintStart_toStartOf="@id/editText"
+        app:layout_constraintTop_toTopOf="@id/editText"
+        tools:text="+91" />
+
+    <View
+        android:id="@+id/viewDivider"
+        android:layout_width="@dimen/_1sdp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:background="@color/hintColor"
+        app:layout_constraintBottom_toBottomOf="@id/textViewCountryCode"
+        app:layout_constraintStart_toEndOf="@id/textViewCountryCode"
+        app:layout_constraintTop_toTopOf="@id/textViewCountryCode" />
+
+    <View
+        android:id="@+id/viewCountryCode"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/editText"
+        app:layout_constraintEnd_toEndOf="@id/viewDivider"
+        app:layout_constraintStart_toStartOf="@id/editText"
+        app:layout_constraintTop_toTopOf="@id/editText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

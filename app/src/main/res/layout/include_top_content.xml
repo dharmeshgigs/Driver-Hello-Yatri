@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewHello"
+        style="@style/TextViewLufgaSemiBoldBlue35"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Hello" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewWelcomeBack"
+        style="@style/TextViewLufgaSemiBoldBlack30"
+        android:layout_width="0dp"
+        android:maxLines="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewHello"
+        tools:text="Welcome back" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewYouHaveMissed"
+        style="@style/TextViewLufgaRegularGrey13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewWelcomeBack"
+        tools:text="you've been missed" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewPhoneNumber"
+        style="@style/TextViewLufgaRegularBlue13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewYouHaveMissed"
+        tools:text="+91 99999 99999" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
