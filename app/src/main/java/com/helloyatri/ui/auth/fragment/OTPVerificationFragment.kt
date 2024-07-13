@@ -98,22 +98,23 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                 }
                                 driverStatus.verificationPending?.let {
                                     session.isDriverVerified = it.status ?: false
+                                    session.verificationDetails = it.details
                                 }
-                                if(session.isAllDocumentUploaded()) {
-                                    if(session.isDriverVerified) {
-                                        navigator.loadActivity(HomeActivity::class.java)
+                                if (session.isDriverVerified) {
+                                    if (session.isAllDocumentUploaded()) {
+                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
                                             .byFinishingAll()
                                             .start()
                                     } else {
-                                        navigator.load(DriverVerificationFragment::class.java)
-                                                .replace(false)
+                                        navigator.loadActivity(HomeActivity::class.java)
+                                            .byFinishingAll()
+                                            .start()
                                     }
                                 } else {
-                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
-                                        .byFinishingAll()
-                                        .start()
+                                    navigator.load(DriverVerificationFragment::class.java)
+                                        .replace(false)
                                 }
-                            }?: run {
+                            } ?: run {
                                 showSomethingMessage()
                             }
                         } ?: run {

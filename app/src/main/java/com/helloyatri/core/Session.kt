@@ -1,6 +1,7 @@
 package com.helloyatri.core
 
 import com.helloyatri.data.User
+import com.helloyatri.data.response.Details
 import com.helloyatri.data.response.Driver
 
 interface Session {
@@ -59,6 +60,8 @@ interface Session {
 
     var isVehicleWithYourPhotoAdded: Boolean
 
+    var verificationDetails : Details?
+
     fun clearSession()
 
     fun isAllDocumentUploaded() : Boolean
@@ -93,5 +96,6 @@ interface Session {
         const val VEHICLE_LEFT_RIGHT_PHOTO = "vehicleLeftRightPhoto"
         const val VEHICLE_CHASSIS = "vehicleChassis"
         const val VEHICLE_PHOTO_WITH_YOUR = "vehiclePhotoWithYour"
+        const val VERIFICATION_DETAILS = "verificationDetails"
     }
 }

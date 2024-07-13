@@ -301,5 +301,7 @@
     <string name="dummy_550">₹ 550</string>
     <string name="title_help_center">Help Center</string>
     <string name="label_date_here">DATE HERE</string>
+    <string name="call_agency">Call agency</string>
+    <string name="navigate_there">Navigate there</string>
 
 </resources>
