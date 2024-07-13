@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.Settings
 import com.google.gson.Gson
 import com.helloyatri.data.User
+import com.helloyatri.data.response.Details
 import com.helloyatri.data.response.Driver
 import com.helloyatri.di.DiConstants
 import javax.inject.Inject
@@ -11,10 +12,12 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-class AppSession @Inject constructor(private val appPreferences: AppPreferences,
-                                     private val context: Context,
-                                     @Named(DiConstants.API_KEY) override var apiKey: String) :
-        Session {
+class AppSession @Inject constructor(
+    private val appPreferences: AppPreferences,
+    private val context: Context,
+    @Named(DiConstants.API_KEY) override var apiKey: String
+) :
+    Session {
 
     private val gson: Gson = Gson()
 
@@ -48,7 +51,7 @@ class AppSession @Inject constructor(private val appPreferences: AppPreferences,
         get() {
             var token = ""
             if (token.isEmpty()) token =
-                    Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+                Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 
             return token
         }
@@ -141,6 +144,18 @@ class AppSession @Inject constructor(private val appPreferences: AppPreferences,
         get() = appPreferences.getBoolean(Session.VEHICLE_PHOTO_WITH_YOUR, false)
         set(value) = appPreferences.putBoolean(Session.VEHICLE_PHOTO_WITH_YOUR, value)
 
+    override var verificationDetails: Details?
+        get() {
+            val data = appPreferences.getString(Session.VERIFICATION_DETAILS)
+            if (data.isNullOrEmpty()) {
+                return null
+            }
+            val details = Gson().fromJson(data, Details::class.java)
+            return details
+        }
+        set(value) {
+            appPreferences.putString(Session.VERIFICATION_DETAILS, Gson().toJson(value))
+        }
 
     override val language: String
         get() = "en"
