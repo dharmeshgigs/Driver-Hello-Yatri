@@ -303,5 +303,13 @@
     <string name="label_date_here">DATE HERE</string>
     <string name="call_agency">Call agency</string>
     <string name="navigate_there">Navigate there</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="label_reset_password">Reset Password</string>
+    <string name="label_whats_your_mobile_number">What\'s your mobile number?</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="label_create_new_password">Create new password</string>
+    <string name="label_complete_the_reset_password_process">Complete the Reset password process</string>
 
 </resources>

@@ -19,7 +19,6 @@
         android:id="@+id/textViewWelcomeBack"
         style="@style/TextViewLufgaSemiBoldBlack30"
         android:layout_width="0dp"
-        android:maxLines="1"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_2sdp"
         app:layout_constraintEnd_toEndOf="parent"
