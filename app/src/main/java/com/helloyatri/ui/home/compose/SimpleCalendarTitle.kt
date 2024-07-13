@@ -62,6 +62,7 @@ fun SimpleCalendarTitle(
         )
     }
 }
+
 @Composable
 private fun CalendarNavigationIcon(
     icon: Painter,

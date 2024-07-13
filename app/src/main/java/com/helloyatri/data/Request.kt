@@ -11,6 +11,4 @@ data class Request(
     @SerializedName("otp") var otp : String? = null,
    @SerializedName("gender") var gender : String? = null,
  @SerializedName("drive_in_city") var driverInCity : String? = null
-
-
 )

@@ -80,11 +80,12 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
                         it.data?.let {
                             val response =
                                 Gson().fromJson(it.toString(), LoginResponse::class.java)
-                            response?.data?.let {
+                            response?.data?.let { it ->
                                 navigator.load(OTPVerificationFragment::class.java).setBundle(
                                     OTPVerificationFragment.createBundle(
                                         phonenumber = it.mobile,
-                                        countrycode = "+91",
+                                        countrycode = it.mobile_txt,
+                                        name = it.name,
                                         sourceScreen = LoginFragment::class.java.simpleName
                                     )
                                 ).replace(true)
@@ -190,7 +191,7 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
             apiViewModel.driverLogin(
                 Request(
                     userId = includedUserId.editText.text.toString().trim(),
-                    password = includedPassword.editText.text.toString().trim()
+                    password = includedPassword.editText.text.toString().trim(),
                 )
             )
             /*  if (includedUserId.editText.trimmedText == "driver") {
