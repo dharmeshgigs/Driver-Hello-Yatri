@@ -54,20 +54,20 @@ class DriverPersonalProfilePictureFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideLoader()
-        apiViewModel.updateProfileImageLiveData.get(this,{
-            hideLoader()
-            when(it.code) {
-                APIFactory.ResponseCode.SUCCESS -> {
-
-                    navigator.goBack()
-                }
-
-                else -> {
-
-                    showMessage(it.message)
-                }
-            }
-        })
+//        apiViewModel.updateProfileImageLiveData.get(this,{
+//            hideLoader()
+//            when(it.code) {
+//                APIFactory.ResponseCode.SUCCESS -> {
+//
+//                    navigator.goBack()
+//                }
+//
+//                else -> {
+//
+//                    showMessage(it.message)
+//                }
+//            }
+//        })
     }
     private val driverProfilePictureDetailsList = ArrayList<DriverProfilePictureDetails>()
 
@@ -114,8 +114,6 @@ class DriverPersonalProfilePictureFragment :
         }
 
         buttonSave.setOnClickListener {
-
-
             showLoader()
             val requestBody: RequestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)

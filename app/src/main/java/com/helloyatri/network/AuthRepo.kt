@@ -25,7 +25,7 @@ interface AuthRepo {
 
     suspend fun updateProfile(request: Request) : Res<Driver>
 
-    suspend fun updateProfileImage(body : RequestBody) : Res<Any>
+    suspend fun updateProfileImage(body : RequestBody) : Resource<JsonObject>
 
     suspend fun getDriverStatus() : Resource<JsonObject>
 

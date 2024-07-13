@@ -65,10 +65,11 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val updateProfileImageLiveData by lazy { ResLiveData<Any>() }
+    val updateProfileImageLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun updateProfileImage(body: RequestBody) {
         run {
+            updateProfileImageLiveData.value = Resource.loading()
             updateProfileImageLiveData.value = authRepo.updateProfileImage(body)
         }
     }
