@@ -30,10 +30,11 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val driverRegisterLiveData by lazy { ResLiveData<Any>() }
+    val driverRegisterLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun driverRegister(request: Request) {
         run {
+            driverRegisterLiveData.value = Resource.loading()
             driverRegisterLiveData.value = authRepo.driverRegister(request)
         }
     }

@@ -12,15 +12,15 @@ import okhttp3.RequestBody
 import javax.inject.Inject
 
 class ApiDataSource @Inject constructor(
-    private val authService : AuthService
+    private val authService: AuthService
 ) : ParentDataSource(), AuthRepo {
 
     override suspend fun resendOTP(request: Request): Resource<JsonObject> {
         return run2 { authService.resendOTP(request) }
     }
 
-    override suspend fun driverRegister(request: Request): Res<Any> {
-        return run { authService.driverRegister(request) }
+    override suspend fun driverRegister(request: Request): Resource<JsonObject> {
+        return run2 { authService.driverRegister(request) }
     }
 
     override suspend fun driverLogin(request: Request): Resource<JsonObject> {
@@ -38,6 +38,7 @@ class ApiDataSource @Inject constructor(
     override suspend fun updateProfileImage(body: RequestBody): Res<Any> {
         return run { authService.updateProfileImage(body) }
     }
+
     override suspend fun getDriverStatus(): Resource<JsonObject> {
         return run2 { authService.getDriverStatus() }
     }

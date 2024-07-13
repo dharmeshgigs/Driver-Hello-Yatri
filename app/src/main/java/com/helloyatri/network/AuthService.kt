@@ -21,7 +21,7 @@ interface AuthService {
     suspend fun resendOTP(@Body request: Request) : Response<JsonObject>
 
     @POST(APIFactory.AuthApi.DRIVER_REGISTER)
-    suspend fun driverRegister(@Body request: Request) : ResBody<Any>
+    suspend fun driverRegister(@Body request: Request) : Response<JsonObject>
 
     @POST(APIFactory.AuthApi.DRIVER_LOGIN)
     suspend fun driverLogin(@Body request: Request) : Response<JsonObject>

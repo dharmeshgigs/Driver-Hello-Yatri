@@ -16,7 +16,8 @@ import retrofit2.http.Body
 
 interface AuthRepo {
     suspend fun resendOTP(request: Request) : Resource<JsonObject>
-    suspend fun driverRegister(request: Request) : Res<Any>
+//    suspend fun driverRegister(request: Request) : Res<Any>
+    suspend fun driverRegister(request: Request) : Resource<JsonObject>
 
     suspend fun driverLogin(request: Request) : Resource<JsonObject>
 

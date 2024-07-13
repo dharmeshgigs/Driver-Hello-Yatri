@@ -49,16 +49,12 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
             sourceScreen: String? = null,
             phonenumber: String? = null,
             countrycode: String? = null,
-            name: String? = null,
-            userId: String? = null,
-            pwd: String? = null
+            name: String? = null
         ) = bundleOf(
             SOURCE_SCREEN to sourceScreen,
             "phone" to phonenumber,
             "countrycode" to countrycode,
-            "name" to name,
-            "userid" to userId,
-            "pwd" to pwd
+            "name" to name
         )
     }
 
@@ -68,6 +64,28 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initObservers()
+
+//        apiViewModel.driverRegisterLiveData.get(this, {
+//            hideLoader()
+//
+//            navigator.load(DriverVerificationFragment::class.java).replace(false)
+//        })
+    }
+
+    private fun setData()  = with(binding) {
+        includedTopContent.textViewHello.text =
+            (buildString {
+                append("Hello, ")
+                append(arguments?.getString("name"))
+            })
+        includedTopContent.textViewPhoneNumber.text = buildString {
+            append(arguments?.getString("countrycode"))
+        }
+    }
+
+    private fun initObservers() {
         apiViewModel.getDriverStatus.observe(this) {
             it?.let { resource ->
                 when (resource.status) {
@@ -98,21 +116,20 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                 }
                                 driverStatus.verificationPending?.let {
                                     session.isDriverVerified = it.status ?: false
-                                    session.verificationDetails = it.details
                                 }
-                                if (session.isDriverVerified) {
-                                    if (session.isAllDocumentUploaded()) {
-                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
-                                            .byFinishingAll()
-                                            .start()
-                                    } else {
+                                if (session.isAllDocumentUploaded()) {
+                                    if (session.isDriverVerified && session.user?.status == 1) {
                                         navigator.loadActivity(HomeActivity::class.java)
                                             .byFinishingAll()
                                             .start()
+                                    } else {
+                                        navigator.load(DriverVerificationFragment::class.java)
+                                            .replace(false)
                                     }
                                 } else {
-                                    navigator.load(DriverVerificationFragment::class.java)
-                                        .replace(false)
+                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
+                                        .byFinishingAll()
+                                        .start()
                                 }
                             } ?: run {
                                 showSomethingMessage()
@@ -198,13 +215,14 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
 //                    showErrorMessage(it.message)
 //                }
 //            }
+
+            apiViewModel.driverRegisterLiveData.observe(this) {
+                hideLoader()
+
+                navigator.load(DriverVerificationFragment::class.java).replace(false)
+            }
         }
 
-        apiViewModel.driverRegisterLiveData.get(this, {
-            hideLoader()
-
-            navigator.load(DriverVerificationFragment::class.java).replace(false)
-        })
     }
 
     private fun getDriverStatus() {
@@ -225,6 +243,8 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
         setUpOTPView()
         setUpButtonVerify()
         countDownTimer()
+        setData()
+
         //  getOtp()
     }
 

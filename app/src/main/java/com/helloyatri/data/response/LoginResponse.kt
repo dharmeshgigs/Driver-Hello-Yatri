@@ -13,5 +13,9 @@ data class Login(
     @SerializedName("otp")
     var otp: String? = null,
     @SerializedName("mobile")
-    var mobile: String? = null
+    var mobile: String? = null,
+    @SerializedName("name")
+    var name: String? = null,
+    @SerializedName("mobile_txt")
+    var mobile_txt: String? = null
 )
