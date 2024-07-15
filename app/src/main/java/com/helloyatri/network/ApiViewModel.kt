@@ -48,6 +48,15 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val sendOTPByMobileNumberLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun sendOTPByMobileNumber(request: Request){
+        run {
+            sendOTPByMobileNumberLiveData.value = Resource.loading()
+            sendOTPByMobileNumberLiveData.value = authRepo.sendOtpToMobileNumber(request)
+        }
+    }
+
+
     val verifyOtpLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun verifyOtp(request: Request) {
@@ -98,4 +107,13 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
             getCitiesLiveData.value = authRepo.getCities()
         }
     }
+
+    val resetPasswordLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun resetPassword(request: Request){
+        run {
+            resetPasswordLiveData.value = Resource.loading()
+            resetPasswordLiveData.value = authRepo.resetPassword(request)
+        }
+    }
+
 }

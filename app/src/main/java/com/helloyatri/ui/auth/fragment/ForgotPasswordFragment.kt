@@ -3,6 +3,7 @@ package com.helloyatri.ui.auth.fragment
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +47,49 @@ class ForgotPasswordFragment : BaseFragment<AuthForgotPasswordFragmentBinding>()
     }
 
     private fun initObservers() {
+        apiViewModel.sendOTPByMobileNumberLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource.data?.let { it ->
+                        val response =
+                            Gson().fromJson(it.toString(), LoginResponse::class.java)
+                        navigator.load(OTPVerificationFragment::class.java).setBundle(
+                            OTPVerificationFragment.createBundle(
+                                phonenumber = binding.includedMobileNumber.editText.text.toString().trim(),
+                                countrycode = "+91 "+binding.includedMobileNumber.editText.text.toString().trim(),
+                                name = "Rahul",
+                                sourceScreen = ForgotPasswordFragment::class.java.simpleName
+                            )
+                        ).replace(true)
+//                        response?.data?.let {
+//                            navigator.load(OTPVerificationFragment::class.java).setBundle(
+//                                OTPVerificationFragment.createBundle(
+//                                    phonenumber = it.mobile,
+//                                    countrycode = it.mobile_txt,
+//                                    name = it.name,
+//                                    sourceScreen = ForgotPasswordFragment::class.java.simpleName
+//                                )
+//                            ).replace(true)
+//                        } ?: run {
+//                            showSomethingMessage()
+//                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
 
+                Status.ERROR -> {
+                    Log.i("TAG", "initObservers: "+resource.message)
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
     }
 
     override fun createViewBinding(
@@ -66,7 +109,8 @@ class ForgotPasswordFragment : BaseFragment<AuthForgotPasswordFragmentBinding>()
 
     private fun setUpText() = with(binding) {
         includedTopContent.textViewHello.text = getString(R.string.label_reset_password)
-        includedTopContent.textViewWelcomeBack.text = getString(R.string.label_whats_your_mobile_number)
+        includedTopContent.textViewWelcomeBack.text =
+            getString(R.string.label_whats_your_mobile_number)
         includedTopContent.textViewYouHaveMissed.text =
             getString(R.string.label_fill_your_information_below)
     }
@@ -142,20 +186,21 @@ class ForgotPasswordFragment : BaseFragment<AuthForgotPasswordFragmentBinding>()
                 .checkMinDigits(Constants.MIN_NUMBER)
                 .errorMessage(getString(R.string.validation_please_enter_valid_mobile_number))
                 .check()
-//            apiViewModel.driverRegister(
-//                Request(
-//                    mobile = binding.includedMobileNumber.editText.text.toString().trim(),
-//                )
-//            )
-
-            navigator.load(OTPVerificationFragment::class.java).setBundle(
-                OTPVerificationFragment.createBundle(
-                    phonenumber = binding.includedMobileNumber.editText.text.toString().trim(),
-                    countrycode = binding.includedMobileNumber.textViewCountryCode.text.toString().trim().plus(" ").plus(binding.includedMobileNumber.editText.text.toString().trim()),
-                    sourceScreen = ForgotPasswordFragment::class.java.simpleName,
-                    name = "Test",
+            apiViewModel.sendOTPByMobileNumber(
+                Request(
+                    type = "driver",
+                    mobile = binding.includedMobileNumber.editText.text.toString().trim(),
                 )
-            ).replace(true)
+            )
+
+//            navigator.load(OTPVerificationFragment::class.java).setBundle(
+//                OTPVerificationFragment.createBundle(
+//                    phonenumber = binding.includedMobileNumber.editText.text.toString().trim(),
+//                    countrycode = binding.includedMobileNumber.textViewCountryCode.text.toString().trim().plus(" ").plus(binding.includedMobileNumber.editText.text.toString().trim()),
+//                    sourceScreen = ForgotPasswordFragment::class.java.simpleName,
+//                    name = "Test",
+//                )
+//            ).replace(true)
         } catch (e: ApplicationException) {
             showMessage(e.message)
         }

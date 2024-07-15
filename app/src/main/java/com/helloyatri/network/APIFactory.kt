@@ -21,6 +21,9 @@ object APIFactory {
         const val UPDATE_PROFILE = "update-profile"
         const val GET_CITIES = "getCities"
         const val GET_PROFILE = "profile"
+        const val SEND_OTP_MOBILE_NUMBER = "login"
+        const val RESET_PASSWORD = "driver/resetPassword"
+//        const val RESEND_OTP = "driver/resetPassword"
 
     }
 

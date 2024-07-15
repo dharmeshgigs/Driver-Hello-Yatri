@@ -311,5 +311,6 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="label_create_new_password">Create new password</string>
     <string name="label_complete_the_reset_password_process">Complete the Reset password process</string>
+    <string name="enter_password">Incorrect confirm password. Please enter same as new password.\n</string>
 
 </resources>

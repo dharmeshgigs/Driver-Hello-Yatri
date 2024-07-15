@@ -50,4 +50,16 @@ class ApiDataSource @Inject constructor(
     override suspend fun getCities(): Res<ArrayList<CommonFieldSelection>> {
         return run { authService.getCities() }
     }
+
+    override suspend fun sendOtpToMobileNumber(request: Request): Resource<JsonObject> {
+        return run2 {
+            authService.sendOtpToMobileNumber(request)
+        }
+    }
+
+    override suspend fun resetPassword(request: Request): Resource<JsonObject> {
+        return run2 {
+            authService.resetPassword(request)
+        }
+    }
 }

@@ -19,6 +19,7 @@ import com.helloyatri.R
 import com.helloyatri.data.request.DriverProfilePictureDetails
 import com.helloyatri.data.request.DriverProfilePictureImages
 import com.helloyatri.data.response.Driver
+import com.helloyatri.data.response.DriverResponse
 import com.helloyatri.data.response.LoginResponse
 import com.helloyatri.databinding.AuthDriverPersonalProfilePictureFragmentBinding
 import com.helloyatri.network.APIFactory
@@ -105,10 +106,10 @@ class DriverPersonalProfilePictureFragment :
                     Status.SUCCESS -> {
                         hideLoader()
                         val response =
-                            Gson().fromJson(it.data.toString(), Driver::class.java)
+                            Gson().fromJson(it.data.toString(), DriverResponse::class.java)
                         driverProfilePictureImagesAdapter.addItem(
                             DriverProfilePictureImages(
-                                images = response.profileImage.toString()
+                                images = response.data?.profileImage.toString()
                             )
                         )
                         updateCount()

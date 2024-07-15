@@ -32,4 +32,8 @@ interface AuthRepo {
 
     suspend fun getCities() : Res<ArrayList<CommonFieldSelection>>
 
+    suspend fun sendOtpToMobileNumber(request: Request) : Resource<JsonObject>
+    suspend fun resetPassword(request: Request) : Resource<JsonObject>
+
+
 }

@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.R
 import com.helloyatri.data.Request
+import com.helloyatri.data.response.DriverStatusResponse
 import com.helloyatri.data.response.Login
 import com.helloyatri.data.response.LoginResponse
 import com.helloyatri.databinding.AuthLoginFragmentBinding
@@ -26,6 +27,7 @@ import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.APIFactory
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.ResBody
+import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.Constants
@@ -55,32 +57,87 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
         initObservers()
     }
 
+    private fun getDriverStatus() {
+        apiViewModel.getDriverStatus()
+    }
+
     private fun initObservers() {
-        apiViewModel.driverLoginLiveData.observe(this) {
+
+        apiViewModel.resetPasswordLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    getDriverStatus()
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
+
+        apiViewModel.getDriverStatus.observe(this) {
             it?.let { resource ->
                 when (resource.status) {
-                    Status.LOADING -> showLoader()
+                    Status.LOADING -> {
+                        showLoader()
+                    }
+
                     Status.SUCCESS -> {
                         hideLoader()
-                        it.data?.let {
+                        it.data?.let { it ->
                             val response =
-                                Gson().fromJson(it.toString(), LoginResponse::class.java)
-                            response?.data?.let { it ->
-                                navigator.load(OTPVerificationFragment::class.java).setBundle(
-                                    OTPVerificationFragment.createBundle(
-                                        phonenumber = it.mobile,
-                                        countrycode = it.mobile_txt,
-                                        name = it.name,
-                                        sourceScreen = ResetPasswordFragment::class.java.simpleName
-                                    )
-                                ).replace(true)
+                                Gson().fromJson(it, DriverStatusResponse::class.java)
+                            response?.data?.let { driverStatus ->
+                                driverStatus.addVehicle?.let {
+                                    session.isAddVehicle = it.status ?: false
+                                }
+                                driverStatus.profileImage?.let {
+                                    session.isProfilePictureAdded = it.status ?: false
+                                }
+                                driverStatus.profileInfo?.let {
+                                    session.isPersonalDetailsAdded = it.status ?: false
+                                }
+                                driverStatus.requiredDocuments?.let {
+                                    session.isRequiredDocumentsAdded = it.status ?: false
+                                }
+                                driverStatus.vehicleDocuments?.let {
+                                    session.isVehicleDocumentsAdded = it.status ?: false
+                                }
+                                driverStatus.vehicleImages?.let {
+                                    session.isVehiclePhotosAdded = it.status ?: false
+                                }
+                                driverStatus.verificationPending?.let {
+                                    session.isDriverVerified = it.status ?: false
+                                }
+
+                                if (session.isAllDocumentUploaded()) {
+                                    if (session.isDriverVerified && session.user?.status == 1) {
+                                        navigator.loadActivity(HomeActivity::class.java)
+                                            .byFinishingAll()
+                                            .start()
+                                    } else {
+                                        navigator.load(DriverVerificationFragment::class.java)
+                                            .replace(false)
+                                    }
+                                } else {
+                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
+                                        .byFinishingAll()
+                                        .start()
+                                }
+
                             } ?: run {
                                 showSomethingMessage()
                             }
+
                         } ?: run {
                             showSomethingMessage()
                         }
-
                     }
 
                     Status.ERROR -> {
@@ -92,11 +149,10 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
                 }
             }
         }
+
     }
 
     override fun bindData() {
-        session.user = null
-        session.userSession = ""
         setUpText()
         setUpEditText()
         setUpButton()
@@ -130,7 +186,7 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     private fun enableNextButton() = with(binding) {
         if (includedNewPassword.editText.trimmedText.length == includedConfirmPassword.editText.trimmedText.length &&
             includedConfirmPassword.editText.trimmedText.length >= 8
-                ) {
+        ) {
             buttonNext.isClickable = true
             buttonNext.isEnabled = true
             buttonNext.backgroundTintList =
@@ -160,9 +216,9 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
             showHideConfirmPassword(imageViewConfirmPassword)
         }
 //
-//        buttonNext.setOnClickListener {
-//            validate()
-//        }
+        buttonNext.setOnClickListener {
+            validate()
+        }
 //
 //        textViewForgotPassword.setOnClickListener {
 //            navigator.load(ForgotPasswordFragment::class.java).replace(true)
@@ -171,10 +227,39 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
 
     private fun validate() = with(binding) {
         try {
-//            validator.submit(includedPassword.editText).checkEmpty()
-//                .errorMessage(getString(R.string.validation_please_enter_password)).check()
-
             hideKeyBoard()
+
+            validator.submit(includedNewPassword.editText).checkEmpty()
+                .errorMessage(getString(R.string.validation_please_enter_password))
+                .checkMinDigits(Constants.MIN_PASSWORD)
+                .errorMessage(getString(R.string.validation_please_enter_minimum_8_characters))
+                .matchPatter(Constants.PASSWORD_REX).errorMessage(
+                    getString(
+                        R.string.validation_password_should_be_contained_1_uppercase_1_lowercase_1_digit_and_1_special_character
+                    )
+                )
+                .check()
+            validator.submit(includedConfirmPassword.editText).checkEmpty()
+                .errorMessage(getString(R.string.validation_please_enter_password))
+                .checkMinDigits(Constants.MIN_PASSWORD)
+                .errorMessage(getString(R.string.validation_please_enter_minimum_8_characters))
+                .matchPatter(Constants.PASSWORD_REX).errorMessage(
+                    getString(
+                        R.string.validation_password_should_be_contained_1_uppercase_1_lowercase_1_digit_and_1_special_character
+                    )
+                )
+                .check()
+            if (includedNewPassword.editText.text.toString()
+                    .trim() == includedConfirmPassword.editText.text.toString().trim()
+            ) {
+                apiViewModel.resetPassword(
+                    Request(
+                        password = includedNewPassword.editText.text.toString().trim()
+                    )
+                )
+            } else {
+                showMessage(getString(R.string.enter_password))
+            }
 //            apiViewModel.driverLogin(
 //                Request(
 //                    userId = includedUserId.editText.text.toString().trim(),

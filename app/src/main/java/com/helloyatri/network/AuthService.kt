@@ -44,6 +44,12 @@ interface AuthService {
     @GET(APIFactory.AuthApi.GET_CITIES)
     suspend fun getCities() : ResBody<ArrayList<CommonFieldSelection>>
 
+    @POST(APIFactory.AuthApi.SEND_OTP_MOBILE_NUMBER)
+    suspend fun sendOtpToMobileNumber(@Body request: Request) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.RESET_PASSWORD)
+    suspend fun resetPassword(@Body request: Request) : Response<JsonObject>
+
 
 
 }
