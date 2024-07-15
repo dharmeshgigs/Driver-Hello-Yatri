@@ -2,7 +2,7 @@ package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
 import com.helloyatri.R
-import com.helloyatri.data.response.AccountPaymentData
+import com.helloyatri.data.model.AccountPaymentData
 import com.helloyatri.databinding.AccountPaymentRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

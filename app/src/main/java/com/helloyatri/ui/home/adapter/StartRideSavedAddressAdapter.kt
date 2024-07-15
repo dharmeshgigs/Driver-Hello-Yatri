@@ -2,7 +2,7 @@ package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
 import com.helloyatri.R
-import com.helloyatri.data.response.SavedAddress
+import com.helloyatri.data.model.SavedAddress
 import com.helloyatri.databinding.FragmentStartRideSavedLocationRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

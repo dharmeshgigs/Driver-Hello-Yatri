@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.data.response.AccountPaymentData
+import com.helloyatri.data.model.AccountPaymentData
 import com.helloyatri.databinding.AccountPaymentReqAcceptFragmentBinding
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AdapterAccountPayment

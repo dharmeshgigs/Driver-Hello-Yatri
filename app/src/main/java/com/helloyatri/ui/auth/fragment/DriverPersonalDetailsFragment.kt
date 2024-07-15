@@ -1,6 +1,7 @@
 package com.helloyatri.ui.auth.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -8,9 +9,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import com.gamingyards.sms.app.utils.Status
+import com.google.gson.Gson
 import com.hbb20.CountryCodePicker
 import com.helloyatri.R
 import com.helloyatri.data.Request
+import com.helloyatri.data.model.CityModel
+import com.helloyatri.data.model.DriverResponse
+import com.helloyatri.data.model.LoginResponse
+import com.helloyatri.data.request.DriverProfilePictureImages
 import com.helloyatri.databinding.AuthDriverPersonalDetailsFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.APIFactory
@@ -41,35 +48,129 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        apiViewModel.getCitiesLiveData.get(this,{
-            hideLoader()
-            when(it?.code) {
-                APIFactory.ResponseCode.SUCCESS -> {
+        initObservers()
 
-                }
+//        apiViewModel.getCitiesLiveData.get(this,{
+//            hideLoader()
+//            when(it?.code) {
+//                APIFactory.ResponseCode.SUCCESS -> {
+//
+//                }
+//
+//                else -> {
+//                    showMessage(it.message?:"")
+//                }
+//            }
+//        })
 
-                else -> {
-                    showMessage(it.message?:"")
-                }
-            }
-        })
-
-        apiViewModel.updateProfileLiveData.get(this,{
-            hideLoader()
-            when(it.code) {
-                APIFactory.ResponseCode.SUCCESS -> {
-                    showMessage(it.message?:"")
-                         navigator.goBack()
-                }
-
-                else -> {
-                    showMessage(it.message?:"")
-                }
-            }
-        })
+//        apiViewModel.updateProfileLiveData.get(this, {
+//            hideLoader()
+//            when (it.code) {
+//                APIFactory.ResponseCode.SUCCESS -> {
+//                    showMessage(it.message ?: "")
+//                    navigator.goBack()
+//                }
+//
+//                else -> {
+//                    showMessage(it.message ?: "")
+//                }
+//            }
+//        })
     }
-    override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                   attachToRoot: Boolean): AuthDriverPersonalDetailsFragmentBinding {
+
+    private fun initObservers() {
+
+        apiViewModel.updateProfileLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    showMessage(resource.message ?: "")
+                    navigator.goBack()
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
+
+        apiViewModel.getCitiesLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), CityModel::class.java)
+                        response?.data?.let {
+                            Log.i("TAG", "initObservers: " + it.toString())
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
+
+        apiViewModel.getDriverProfileLiveData.observe(this) { it ->
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.LOADING -> showLoader()
+                    Status.SUCCESS -> {
+                        hideLoader()
+                        val response =
+                            Gson().fromJson(it.data.toString(), DriverResponse::class.java)
+                        binding.includedFullName.editText.setText(
+                            String.format(
+                                "%s",
+                                response.data?.name
+                            )
+                        )
+                        binding.includedUserId.editText.setText(
+                            String.format(
+                                "%s",
+                                response.data?.userId
+                            )
+                        )
+                        binding.includedMobileNumber.editText.setText(
+                            String.format(
+                                "%s",
+                                response.data?.mobile
+                            )
+                        )
+                    }
+
+                    Status.ERROR -> {
+                        hideLoader()
+                        val error =
+                            resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                        showErrorMessage(error)
+                    }
+                }
+            }
+        }
+
+    }
+
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): AuthDriverPersonalDetailsFragmentBinding {
         return AuthDriverPersonalDetailsFragmentBinding.inflate(layoutInflater)
     }
 
@@ -81,13 +182,15 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
         setUpData()
 
         showLoader()
+        apiViewModel.getDriverProfile()
         apiViewModel.getCities()
     }
 
     private fun setUpCountryCode() = with(binding) {
         countryCodePicker = CountryCodePicker(context)
         countryCodePicker.setTypeFace(
-                ResourcesCompat.getFont(requireContext(), R.font.lufga_regular))
+            ResourcesCompat.getFont(requireContext(), R.font.lufga_regular)
+        )
         countryCodePicker.setAutoDetectedCountry(true)
         countryCode = countryCodePicker.selectedCountryCodeWithPlus
         countryShortCode = countryCodePicker.selectedCountryNameCode
@@ -98,10 +201,11 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
         includedTopContent.textViewHello.text = getString(R.string.label_complete)
         includedTopContent.textViewWelcomeBack.text = getString(R.string.label_your_profile)
         includedTopContent.textViewYouHaveMissed.text = getString(
-                R.string.label_don_t_worry_only_you_can_see_your_personal_data_no_one_else_will_be_able_to_see_it)
-        includedFullName.editText.setText(String.format("%s", session.user?.name))
-        includedUserId.editText.setText(String.format("%s", session.user?.userId))
-        includedMobileNumber.editText.setText(String.format("%s", session.user?.mobile))
+            R.string.label_don_t_worry_only_you_can_see_your_personal_data_no_one_else_will_be_able_to_see_it
+        )
+//        includedFullName.editText.setText(String.format("%s", session.user?.name))
+//        includedUserId.editText.setText(String.format("%s", session.user?.userId))
+//        includedMobileNumber.editText.setText(String.format("%s", session.user?.mobile))
         includedMobileNumber.textViewCountryCode.text = String.format("%s", "+91")
 
         commonFieldSelectionBottomSheetForGender.setOnOkButtonClickListener {
@@ -113,14 +217,14 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
     }
 
     private fun setUpData() = with(binding) {
-       /* if (session.isPersonalDetailsAdded) {
-            includedGender.editText.setText(String.format("%s", "Male"))
-            includedCityYouDriveIn.editText.setText(String.format("%s", "Ahmedabad"))
-            includedGender.editText.isFocusable = false
-            includedGender.editText.isEnabled = false
-            includedCityYouDriveIn.editText.isFocusable = false
-            includedCityYouDriveIn.editText.isEnabled = false
-        }*/
+        /* if (session.isPersonalDetailsAdded) {
+             includedGender.editText.setText(String.format("%s", "Male"))
+             includedCityYouDriveIn.editText.setText(String.format("%s", "Ahmedabad"))
+             includedGender.editText.isFocusable = false
+             includedGender.editText.isEnabled = false
+             includedCityYouDriveIn.editText.isFocusable = false
+             includedCityYouDriveIn.editText.isEnabled = false
+         }*/
     }
 
     private fun setUpEditText() = with(binding) {
@@ -152,11 +256,12 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
 
     private fun checkEmptyEditText() = with(binding) {
         if (includedGender.editText.trimmedText.isEmpty()
-                    .not() && includedCityYouDriveIn.editText.trimmedText.isEmpty().not()) {
+                .not() && includedCityYouDriveIn.editText.trimmedText.isEmpty().not()
+        ) {
             buttonSave.isClickable = true
             buttonSave.isEnabled = true
             buttonSave.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
+                ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
         }
     }
 
@@ -167,46 +272,49 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
 
         includedGender.editText.setOnClickListener {
             commonFieldSelectionBottomSheetForGender.setOptionsList(
-                    optionList = arrayListOf(CommonFieldSelection(options = "Male"),
-                            CommonFieldSelection(options = "Female"),
-                            CommonFieldSelection(options = "Other"))).setTitle("Select Gender")
-                    .setSelectedOption(includedGender.editText.trimmedText)
-                    .show(childFragmentManager, null)
+                optionList = arrayListOf(
+                    CommonFieldSelection(options = "Male"),
+                    CommonFieldSelection(options = "Female"),
+                    CommonFieldSelection(options = "Other")
+                )
+            ).setTitle("Select Gender")
+                .setSelectedOption(includedGender.editText.trimmedText)
+                .show(childFragmentManager, null)
         }
 
-        includedCityYouDriveIn.editText.setOnClickListener {
-            commonFieldSelectionBottomSheetForCity.setOptionsList(
-                    optionList = apiViewModel.getCitiesLiveData.value?.resBody?.data?: arrayListOf<CommonFieldSelection>()
-            ).setTitle("Select City")
-                    .setSelectedOption(includedCityYouDriveIn.editText.trimmedText)
-                    .show(childFragmentManager, null)
-        }
+//        includedCityYouDriveIn.editText.setOnClickListener {
+//            commonFieldSelectionBottomSheetForCity.setOptionsList(
+//                    optionList = apiViewModel.getCitiesLiveData.value?.resBody?.data?: arrayListOf<CommonFieldSelection>()
+//            ).setTitle("Select City")
+//                    .setSelectedOption(includedCityYouDriveIn.editText.trimmedText)
+//                    .show(childFragmentManager, null)
+//        }
     }
 
     private fun validate() = with(binding) {
         try {
             validator.submit(includedFullName.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_enter_full_name))
-                    .checkMinDigits(Constants.MIN_NAME)
-                    .errorMessage(getString(R.string.validation_please_enter_valid_full_name))
-                    .check()
+                .errorMessage(getString(R.string.validation_please_enter_full_name))
+                .checkMinDigits(Constants.MIN_NAME)
+                .errorMessage(getString(R.string.validation_please_enter_valid_full_name))
+                .check()
 
             validator.submit(includedUserId.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_enter_user_id))
-                    .checkMinDigits(Constants.MIN_NAME)
-                    .errorMessage(getString(R.string.validation_please_enter_valid_user_id)).check()
+                .errorMessage(getString(R.string.validation_please_enter_user_id))
+                .checkMinDigits(Constants.MIN_NAME)
+                .errorMessage(getString(R.string.validation_please_enter_valid_user_id)).check()
 
             validator.submit(includedMobileNumber.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_enter_mobile_number))
-                    .checkMinDigits(Constants.MIN_NUMBER)
-                    .errorMessage(getString(R.string.validation_please_enter_valid_mobile_number))
-                    .check()
+                .errorMessage(getString(R.string.validation_please_enter_mobile_number))
+                .checkMinDigits(Constants.MIN_NUMBER)
+                .errorMessage(getString(R.string.validation_please_enter_valid_mobile_number))
+                .check()
 
             validator.submit(includedGender.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_select_gender)).check()
+                .errorMessage(getString(R.string.validation_please_select_gender)).check()
 
             validator.submit(includedCityYouDriveIn.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_select_city)).check()
+                .errorMessage(getString(R.string.validation_please_select_city)).check()
 
             /*session.isPersonalDetailsAdded = true
             navigator.goBack()
@@ -214,13 +322,13 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
             showLoader()
             apiViewModel.updateProfile(
                 Request(
-                name = binding.includedFullName.editText.text.toString().trim(),
-                userId = binding.includedUserId.editText.text.toString().trim(),
-                mobile = binding.includedMobileNumber.editText.text.toString().trim(),
-               gender = binding.includedGender.editText.text.toString().trim(),
+                    name = binding.includedFullName.editText.text.toString().trim(),
+                    userId = binding.includedUserId.editText.text.toString().trim(),
+                    mobile = binding.includedMobileNumber.editText.text.toString().trim(),
+                    gender = binding.includedGender.editText.text.toString().trim(),
                     driverInCity = binding.includedCityYouDriveIn.editText.text.toString().trim()
 
-            )
+                )
             )
 
 

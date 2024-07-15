@@ -1,7 +1,7 @@
 package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
-import com.helloyatri.data.response.AccountPreferences
+import com.helloyatri.data.model.AccountPreferences
 import com.helloyatri.databinding.AccountPreferenceRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

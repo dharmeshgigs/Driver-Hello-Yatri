@@ -1,7 +1,7 @@
 package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
-import com.helloyatri.data.response.RidePickUps
+import com.helloyatri.data.model.RidePickUps
 import com.helloyatri.databinding.ItemRowHomePickupsBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

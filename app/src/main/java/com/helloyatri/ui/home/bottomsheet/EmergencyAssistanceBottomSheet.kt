@@ -3,7 +3,7 @@ package com.helloyatri.ui.home.bottomsheet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.helloyatri.R
-import com.helloyatri.data.response.EmergencyAssistance
+import com.helloyatri.data.model.EmergencyAssistance
 import com.helloyatri.databinding.EmergencyAssistanceBottomSheetBinding
 import com.helloyatri.ui.base.BaseBottomSheetDialogFragment
 import com.helloyatri.ui.home.adapter.AdapterEmergencyAssistance

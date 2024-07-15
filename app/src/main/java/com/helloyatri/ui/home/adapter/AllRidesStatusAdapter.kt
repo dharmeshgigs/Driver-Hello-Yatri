@@ -3,8 +3,8 @@ package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
 import com.helloyatri.R
-import com.helloyatri.data.response.RidePickUps
-import com.helloyatri.data.response.Status
+import com.helloyatri.data.model.RidePickUps
+import com.helloyatri.data.model.Status
 import com.helloyatri.databinding.ItemRowActiveRideBinding
 import com.helloyatri.databinding.ItemRowCompletedCancelledRideBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter

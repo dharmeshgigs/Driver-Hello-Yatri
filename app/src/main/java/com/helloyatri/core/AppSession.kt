@@ -3,9 +3,8 @@ package com.helloyatri.core
 import android.content.Context
 import android.provider.Settings
 import com.google.gson.Gson
-import com.helloyatri.data.User
-import com.helloyatri.data.response.Details
-import com.helloyatri.data.response.Driver
+import com.helloyatri.data.model.Details
+import com.helloyatri.data.model.Driver
 import com.helloyatri.di.DiConstants
 import javax.inject.Inject
 import javax.inject.Named

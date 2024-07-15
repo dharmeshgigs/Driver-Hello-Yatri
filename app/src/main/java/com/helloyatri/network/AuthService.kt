@@ -1,14 +1,8 @@
 package com.helloyatri.network
 
-import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
-import com.helloyatri.data.response.City
-import com.helloyatri.data.response.Driver
-import com.helloyatri.data.response.DriverStatus
-import com.helloyatri.data.response.Login
-import com.helloyatri.data.response.Otp
-import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection
+import com.helloyatri.data.model.Driver
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -30,7 +24,7 @@ interface AuthService {
     suspend fun verifyOtp(@Body request: Request) : Response<JsonObject>
 
     @POST(APIFactory.AuthApi.UPDATE_PROFILE)
-    suspend fun updateProfile(@Body request: Request) : ResBody<Driver>
+    suspend fun updateProfile(@Body request: Request) : Response<JsonObject>
 
     @POST(APIFactory.AuthApi.UPDATE_PROFILE)
     suspend fun updateProfileImage(@Body request : RequestBody) : Response<JsonObject>
@@ -42,7 +36,7 @@ interface AuthService {
     suspend fun getDriverProfile() : Response<JsonObject>
 
     @GET(APIFactory.AuthApi.GET_CITIES)
-    suspend fun getCities() : ResBody<ArrayList<CommonFieldSelection>>
+    suspend fun getCities() : Response<JsonObject>
 
     @POST(APIFactory.AuthApi.SEND_OTP_MOBILE_NUMBER)
     suspend fun sendOtpToMobileNumber(@Body request: Request) : Response<JsonObject>

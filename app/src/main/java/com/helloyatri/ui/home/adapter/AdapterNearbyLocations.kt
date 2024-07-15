@@ -2,7 +2,7 @@ package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
 import com.helloyatri.R
-import com.helloyatri.data.response.NearByLocation
+import com.helloyatri.data.model.NearByLocation
 import com.helloyatri.databinding.RowItemNearByLocationBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

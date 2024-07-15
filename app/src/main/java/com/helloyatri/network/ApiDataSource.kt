@@ -3,11 +3,7 @@ package com.helloyatri.network
 import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
-import com.helloyatri.data.response.Driver
-import com.helloyatri.data.response.DriverStatus
-import com.helloyatri.data.response.Login
-import com.helloyatri.data.response.Otp
-import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection
+import com.helloyatri.data.model.Driver
 import okhttp3.RequestBody
 import javax.inject.Inject
 
@@ -31,8 +27,8 @@ class ApiDataSource @Inject constructor(
         return run2 { authService.verifyOtp(request) }
     }
 
-    override suspend fun updateProfile(request: Request): Res<Driver> {
-        return run { authService.updateProfile(request) }
+    override suspend fun updateProfile(request: Request): Resource<JsonObject> {
+        return run2 { authService.updateProfile(request) }
     }
 
     override suspend fun updateProfileImage(request: RequestBody): Resource<JsonObject> {
@@ -47,8 +43,8 @@ class ApiDataSource @Inject constructor(
         return run2 { authService.getDriverProfile() }
     }
 
-    override suspend fun getCities(): Res<ArrayList<CommonFieldSelection>> {
-        return run { authService.getCities() }
+    override suspend fun getCities(): Resource<JsonObject> {
+        return run2 { authService.getCities() }
     }
 
     override suspend fun sendOtpToMobileNumber(request: Request): Resource<JsonObject> {
@@ -56,7 +52,6 @@ class ApiDataSource @Inject constructor(
             authService.sendOtpToMobileNumber(request)
         }
     }
-
     override suspend fun resetPassword(request: Request): Resource<JsonObject> {
         return run2 {
             authService.resetPassword(request)

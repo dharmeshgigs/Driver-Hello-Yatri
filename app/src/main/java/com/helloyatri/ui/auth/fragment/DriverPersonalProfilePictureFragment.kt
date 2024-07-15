@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -18,11 +17,8 @@ import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.request.DriverProfilePictureDetails
 import com.helloyatri.data.request.DriverProfilePictureImages
-import com.helloyatri.data.response.Driver
-import com.helloyatri.data.response.DriverResponse
-import com.helloyatri.data.response.LoginResponse
+import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.AuthDriverPersonalProfilePictureFragmentBinding
-import com.helloyatri.network.APIFactory
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureDetailsAdapter
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureImagesAdapter

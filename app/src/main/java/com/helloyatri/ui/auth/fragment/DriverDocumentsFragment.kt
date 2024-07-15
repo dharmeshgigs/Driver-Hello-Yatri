@@ -8,10 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
-import com.helloyatri.data.response.DriverDocuments
-import com.helloyatri.data.response.DriverStatus
+import com.helloyatri.data.model.DriverDocuments
 import com.helloyatri.databinding.AuthDriverDocumentsFragmentBinding
-import com.helloyatri.network.APIFactory
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment

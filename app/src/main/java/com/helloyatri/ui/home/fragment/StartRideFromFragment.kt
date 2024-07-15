@@ -6,7 +6,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
-import com.helloyatri.data.response.SavedAddress
+import com.helloyatri.data.model.SavedAddress
 import com.helloyatri.databinding.FragmentStartRideFromBinding
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AdapterNearbyLocations

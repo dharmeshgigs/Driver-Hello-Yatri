@@ -1,8 +1,7 @@
 package com.helloyatri.core
 
-import com.helloyatri.data.User
-import com.helloyatri.data.response.Details
-import com.helloyatri.data.response.Driver
+import com.helloyatri.data.model.Details
+import com.helloyatri.data.model.Driver
 
 interface Session {
 

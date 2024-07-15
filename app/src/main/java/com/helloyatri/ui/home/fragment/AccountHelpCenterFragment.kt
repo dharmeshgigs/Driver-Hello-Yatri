@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.helloyatri.R
-import com.helloyatri.data.response.HelpCenterTabs
-import com.helloyatri.data.response.TabType
+import com.helloyatri.data.model.HelpCenterTabs
+import com.helloyatri.data.model.TabType
 import com.helloyatri.databinding.AccountHelpCenterFragmentBinding
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AccountHelpCenterPagerAdapter

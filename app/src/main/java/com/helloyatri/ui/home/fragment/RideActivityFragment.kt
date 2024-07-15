@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.helloyatri.R
-import com.helloyatri.data.response.RideActivityTabs
-import com.helloyatri.data.response.Status
+import com.helloyatri.data.model.RideActivityTabs
+import com.helloyatri.data.model.Status
 import com.helloyatri.databinding.RideActivityFragmentBinding
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.RideActivityPagerAdapter

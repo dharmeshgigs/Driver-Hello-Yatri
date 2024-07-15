@@ -3,7 +3,7 @@ package com.helloyatri.ui.auth.adapter
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.helloyatri.R
-import com.helloyatri.data.response.DriverDocuments
+import com.helloyatri.data.model.DriverDocuments
 import com.helloyatri.databinding.AuthDriverDocumentsRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

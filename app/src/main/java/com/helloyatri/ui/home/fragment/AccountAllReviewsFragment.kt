@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
-import com.helloyatri.data.response.AccountAllReviews
+import com.helloyatri.data.model.AccountAllReviews
 import com.helloyatri.databinding.AccountAllReviewsFragmentBinding
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AdapterAccountAllReviews

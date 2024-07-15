@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
-import com.helloyatri.data.response.DriverDocuments
-import com.helloyatri.data.response.DriverVerification
+import com.helloyatri.data.model.DriverDocuments
+import com.helloyatri.data.model.DriverVerification
 import com.helloyatri.databinding.AccountDocumentsFragmentBinding
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.auth.adapter.DriverVerificationAdapter

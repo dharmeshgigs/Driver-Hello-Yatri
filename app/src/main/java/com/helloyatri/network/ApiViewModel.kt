@@ -1,21 +1,12 @@
 package com.helloyatri.network
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.gamingyards.sms.app.utils.Resource
-import com.google.gson.JsonNull
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
-import com.helloyatri.data.response.City
-import com.helloyatri.data.response.Driver
-import com.helloyatri.data.response.DriverStatus
-import com.helloyatri.data.response.Login
-import com.helloyatri.data.response.Otp
-import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection
+import com.helloyatri.data.model.Driver
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import okhttp3.RequestBody
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,7 +57,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val updateProfileLiveData by lazy { ResLiveData<Driver>() }
+    val updateProfileLiveData by lazy {MutableLiveData<Resource<JsonObject>>() }
 
     fun updateProfile(request: Request) {
         run {
@@ -100,7 +91,8 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getCitiesLiveData by lazy { ResLiveData<ArrayList<CommonFieldSelection>>() }
+//    val getCitiesLiveData by lazy { ResLiveData<ArrayList<CommonFieldSelection>>() }
+    val getCitiesLiveData by lazy { MutableLiveData<Resource<JsonObject>>()}
 
     fun getCities() {
         run {

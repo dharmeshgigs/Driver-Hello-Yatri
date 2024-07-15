@@ -1,7 +1,7 @@
 package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
-import com.helloyatri.data.response.EmergencyAssistance
+import com.helloyatri.data.model.EmergencyAssistance
 import com.helloyatri.databinding.ItemRowEmegencyAssistanceBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

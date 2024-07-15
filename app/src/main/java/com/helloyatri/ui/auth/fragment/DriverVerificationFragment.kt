@@ -2,9 +2,8 @@ package com.helloyatri.ui.auth.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import com.helloyatri.R
-import com.helloyatri.data.response.DriverVerification
+import com.helloyatri.data.model.DriverVerification
 import com.helloyatri.databinding.AuthDriverVerificationFragmentBinding
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.auth.adapter.DriverVerificationAdapter

@@ -3,7 +3,7 @@ package com.helloyatri.ui.home.adapter
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.helloyatri.R
-import com.helloyatri.data.response.NotificationsSubData
+import com.helloyatri.data.model.NotificationsSubData
 import com.helloyatri.databinding.ItemSubNotificationBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

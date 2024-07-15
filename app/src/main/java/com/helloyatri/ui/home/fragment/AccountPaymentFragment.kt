@@ -3,8 +3,8 @@ package com.helloyatri.ui.home.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
-import com.helloyatri.data.response.PaymentTab
-import com.helloyatri.data.response.TabTypeForPayment
+import com.helloyatri.data.model.PaymentTab
+import com.helloyatri.data.model.TabTypeForPayment
 import com.helloyatri.databinding.AccountPaymentFragmentBinding
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AccountPaymentPagerAdapter

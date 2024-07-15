@@ -7,7 +7,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.os.bundleOf
-import com.helloyatri.data.response.TabType
+import com.helloyatri.data.model.TabType
 import com.helloyatri.databinding.WebviewFragmentBinding
 import com.helloyatri.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint

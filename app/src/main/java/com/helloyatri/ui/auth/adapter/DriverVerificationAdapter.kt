@@ -1,7 +1,7 @@
 package com.helloyatri.ui.auth.adapter
 
 import android.view.ViewGroup
-import com.helloyatri.data.response.DriverVerification
+import com.helloyatri.data.model.DriverVerification
 import com.helloyatri.databinding.AuthDriverVerificationRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

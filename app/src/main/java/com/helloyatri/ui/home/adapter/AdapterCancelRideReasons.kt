@@ -2,7 +2,7 @@ package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.helloyatri.data.response.CancelRideReasons
+import com.helloyatri.data.model.CancelRideReasons
 import com.helloyatri.databinding.ItemRowCancelReasonsBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder

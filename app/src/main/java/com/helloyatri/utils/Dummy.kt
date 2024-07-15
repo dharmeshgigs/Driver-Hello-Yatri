@@ -2,13 +2,13 @@ package com.helloyatri.utils
 
 import android.app.Activity
 import com.helloyatri.R
-import com.helloyatri.data.response.CancelRideReasons
-import com.helloyatri.data.response.NearByLocation
-import com.helloyatri.data.response.NotificationsData
-import com.helloyatri.data.response.NotificationsSubData
-import com.helloyatri.data.response.RidePickUps
-import com.helloyatri.data.response.ScheduleRide
-import com.helloyatri.data.response.Status
+import com.helloyatri.data.model.CancelRideReasons
+import com.helloyatri.data.model.NearByLocation
+import com.helloyatri.data.model.NotificationsData
+import com.helloyatri.data.model.NotificationsSubData
+import com.helloyatri.data.model.RidePickUps
+import com.helloyatri.data.model.ScheduleRide
+import com.helloyatri.data.model.Status
 
 fun Activity.getCancelRideReasons(): ArrayList<CancelRideReasons> {
     return ArrayList<CancelRideReasons>().apply {

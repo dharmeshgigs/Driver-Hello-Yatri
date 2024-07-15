@@ -3,7 +3,7 @@ package com.helloyatri.ui.home.adapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.helloyatri.data.response.HelpCenterTabs
+import com.helloyatri.data.model.HelpCenterTabs
 import com.helloyatri.ui.home.fragment.AccountHelpCenterWebViewFragment
 import com.helloyatri.ui.home.fragment.AccountHelpCenterWebViewFragment.Companion.TAB_TYPE
 
