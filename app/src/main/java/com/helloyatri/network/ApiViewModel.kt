@@ -74,6 +74,14 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val getDriverProfileLiveData by lazy { MutableLiveData<Resource<JsonObject>>()}
+    fun getDriverProfile(){
+        run {
+            getDriverProfileLiveData.value = Resource.loading()
+            getDriverProfileLiveData.value = authRepo.getDriverProfile()
+        }
+    }
+
 
     val getDriverStatus by lazy { MutableLiveData<Resource<JsonObject>>() }
 

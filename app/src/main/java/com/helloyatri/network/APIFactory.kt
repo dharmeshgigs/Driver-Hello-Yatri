@@ -20,6 +20,7 @@ object APIFactory {
         const val GET_DRIVER_STATUS = "driver/get-driver-status"
         const val UPDATE_PROFILE = "update-profile"
         const val GET_CITIES = "getCities"
+        const val GET_PROFILE = "profile"
 
     }
 

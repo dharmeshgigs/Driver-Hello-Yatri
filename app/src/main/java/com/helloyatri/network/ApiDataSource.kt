@@ -35,12 +35,16 @@ class ApiDataSource @Inject constructor(
         return run { authService.updateProfile(request) }
     }
 
-    override suspend fun updateProfileImage(request: Request): Resource<JsonObject> {
+    override suspend fun updateProfileImage(request: RequestBody): Resource<JsonObject> {
         return run2 { authService.updateProfileImage(request) }
     }
 
     override suspend fun getDriverStatus(): Resource<JsonObject> {
         return run2 { authService.getDriverStatus() }
+    }
+
+    override suspend fun getDriverProfile(): Resource<JsonObject> {
+        return run2 { authService.getDriverProfile() }
     }
 
     override suspend fun getCities(): Res<ArrayList<CommonFieldSelection>> {

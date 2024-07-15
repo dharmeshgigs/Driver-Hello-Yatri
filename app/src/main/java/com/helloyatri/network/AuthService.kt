@@ -33,10 +33,13 @@ interface AuthService {
     suspend fun updateProfile(@Body request: Request) : ResBody<Driver>
 
     @POST(APIFactory.AuthApi.UPDATE_PROFILE)
-    suspend fun updateProfileImage(@Body request : Request) : ResBody<Driver>
+    suspend fun updateProfileImage(@Body request : RequestBody) : Response<JsonObject>
 
     @GET(APIFactory.AuthApi.GET_DRIVER_STATUS)
     suspend fun getDriverStatus() : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_PROFILE)
+    suspend fun getDriverProfile() : Response<JsonObject>
 
     @GET(APIFactory.AuthApi.GET_CITIES)
     suspend fun getCities() : ResBody<ArrayList<CommonFieldSelection>>
