@@ -74,7 +74,7 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
 //        })
     }
 
-    private fun setData()  = with(binding) {
+    private fun setData() = with(binding) {
         includedTopContent.textViewHello.text =
             (buildString {
                 append("Hello, ")
@@ -117,23 +117,29 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                 driverStatus.verificationPending?.let {
                                     session.isDriverVerified = it.status ?: false
                                 }
-                                if (session.isAllDocumentUploaded()) {
-                                    if (session.isDriverVerified && session.user?.status == 1) {
-                                        navigator.loadActivity(HomeActivity::class.java)
+                                if (getSourceScreen == SignUpFragment::class.java.simpleName || getSourceScreen == LoginFragment::class.java.simpleName) {
+                                    if (session.isAllDocumentUploaded()) {
+                                        if (session.isDriverVerified && session.user?.status == 1) {
+                                            navigator.loadActivity(HomeActivity::class.java)
+                                                .byFinishingAll()
+                                                .start()
+                                        } else {
+                                            navigator.load(DriverVerificationFragment::class.java)
+                                                .replace(false)
+                                        }
+                                    } else {
+                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
                                             .byFinishingAll()
                                             .start()
-                                    } else {
-                                        navigator.load(DriverVerificationFragment::class.java)
-                                            .replace(false)
                                     }
-                                } else {
-                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
-                                        .byFinishingAll()
-                                        .start()
+                                } else if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
+                                    navigator.load(ResetPasswordFragment::class.java)
+                                        .replace(false)
                                 }
                             } ?: run {
                                 showSomethingMessage()
                             }
+
                         } ?: run {
                             showSomethingMessage()
                         }
@@ -243,8 +249,9 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
         setUpOTPView()
         setUpButtonVerify()
         countDownTimer()
-        setData()
-
+        if(!getSourceScreen.equals(ForgotPasswordFragment::class.java.simpleName)) {
+            setData()
+        }
         //  getOtp()
     }
 
@@ -272,13 +279,19 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
 
     @SuppressLint("SetTextI18n")
     private fun setUpText() = with(binding) {
-        includedTopContent.textViewHello.text = getString(R.string.label_hello_s, "Rahul")
         includedTopContent.textViewWelcomeBack.text =
             getString(R.string.label_enter_6_digit_verification_code)
-        includedTopContent.textViewYouHaveMissed.text =
-            getString(R.string.label_we_have_sent_you_a_six_digit_code_on_your_s)
-        includedTopContent.textViewPhoneNumber.text =
-            arguments?.getString("countrycode").plus(" ") + arguments?.getString("phone")
+        if(getSourceScreen.equals(ForgotPasswordFragment::class.java.simpleName)) {
+            includedTopContent.textViewHello.text = getString(R.string.label_reset_password)
+            includedTopContent.textViewYouHaveMissed.text =
+                getString(R.string.label_fill_your_information_below)
+        } else {
+            includedTopContent.textViewHello.text = getString(R.string.label_hello_s, "Rahul")
+            includedTopContent.textViewYouHaveMissed.text =
+                getString(R.string.label_we_have_sent_you_a_six_digit_code_on_your_s)
+            includedTopContent.textViewPhoneNumber.text =
+                arguments?.getString("countrycode").plus(" ") + arguments?.getString("phone")
+        }
     }
 
     private fun setUpClickListener() = with(binding) {
@@ -291,22 +304,27 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
         }
 
         buttonVerify.setOnClickListener {
-            if (otpView.trimmedText.isEmpty()) {
-                showErrorMessage(getString(R.string.validation_please_enter_otp))
-            } else if (otpView.trimmedText.length != 6) {
-                showErrorMessage(getString(R.string.validation_please_enter_otp))
-            } /*else if (otpView.text.toString() != getOTP) {
+            if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
+                navigator.load(ResetPasswordFragment::class.java)
+                    .replace(false)
+            } else {
+                if (otpView.trimmedText.isEmpty()) {
+                    showErrorMessage(getString(R.string.validation_please_enter_otp))
+                } else if (otpView.trimmedText.length != 6) {
+                    showErrorMessage(getString(R.string.validation_please_enter_otp))
+                } /*else if (otpView.text.toString() != getOTP) {
                 showMessage(getString(R.string.validation_please_enter_valid_otp))
             }*/ else {
-                hideKeyBoard()
-                apiViewModel.verifyOtp(
-                    Request(
-                        type = "driver",
-                        mobile = arguments?.getString("phone"),
-                        otp = otpView.text.toString()
+                    hideKeyBoard()
+                    apiViewModel.verifyOtp(
+                        Request(
+                            type = "driver",
+                            mobile = arguments?.getString("phone"),
+                            otp = otpView.text.toString()
+                        )
                     )
-                )
 
+                }
             }
         }
 

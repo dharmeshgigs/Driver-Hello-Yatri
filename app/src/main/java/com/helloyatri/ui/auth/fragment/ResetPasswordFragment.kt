@@ -21,6 +21,7 @@ import com.helloyatri.data.Request
 import com.helloyatri.data.response.Login
 import com.helloyatri.data.response.LoginResponse
 import com.helloyatri.databinding.AuthLoginFragmentBinding
+import com.helloyatri.databinding.AuthResetPasswordFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.APIFactory
 import com.helloyatri.network.ApiViewModel
@@ -37,13 +38,13 @@ import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
+class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     private val apiViewModel by viewModels<ApiViewModel>()
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?,
         attachToRoot: Boolean
-    ): AuthLoginFragmentBinding {
-        return AuthLoginFragmentBinding.inflate(layoutInflater)
+    ): AuthResetPasswordFragmentBinding {
+        return AuthResetPasswordFragmentBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +71,7 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
                                         phonenumber = it.mobile,
                                         countrycode = it.mobile_txt,
                                         name = it.name,
-                                        sourceScreen = LoginFragment::class.java.simpleName
+                                        sourceScreen = ResetPasswordFragment::class.java.simpleName
                                     )
                                 ).replace(true)
                             } ?: run {
@@ -81,6 +82,7 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
                         }
 
                     }
+
                     Status.ERROR -> {
                         hideLoader()
                         val error =
@@ -103,33 +105,32 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
     }
 
     private fun setUpText() = with(binding) {
-        includedTopContent.textViewHello.text = getString(R.string.label_hello)
-        includedTopContent.textViewWelcomeBack.text = getString(R.string.label_welcome_back)
-        includedTopContent.textViewYouHaveMissed.text = getString(R.string.label_you_ve_been_missed)
+        includedTopContent.textViewHello.text = getString(R.string.label_reset_password)
+        includedTopContent.textViewWelcomeBack.text = getString(R.string.label_create_new_password)
+        includedTopContent.textViewYouHaveMissed.text =
+            getString(R.string.label_complete_the_reset_password_process)
     }
 
     private fun setUpEditText() = with(binding) {
-        includedUserId.textViewTitle.text = getString(R.string.title_user_id)
-        includedUserId.editText.hint = getString(R.string.hint_ex_rahul)
-        includedPassword.textViewTitle.text = getString(R.string.title_password)
-        includedPassword.editText.hint = getString(R.string.hint_password)
-        includedUserId.editText.imeOptions = EditorInfo.IME_ACTION_NEXT
-        includedPassword.editText.imeOptions = EditorInfo.IME_ACTION_DONE
+        includedNewPassword.textViewTitle.text = getString(R.string.new_password)
+        includedConfirmPassword.textViewTitle.text = getString(R.string.confirm_password)
     }
 
     private fun setUpButton() = with(binding) {
         buttonNext.isClickable = false
         buttonNext.isEnabled = false
-        includedPassword.editText.doAfterTextChanged {
+        includedNewPassword.editText.doAfterTextChanged {
             enableNextButton()
         }
-        includedUserId.editText.doAfterTextChanged {
+        includedConfirmPassword.editText.doAfterTextChanged {
             enableNextButton()
         }
     }
 
     private fun enableNextButton() = with(binding) {
-        if (includedPassword.editText.trimmedText.length >= 8) {
+        if (includedNewPassword.editText.trimmedText.length == includedConfirmPassword.editText.trimmedText.length &&
+            includedConfirmPassword.editText.trimmedText.length >= 8
+                ) {
             buttonNext.isClickable = true
             buttonNext.isEnabled = true
             buttonNext.backgroundTintList =
@@ -143,68 +144,90 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
     }
 
     private fun setTextDecorator() = with(binding) {
-        TextDecorator.decorate(textViewDontHaveAccount, textViewDontHaveAccount.trimmedText)
-            .makeTextClickable(false, getString(R.string.label_sign_up)) { _, _ ->
-                navigator.load(SignUpFragment::class.java).replace(true)
-            }.setTextColor(R.color.colorPrimary, getString(R.string.label_sign_up))
-            .setBackgroundColor(R.color.backgroundColor, getString(R.string.label_sign_up))
-            .setTypeface(R.font.lufga_medium, getString(R.string.label_sign_up)).build()
+//        TextDecorator.decorate(textViewDontHaveAccount, textViewDontHaveAccount.trimmedText)
+//            .makeTextClickable(false, getString(R.string.label_sign_up)) { _, _ ->
+//                navigator.load(SignUpFragment::class.java).replace(true)
+//            }.setTextColor(R.color.colorPrimary, getString(R.string.label_sign_up))
+//            .setBackgroundColor(R.color.backgroundColor, getString(R.string.label_sign_up))
+//            .setTypeface(R.font.lufga_medium, getString(R.string.label_sign_up)).build()
     }
 
     private fun setUpClickListener() = with(binding) {
-        imageViewPassword.setOnClickListener {
-            showHidePassword(imageViewPassword)
+        imageViewNewPassword.setOnClickListener {
+            showHidePassword(imageViewNewPassword)
         }
-
-        buttonNext.setOnClickListener {
-            validate()
+        imageViewConfirmPassword.setOnClickListener {
+            showHideConfirmPassword(imageViewConfirmPassword)
         }
-
-        textViewForgotPassword.setOnClickListener {
-            navigator.load(ForgotPasswordFragment::class.java).replace(true)
-        }
+//
+//        buttonNext.setOnClickListener {
+//            validate()
+//        }
+//
+//        textViewForgotPassword.setOnClickListener {
+//            navigator.load(ForgotPasswordFragment::class.java).replace(true)
+//        }
     }
 
     private fun validate() = with(binding) {
         try {
-            validator.submit(includedUserId.editText).checkEmpty()
-                .errorMessage(getString(R.string.validation_please_enter_user_id))
-                .checkMinDigits(Constants.MIN_NAME)
-                .errorMessage(getString(R.string.validation_please_enter_valid_user_id)).check()
-
-            validator.submit(includedPassword.editText).checkEmpty()
-                .errorMessage(getString(R.string.validation_please_enter_password)).check()
+//            validator.submit(includedPassword.editText).checkEmpty()
+//                .errorMessage(getString(R.string.validation_please_enter_password)).check()
 
             hideKeyBoard()
-            apiViewModel.driverLogin(
-                Request(
-                    userId = includedUserId.editText.text.toString().trim(),
-                    password = includedPassword.editText.text.toString().trim(),
-                )
-            )
+//            apiViewModel.driverLogin(
+//                Request(
+//                    userId = includedUserId.editText.text.toString().trim(),
+//                    password = includedPassword.editText.text.toString().trim(),
+//                )
+//            )
         } catch (e: ApplicationException) {
             showMessage(e.message)
         }
     }
 
     private fun showHidePassword(view: View) {
-        if (view.id == R.id.imageViewPassword) {
-            if (binding.includedPassword.editText.transformationMethod.equals(
+        if (view.id == R.id.imageViewNewPassword) {
+            if (binding.includedNewPassword.editText.transformationMethod.equals(
                     PasswordTransformationMethod.getInstance()
                 )
             ) {
-                binding.includedPassword.editText.transformationMethod =
+                binding.includedNewPassword.editText.transformationMethod =
                     HideReturnsTransformationMethod.getInstance()
-                binding.includedPassword.editText.setSelection(
-                    binding.includedPassword.editText.text?.length ?: 0
+                binding.includedNewPassword.editText.setSelection(
+                    binding.includedNewPassword.editText.text?.length ?: 0
                 )
                 (view as AppCompatImageView).setImageResource(R.drawable.ic_password_show)
             } else {
                 (view as AppCompatImageView).setImageResource(R.drawable.ic_password_hide)
-                binding.includedPassword.editText.transformationMethod =
+                binding.includedNewPassword.editText.transformationMethod =
                     PasswordTransformationMethod.getInstance()
-                binding.includedPassword.editText.setSelection(
-                    binding.includedPassword.editText.text?.length ?: 0
+                binding.includedNewPassword.editText.setSelection(
+                    binding.includedNewPassword.editText.text?.length ?: 0
+                )
+
+            }
+        }
+    }
+
+    private fun showHideConfirmPassword(view: View) {
+        if (view.id == R.id.imageViewConfirmPassword) {
+            if (binding.includedConfirmPassword.editText.transformationMethod.equals(
+                    PasswordTransformationMethod.getInstance()
+                )
+            ) {
+                binding.includedConfirmPassword.editText.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+                binding.includedConfirmPassword.editText.setSelection(
+                    binding.includedConfirmPassword.editText.text?.length ?: 0
+                )
+                (view as AppCompatImageView).setImageResource(R.drawable.ic_password_show)
+            } else {
+                (view as AppCompatImageView).setImageResource(R.drawable.ic_password_hide)
+                binding.includedConfirmPassword.editText.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
+                binding.includedConfirmPassword.editText.setSelection(
+                    binding.includedConfirmPassword.editText.text?.length ?: 0
                 )
 
             }

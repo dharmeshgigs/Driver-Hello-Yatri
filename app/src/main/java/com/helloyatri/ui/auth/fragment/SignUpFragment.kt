@@ -165,7 +165,7 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
         countryCodePicker.setTypeFace(
             ResourcesCompat.getFont(requireContext(), R.font.lufga_regular)
         )
-        countryCodePicker.setAutoDetectedCountry(true)
+        countryCodePicker.setCountryForPhoneCode(91)
         countryCode = countryCodePicker.selectedCountryCodeWithPlus
         countryShortCode = countryCodePicker.selectedCountryNameCode
         includedMobileNumber.textViewCountryCode.text = countryCode
@@ -223,8 +223,8 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
 
     private fun setUpClickListener() = with(binding) {
         includedMobileNumber.viewCountryCode.setOnClickListener {
-            hideKeyBoard()
-            countryCodePicker.launchCountrySelectionDialog()
+//            hideKeyBoard()
+//            countryCodePicker.launchCountrySelectionDialog()
         }
 
         imageViewPassword.setOnClickListener {
