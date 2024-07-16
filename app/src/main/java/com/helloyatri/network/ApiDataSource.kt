@@ -52,9 +52,22 @@ class ApiDataSource @Inject constructor(
             authService.sendOtpToMobileNumber(request)
         }
     }
+
     override suspend fun resetPassword(request: Request): Resource<JsonObject> {
         return run2 {
             authService.resetPassword(request)
         }
+    }
+
+    override suspend fun getRequiredAllDocument(): Resource<JsonObject> {
+        return run2 { authService.getRequiredAllDocument() }
+    }
+
+    override suspend fun getVehicleDocument(): Resource<JsonObject> {
+        return run2 { authService.getVehicleDocument() }
+    }
+
+    override suspend fun getVehiclePhotos(): Resource<JsonObject> {
+        return run2 { authService.getVehiclePhotos() }
     }
 }

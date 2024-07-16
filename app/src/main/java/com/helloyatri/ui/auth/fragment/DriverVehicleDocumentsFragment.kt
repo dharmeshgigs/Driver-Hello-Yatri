@@ -3,23 +3,33 @@ package com.helloyatri.ui.auth.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gamingyards.sms.app.utils.Status
+import com.google.gson.Gson
 import com.helloyatri.R
+import com.helloyatri.data.model.DataDocument
 import com.helloyatri.data.model.DriverDocuments
+import com.helloyatri.data.model.GetAllRequiredDocument
 import com.helloyatri.databinding.AuthDriverVehicleDocumentsFragmentBinding
+import com.helloyatri.network.ApiViewModel
+import com.helloyatri.ui.auth.adapter.CommonAdapter
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DriverVehicleDocumentsFragment : BaseFragment<AuthDriverVehicleDocumentsFragmentBinding>() {
+    private val apiViewModel by viewModels<ApiViewModel>()
 
-    private val driverVehicleDocumentsAdapter by lazy {
-        DriverDocumentsAdapter()
+    private val driverRequiredDocumentsAdapter by lazy {
+        CommonAdapter()
     }
 
     private val driverVehicleDocumentsList = ArrayList<DriverDocuments>()
+    private val getVehicleDocumentMutableList: MutableList<DataDocument> = mutableListOf()
+
 
     override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
                                    attachToRoot: Boolean): AuthDriverVehicleDocumentsFragmentBinding {
@@ -31,6 +41,44 @@ class DriverVehicleDocumentsFragment : BaseFragment<AuthDriverVehicleDocumentsFr
         setUpRecyclerView()
         setUpData()
         setUpClickListener()
+        initObservers()
+        getAllVehicleDocument()
+    }
+
+    private fun getAllVehicleDocument() {
+        apiViewModel.getVehicleDocument()
+    }
+
+    private fun initObservers() {
+        apiViewModel.getVehicleDocumentLiveData.observe(this){ resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
+                        response?.data?.let {
+                            getVehicleDocumentMutableList.clear()
+                            getVehicleDocumentMutableList.addAll(response.data)
+                            setUpData()
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+                Status.LOADING -> showLoader()
+            }
+
+        }
+
     }
 
     private fun setUpText() = with(binding) {
@@ -42,13 +90,13 @@ class DriverVehicleDocumentsFragment : BaseFragment<AuthDriverVehicleDocumentsFr
 
     private fun setUpRecyclerView() = with(binding) {
         recyclerViewDriverVehicleDocuments.apply {
-            adapter = driverVehicleDocumentsAdapter
+            adapter = driverRequiredDocumentsAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         }
     }
 
     private fun setUpClickListener() {
-        driverVehicleDocumentsAdapter.setOnItemClickPositionListener { _, position ->
+        driverRequiredDocumentsAdapter.setOnItemClickPositionListener { _, position ->
             when (position) {
                 0 -> {
                     navigator.load(DriverVehiclePUCFragment::class.java).replace(true)
@@ -76,20 +124,20 @@ class DriverVehicleDocumentsFragment : BaseFragment<AuthDriverVehicleDocumentsFr
     }
 
     private fun setUpData() {
-        driverVehicleDocumentsList.clear()
-        driverVehicleDocumentsList.add(
-                DriverDocuments(documentName = getString(R.string.label_vehicle_puc),
-                        isDataAdded = session.isVehiclePUCAdded))
-        driverVehicleDocumentsList.add(
-                DriverDocuments(documentName = getString(R.string.label_vehicle_insurance),
-                        isDataAdded = session.isVehicleInsuranceAdded))
-        driverVehicleDocumentsList.add(DriverDocuments(
-                documentName = getString(R.string.label_vehicle_registration_certificate),
-                isDataAdded = session.isVehicleRegistrationAdded))
-        driverVehicleDocumentsList.add(
-                DriverDocuments(documentName = getString(R.string.label_vehicle_permit),
-                        isDataAdded = session.isVehiclePermitAdded))
-        driverVehicleDocumentsAdapter.setItems(driverVehicleDocumentsList, 1)
+//        driverVehicleDocumentsList.clear()
+//        driverVehicleDocumentsList.add(
+//                DriverDocuments(documentName = getString(R.string.label_vehicle_puc),
+//                        isDataAdded = session.isVehiclePUCAdded))
+//        driverVehicleDocumentsList.add(
+//                DriverDocuments(documentName = getString(R.string.label_vehicle_insurance),
+//                        isDataAdded = session.isVehicleInsuranceAdded))
+//        driverVehicleDocumentsList.add(DriverDocuments(
+//                documentName = getString(R.string.label_vehicle_registration_certificate),
+//                isDataAdded = session.isVehicleRegistrationAdded))
+//        driverVehicleDocumentsList.add(
+//                DriverDocuments(documentName = getString(R.string.label_vehicle_permit),
+//                        isDataAdded = session.isVehiclePermitAdded))
+        driverRequiredDocumentsAdapter.setItems(getVehicleDocumentMutableList.toList(), 1)
 
         if (session.isVehiclePUCAdded && session.isVehicleInsuranceAdded && session.isVehicleRegistrationAdded && session.isVehiclePermitAdded) {
             binding.buttonSave.isClickable = true

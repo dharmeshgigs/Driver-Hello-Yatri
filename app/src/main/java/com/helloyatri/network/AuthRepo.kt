@@ -28,5 +28,8 @@ interface AuthRepo {
     suspend fun sendOtpToMobileNumber(request: Request) : Resource<JsonObject>
     suspend fun resetPassword(request: Request) : Resource<JsonObject>
 
+    suspend fun getRequiredAllDocument() : Resource<JsonObject>
+    suspend fun getVehicleDocument() : Resource<JsonObject>
+    suspend fun getVehiclePhotos() : Resource<JsonObject>
 
 }

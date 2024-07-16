@@ -40,7 +40,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val sendOTPByMobileNumberLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-    fun sendOTPByMobileNumber(request: Request){
+    fun sendOTPByMobileNumber(request: Request) {
         run {
             sendOTPByMobileNumberLiveData.value = Resource.loading()
             sendOTPByMobileNumberLiveData.value = authRepo.sendOtpToMobileNumber(request)
@@ -57,7 +57,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val updateProfileLiveData by lazy {MutableLiveData<Resource<JsonObject>>() }
+    val updateProfileLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun updateProfile(request: Request) {
         run {
@@ -74,8 +74,8 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getDriverProfileLiveData by lazy { MutableLiveData<Resource<JsonObject>>()}
-    fun getDriverProfile(){
+    val getDriverProfileLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun getDriverProfile() {
         run {
             getDriverProfileLiveData.value = Resource.loading()
             getDriverProfileLiveData.value = authRepo.getDriverProfile()
@@ -91,8 +91,8 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-//    val getCitiesLiveData by lazy { ResLiveData<ArrayList<CommonFieldSelection>>() }
-    val getCitiesLiveData by lazy { MutableLiveData<Resource<JsonObject>>()}
+    //    val getCitiesLiveData by lazy { ResLiveData<ArrayList<CommonFieldSelection>>() }
+    val getCitiesLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun getCities() {
         run {
@@ -101,10 +101,35 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val resetPasswordLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-    fun resetPassword(request: Request){
+    fun resetPassword(request: Request) {
         run {
             resetPasswordLiveData.value = Resource.loading()
             resetPasswordLiveData.value = authRepo.resetPassword(request)
+        }
+    }
+
+    val getRequiredAllDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAllRequiredDocument() {
+        run {
+            getRequiredAllDocumentLiveData.value = Resource.loading()
+            getRequiredAllDocumentLiveData.value = authRepo.getRequiredAllDocument()
+        }
+    }
+
+    val getVehicleDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun getVehicleDocument() {
+        run {
+            getVehicleDocumentLiveData.value = Resource.loading()
+            getVehicleDocumentLiveData.value = authRepo.getVehicleDocument()
+        }
+    }
+
+    val getVehiclePhotosLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun getVehiclePhotos() {
+        run {
+            getVehiclePhotosLiveData.value = Resource.loading()
+            getVehiclePhotosLiveData.value = authRepo.getVehiclePhotos()
         }
     }
 

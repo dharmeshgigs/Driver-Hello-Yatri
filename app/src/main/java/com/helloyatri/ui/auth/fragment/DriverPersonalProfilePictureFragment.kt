@@ -6,9 +6,11 @@ import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,6 +53,14 @@ class DriverPersonalProfilePictureFragment :
 
     private val driverProfilePictureImagesAdapter by lazy {
         DriverProfilePictureImagesAdapter()
+    }
+
+    companion object {
+        fun createBundle(
+            statusCode: String? = null
+        ) = bundleOf(
+            "statusCode" to statusCode
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,12 +150,61 @@ class DriverPersonalProfilePictureFragment :
     }
 
     private fun getProfile() {
-        apiViewModel.getDriverProfile()
+        if (arguments?.getString("statusCode") == "1001") {
+            apiViewModel.getDriverProfile()
+        }
     }
 
     private fun setUpText() = with(binding) {
-        includedTopContent.textViewHello.text = getString(R.string.label_upload)
-        includedTopContent.textViewWelcomeBack.text = getString(R.string.label_profile_picture)
+        if (arguments?.getString("statusCode") == "1001") {
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_profile_picture)
+            textViewProfilePicture.text = getString(R.string.label_profile_picture)
+        }else if (arguments?.getString("statusCode") == "1002"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_driving_license)
+            textViewProfilePicture.text = getString(R.string.label_driving_license)
+        }else if (arguments?.getString("statusCode") == "1003"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_government_id)
+            textViewProfilePicture.text = getString(R.string.label_government_id)
+        }else if (arguments?.getString("statusCode") == "1004"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_bank_details)
+            textViewProfilePicture.text = getString(R.string.label_attach_bank_account_details)
+        }else if (arguments?.getString("statusCode") == "1005"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
+            textViewProfilePicture.text = getString(R.string.label_vehicle_puc)
+        }else if (arguments?.getString("statusCode") == "1006"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
+            textViewProfilePicture.text = getString(R.string.label_vehicle_insurance)
+        }else if (arguments?.getString("statusCode") == "1007"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
+            textViewProfilePicture.text = getString(R.string.label_vehicle_registration_certificate)
+        }else if (arguments?.getString("statusCode") == "1008"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
+            textViewProfilePicture.text = getString(R.string.label_vehicle_permit)
+        }else if (arguments?.getString("statusCode") == "1009"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
+            textViewProfilePicture.text = getString(R.string.label_front_back_with_number_plate)
+        }else if (arguments?.getString("statusCode") == "1010"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
+            textViewProfilePicture.text = getString(R.string.label_left_right_side_exterior)
+        }else if (arguments?.getString("statusCode") == "1011"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
+            textViewProfilePicture.text = getString(R.string.label_chassis_number_images)
+        }else if (arguments?.getString("statusCode") == "1012"){
+            includedTopContent.textViewHello.text = getString(R.string.label_upload)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
+            textViewProfilePicture.text = getString(R.string.label_your_photo_with_vehicle)
+        }
         includedTopContent.textViewYouHaveMissed.text = getString(
             R.string.label_don_t_worry_only_you_can_see_your_personal_data_no_one_else_will_be_able_to_see_it
         )
@@ -165,7 +224,10 @@ class DriverPersonalProfilePictureFragment :
 
     private fun setUpClickListener() = with(binding) {
         constraintUploadDocuments.setOnClickListener {
-            mediaSelectHelper.openAnyIntent()
+
+            mediaSelectHelper.canSelectMultipleImages(false)
+            mediaSelectHelper.selectOptionsForImagePicker(false)
+
         }
 
         driverProfilePictureImagesAdapter.setOnItemClickListener {
@@ -187,16 +249,22 @@ class DriverPersonalProfilePictureFragment :
                     )
                 )
                 .build()
-
-            apiViewModel.updateProfileImage(requestBody)
+            if (arguments?.getString("statusCode") == "1001") {
+                apiViewModel.updateProfileImage(requestBody)
+            }
             // session.isProfilePictureAdded = true
             //navigator.goBack()
         }
     }
 
     private fun setUpImages() {
+        Log.i("TAG", "setUpImages: ")
         mediaSelectHelper.registerCallback(object : MediaSelector {
+            override fun onImageUri(uri: Uri) {
+                super.onImageUri(uri)
+            }
             override fun onAnyFileSelected(outPutFileAny: OutPutFileAny) {
+                Log.i("TAG", "onAnyFileSelected: "+outPutFileAny.type)
                 binding.recyclerViewImages.show()
                 when (outPutFileAny.type) {
                     FileType.Image -> {
@@ -204,6 +272,7 @@ class DriverPersonalProfilePictureFragment :
                         driverProfilePictureImagesAdapter.addItem(
                             DriverProfilePictureImages(images = outPutFileAny.uri.path)
                         )
+                        Log.i("TAG", "onAnyFileSelected:11 "+outPutFileAny.uri.path)
                         updateCount()
                     }
 

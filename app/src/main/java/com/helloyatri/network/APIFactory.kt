@@ -23,6 +23,9 @@ object APIFactory {
         const val GET_PROFILE = "profile"
         const val SEND_OTP_MOBILE_NUMBER = "login"
         const val RESET_PASSWORD = "driver/resetPassword"
+        const val GET_REQUIRED_ALL_DOCUMENT = "driver/required-documents"
+        const val GET_VEHICLE_DOCUMENT = "driver/vehicle-documents"
+        const val GET_VEHICLE_PHOTOS = "driver/vehicle-photos"
 //        const val RESEND_OTP = "driver/resetPassword"
 
     }

@@ -44,6 +44,13 @@ interface AuthService {
     @POST(APIFactory.AuthApi.RESET_PASSWORD)
     suspend fun resetPassword(@Body request: Request) : Response<JsonObject>
 
+    @GET(APIFactory.AuthApi.GET_REQUIRED_ALL_DOCUMENT)
+    suspend fun getRequiredAllDocument() : Response<JsonObject>
 
+    @GET(APIFactory.AuthApi.GET_VEHICLE_DOCUMENT)
+    suspend fun getVehicleDocument() : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_VEHICLE_PHOTOS)
+    suspend fun getVehiclePhotos() : Response<JsonObject>
 
 }

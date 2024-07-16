@@ -137,8 +137,10 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
     private fun setUpText() = with(binding) {
         includedTopContent.textViewHello.text = getString(R.string.label_hello)
-        includedTopContent.textViewWelcomeBack.text = String.format(getString(R.string.dummy_welcome_rahul),
-            session.user?.name?.split(" ")?.get(0) ?: "")
+        includedTopContent.textViewWelcomeBack.text = String.format(
+            getString(R.string.dummy_welcome_rahul),
+            session.user?.name?.split(" ")?.get(0) ?: ""
+        )
         includedTopContent.textViewYouHaveMissed.text =
             getString(R.string.label_please_complete_all_steps)
     }
@@ -169,11 +171,15 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                 }
 
                 1 -> {
-                    navigator.load(DriverPersonalProfilePictureFragment::class.java).replace(true)
+                    navigator.load(DriverPersonalProfilePictureFragment::class.java)
+                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = "1001"))
+                        .replace(true)
                 }
 
                 2 -> {
-                    navigator.load(DriverRequiredDocumentsFragment::class.java).replace(true)
+                    navigator.load(DriverRequiredDocumentsFragment::class.java)
+                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = "11"))
+                        .replace(true)
                 }
             }
         }
@@ -185,11 +191,17 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                 }
 
                 1 -> {
-                    navigator.load(DriverVehicleDocumentsFragment::class.java).replace(true)
+                    navigator.load(DriverRequiredDocumentsFragment::class.java)
+                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = "12"))
+                        .replace(true)
+//                    navigator.load(DriverVehicleDocumentsFragment::class.java).replace(true)
                 }
 
                 2 -> {
-                    navigator.load(DriverVehiclePhotosFragment::class.java).replace(true)
+                    navigator.load(DriverRequiredDocumentsFragment::class.java)
+                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = "13"))
+                        .replace(true)
+                    //  navigator.load(DriverVehiclePhotosFragment::class.java).replace(true)
                 }
             }
         }

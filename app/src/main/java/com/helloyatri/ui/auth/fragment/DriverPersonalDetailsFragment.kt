@@ -9,8 +9,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import com.gamingyards.sms.app.utils.Resource
 import com.gamingyards.sms.app.utils.Status
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.hbb20.CountryCodePicker
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -37,6 +40,8 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
     private lateinit var countryCodePicker: CountryCodePicker
     private var countryCode: String? = null
     private var countryShortCode: String? = null
+    val getCities by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val getAllCities by lazy { ArrayList<CommonFieldSelection>() }
 
     private val commonFieldSelectionBottomSheetForGender by lazy {
         CommonFieldSelectionBottomSheet()
@@ -49,33 +54,6 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initObservers()
-
-//        apiViewModel.getCitiesLiveData.get(this,{
-//            hideLoader()
-//            when(it?.code) {
-//                APIFactory.ResponseCode.SUCCESS -> {
-//
-//                }
-//
-//                else -> {
-//                    showMessage(it.message?:"")
-//                }
-//            }
-//        })
-
-//        apiViewModel.updateProfileLiveData.get(this, {
-//            hideLoader()
-//            when (it.code) {
-//                APIFactory.ResponseCode.SUCCESS -> {
-//                    showMessage(it.message ?: "")
-//                    navigator.goBack()
-//                }
-//
-//                else -> {
-//                    showMessage(it.message ?: "")
-//                }
-//            }
-//        })
     }
 
     private fun initObservers() {
@@ -84,8 +62,19 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
-                    showMessage(resource.message ?: "")
-                    navigator.goBack()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), DriverResponse::class.java)
+                        response?.data?.let {
+                            showMessage(response.message ?: "")
+                            navigator.goBack()
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+
                 }
 
                 Status.ERROR -> {
@@ -103,11 +92,12 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
-                    resource?.data?.let {
+                    resource?.data?.let { it ->
                         val response =
                             Gson().fromJson(it.toString(), CityModel::class.java)
                         response?.data?.let {
-                            Log.i("TAG", "initObservers: " + it.toString())
+                            getAllCities.clear()
+                            getAllCities.addAll(it)
                         } ?: run {
                             showSomethingMessage()
                         }
@@ -151,6 +141,18 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
                             String.format(
                                 "%s",
                                 response.data?.mobile
+                            )
+                        )
+                        binding.includedGender.editText.setText(
+                            String.format(
+                                "%s",
+                                response.data?.gender
+                            )
+                        )
+                        binding.includedCityYouDriveIn.editText.setText(
+                            String.format(
+                                "%s",
+                                response.data?.driveInCity
                             )
                         )
                     }
@@ -282,13 +284,15 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
                 .show(childFragmentManager, null)
         }
 
-//        includedCityYouDriveIn.editText.setOnClickListener {
-//            commonFieldSelectionBottomSheetForCity.setOptionsList(
-//                    optionList = apiViewModel.getCitiesLiveData.value?.resBody?.data?: arrayListOf<CommonFieldSelection>()
-//            ).setTitle("Select City")
-//                    .setSelectedOption(includedCityYouDriveIn.editText.trimmedText)
-//                    .show(childFragmentManager, null)
-//        }
+        includedCityYouDriveIn.editText.setOnClickListener {
+            commonFieldSelectionBottomSheetForCity.setOptionsList(
+                optionList = getAllCities
+            ).setTitle("Select City")
+                .setSelectedOption(includedCityYouDriveIn.editText.trimmedText)
+                .show(childFragmentManager, null)
+        }
+        //optionList = apiViewModel.getCitiesLiveData.value?.resBody?.data?: arrayListOf<CommonFieldSelection>()
+
     }
 
     private fun validate() = with(binding) {
@@ -327,11 +331,8 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
                     mobile = binding.includedMobileNumber.editText.text.toString().trim(),
                     gender = binding.includedGender.editText.text.toString().trim(),
                     driverInCity = binding.includedCityYouDriveIn.editText.text.toString().trim()
-
                 )
             )
-
-
         } catch (e: ApplicationException) {
             showMessage(e.message)
         }
