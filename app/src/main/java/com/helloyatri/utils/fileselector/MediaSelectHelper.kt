@@ -634,7 +634,6 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
             galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
             galleryIntent!!.type = "*/*"
             galleryIntent!!.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-
             galleryIntent!!.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         } else {
             galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

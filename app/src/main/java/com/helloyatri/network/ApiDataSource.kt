@@ -35,6 +35,10 @@ class ApiDataSource @Inject constructor(
         return run2 { authService.updateProfileImage(request) }
     }
 
+    override suspend fun uploadDocument(body: RequestBody): Resource<JsonObject> {
+        return run2 { authService.uploadDocument(body) }
+    }
+
     override suspend fun getDriverStatus(): Resource<JsonObject> {
         return run2 { authService.getDriverStatus() }
     }
@@ -45,6 +49,10 @@ class ApiDataSource @Inject constructor(
 
     override suspend fun getCities(): Resource<JsonObject> {
         return run2 { authService.getCities() }
+    }
+
+    override suspend fun deleteUserImage(): Resource<JsonObject> {
+        return run2 { authService.deleteUserImage() }
     }
 
     override suspend fun sendOtpToMobileNumber(request: Request): Resource<JsonObject> {
@@ -69,5 +77,9 @@ class ApiDataSource @Inject constructor(
 
     override suspend fun getVehiclePhotos(): Resource<JsonObject> {
         return run2 { authService.getVehiclePhotos() }
+    }
+
+    override suspend fun removeSpecificDocument(request: Request): Resource<JsonObject> {
+        return run2 { authService.removeSpecificDocument(request) }
     }
 }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
 import com.helloyatri.data.request.DriverProfilePictureDetails
-import com.helloyatri.data.request.DriverProfilePictureImages
+import com.helloyatri.data.model.DriverProfilePictureImages
 import com.helloyatri.databinding.AuthDriverVehiclePermitFragmentBinding
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureDetailsAdapter
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureImagesAdapter
@@ -97,7 +97,8 @@ class DriverVehiclePermitFragment : BaseFragment<AuthDriverVehiclePermitFragment
                     FileType.Image -> {
                         driverVehiclePermitImagesAdapter.isBitMap = false
                         driverVehiclePermitImagesAdapter.addItem(
-                                DriverProfilePictureImages(images = outPutFileAny.uri.path))
+                                DriverProfilePictureImages(images = outPutFileAny.uri.path)
+                        )
                         updateCount()
                     }
 
@@ -118,7 +119,8 @@ class DriverVehiclePermitFragment : BaseFragment<AuthDriverVehiclePermitFragment
                                     driverVehiclePermitImagesAdapter.addItem(
                                             DriverProfilePictureImages(
                                                     images = outPutFileAny.uri.path,
-                                                    imageBitmap = bitmap))
+                                                    imageBitmap = bitmap)
+                                    )
                                 }
                         updateCount()
                     }
@@ -142,8 +144,10 @@ class DriverVehiclePermitFragment : BaseFragment<AuthDriverVehiclePermitFragment
                 R.string.label_only_documents_that_are_less_than_10_mb_in_size_and_in_jpg_jpeg_png_or_pdf_format_will_be_accepted)))
         driverVehiclePermitDetailsAdapter.setItems(driverVehiclePermitDetailsList, 1)
 
-        driverVehiclePermitImagesAdapter.addItem(DriverProfilePictureImages(
-                images = "https://images.unsplash.com/photo-1581553673739-c4906b5d0de8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"))
+        driverVehiclePermitImagesAdapter.addItem(
+            DriverProfilePictureImages(
+                images = "https://images.unsplash.com/photo-1581553673739-c4906b5d0de8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+        )
         updateCount()
     }
 

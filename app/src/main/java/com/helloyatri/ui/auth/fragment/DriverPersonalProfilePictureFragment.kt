@@ -17,14 +17,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gamingyards.sms.app.utils.Status
 import com.google.gson.Gson
 import com.helloyatri.R
-import com.helloyatri.data.request.DriverProfilePictureDetails
-import com.helloyatri.data.request.DriverProfilePictureImages
+import com.helloyatri.data.Request
+import com.helloyatri.data.model.DriverProfilePictureImages
 import com.helloyatri.data.model.DriverResponse
+import com.helloyatri.data.model.GetAllRequiredDocument
+import com.helloyatri.data.model.UploadDocumentModel
+import com.helloyatri.data.request.DriverProfilePictureDetails
 import com.helloyatri.databinding.AuthDriverPersonalProfilePictureFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureDetailsAdapter
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureImagesAdapter
 import com.helloyatri.ui.base.BaseFragment
+import com.helloyatri.utils.Constants.DRIVER_DOC
+import com.helloyatri.utils.Constants.PERSONAL_PROFILE_SCREEN
+import com.helloyatri.utils.Constants.UPDATE_PROFILE_PICTURE
+import com.helloyatri.utils.Constants.UPLOAD_BANK_DETAILS
+import com.helloyatri.utils.Constants.UPLOAD_CHASIS_NUMBER_IMAGES
+import com.helloyatri.utils.Constants.UPLOAD_DRIVING_LICENCE
+import com.helloyatri.utils.Constants.UPLOAD_FRONTBACK_WITH_NUMBER_PLATE
+import com.helloyatri.utils.Constants.UPLOAD_GOVERNMENT_ID
+import com.helloyatri.utils.Constants.UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR
+import com.helloyatri.utils.Constants.UPLOAD_REGISTRATION_CERTIFICATION
+import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_INSURANCE
+import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_PERMIT
+import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_PUC
+import com.helloyatri.utils.Constants.UPLOAD_YOUR_PHOTO_WITH_VEHICLE
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.fileselector.FileType
@@ -38,6 +55,7 @@ import okhttp3.RequestBody
 import java.io.File
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class DriverPersonalProfilePictureFragment :
     BaseFragment<AuthDriverPersonalProfilePictureFragmentBinding>() {
@@ -47,6 +65,7 @@ class DriverPersonalProfilePictureFragment :
     @Inject
     lateinit var mediaSelectHelper: MediaSelectHelper
 
+
     private val driverProfilePictureDetailsAdapter by lazy {
         DriverProfilePictureDetailsAdapter()
     }
@@ -55,17 +74,25 @@ class DriverPersonalProfilePictureFragment :
         DriverProfilePictureImagesAdapter()
     }
 
+    var getuploadedDriverArrayList: ArrayList<String> = arrayListOf()
+
+
     companion object {
         fun createBundle(
-            statusCode: String? = null
+            statusCode: String? = null,
+            document_id: String? = null
         ) = bundleOf(
-            "statusCode" to statusCode
+            "statusCode" to statusCode,
+            "document_id" to document_id
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideLoader()
+        statusCode = arguments?.getString("statusCode")
+        document_id = arguments?.getString("document_id")
+
 //        apiViewModel.updateProfileImageLiveData.get(this,{
 //            hideLoader()
 //            when(it.code) {
@@ -80,9 +107,15 @@ class DriverPersonalProfilePictureFragment :
 //                }
 //            }
 //        })
+
         getProfile()
+        getRequiredDriverDocumentAPI()
         initObservers()
 
+    }
+
+    private fun getRequiredDriverDocumentAPI() {
+        apiViewModel.getAllRequiredDocument()
     }
 
     private fun initObservers() {
@@ -91,11 +124,25 @@ class DriverPersonalProfilePictureFragment :
                 when (resource.status) {
                     Status.LOADING -> showLoader()
                     Status.SUCCESS -> {
+                        Log.i("TAG", "initObservers: ")
                         hideLoader()
-                        navigator.goBack()
+                        resource.data?.let {
+                            val response =
+                                Gson().fromJson(it.toString(), DriverResponse::class.java)
+                            response?.data?.let {
+                                showMessage(response.message ?: "")
+                                navigator.goBack()
+                            } ?: run {
+                                Log.i("TAG", "initObservers: 111")
+                                showSomethingMessage()
+                            }
+                        } ?: run {
+                            showSomethingMessage()
+                        }
                     }
 
                     Status.ERROR -> {
+                        Log.i("TAG", "initObservers:11 " + resource.message)
                         hideLoader()
                         val error =
                             resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
@@ -115,7 +162,8 @@ class DriverPersonalProfilePictureFragment :
                             Gson().fromJson(it.data.toString(), DriverResponse::class.java)
                         driverProfilePictureImagesAdapter.addItem(
                             DriverProfilePictureImages(
-                                images = response.data?.profileImage.toString()
+                                images = response.data?.profileImage.toString(),
+                                local = false
                             )
                         )
                         updateCount()
@@ -123,6 +171,7 @@ class DriverPersonalProfilePictureFragment :
 
                     Status.ERROR -> {
                         hideLoader()
+                        Log.i("TAG", "initObservers: " + resource.message)
                         val error =
                             resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                         showErrorMessage(error)
@@ -130,9 +179,88 @@ class DriverPersonalProfilePictureFragment :
                 }
             }
         }
+
+        apiViewModel.uploadDocumentLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource.data?.let {
+                        val response =
+                            Gson().fromJson(
+                                resource.data.toString(),
+                                UploadDocumentModel::class.java
+                            )
+                        showMessage(response.message ?: "")
+                        navigator.goBack()
+
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    Log.i("TAG", "initObservers: " + resource.message)
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> hideLoader()
+            }
+        }
+
+        apiViewModel.getRequiredAllDocumentLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
+                        response?.data?.let {
+                            for (item in response.data!!) {
+                                if (item.id.toString() == document_id) {
+                                    item.uploadedDriverDocument?.uploadedArray?.let { it1 ->
+                                        getuploadedDriverArrayList.addAll(
+                                            it1
+                                        )
+                                    }
+                                }
+                            }
+                            for (item in getuploadedDriverArrayList) {
+                                driverProfilePictureImagesAdapter.addItem(
+                                    DriverProfilePictureImages(
+                                        images = item,
+                                        local = false
+                                    )
+                                )
+                            }
+                            updateCount()
+                            setUpData()
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
+
     }
 
     private val driverProfilePictureDetailsList = ArrayList<DriverProfilePictureDetails>()
+    var statusCode: String? = null
+    var document_id: String? = null
 
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -150,60 +278,96 @@ class DriverPersonalProfilePictureFragment :
     }
 
     private fun getProfile() {
-        if (arguments?.getString("statusCode") == "1001") {
+        if (statusCode == UPDATE_PROFILE_PICTURE) {
             apiViewModel.getDriverProfile()
         }
     }
 
     private fun setUpText() = with(binding) {
-        if (arguments?.getString("statusCode") == "1001") {
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_profile_picture)
-            textViewProfilePicture.text = getString(R.string.label_profile_picture)
-        }else if (arguments?.getString("statusCode") == "1002"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_driving_license)
-            textViewProfilePicture.text = getString(R.string.label_driving_license)
-        }else if (arguments?.getString("statusCode") == "1003"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_government_id)
-            textViewProfilePicture.text = getString(R.string.label_government_id)
-        }else if (arguments?.getString("statusCode") == "1004"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_bank_details)
-            textViewProfilePicture.text = getString(R.string.label_attach_bank_account_details)
-        }else if (arguments?.getString("statusCode") == "1005"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
-            textViewProfilePicture.text = getString(R.string.label_vehicle_puc)
-        }else if (arguments?.getString("statusCode") == "1006"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
-            textViewProfilePicture.text = getString(R.string.label_vehicle_insurance)
-        }else if (arguments?.getString("statusCode") == "1007"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
-            textViewProfilePicture.text = getString(R.string.label_vehicle_registration_certificate)
-        }else if (arguments?.getString("statusCode") == "1008"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_documents)
-            textViewProfilePicture.text = getString(R.string.label_vehicle_permit)
-        }else if (arguments?.getString("statusCode") == "1009"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
-            textViewProfilePicture.text = getString(R.string.label_front_back_with_number_plate)
-        }else if (arguments?.getString("statusCode") == "1010"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
-            textViewProfilePicture.text = getString(R.string.label_left_right_side_exterior)
-        }else if (arguments?.getString("statusCode") == "1011"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
-            textViewProfilePicture.text = getString(R.string.label_chassis_number_images)
-        }else if (arguments?.getString("statusCode") == "1012"){
-            includedTopContent.textViewHello.text = getString(R.string.label_upload)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_vehicle_photos)
-            textViewProfilePicture.text = getString(R.string.label_your_photo_with_vehicle)
+        when (statusCode) {
+            UPDATE_PROFILE_PICTURE -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_profile_picture)
+                textViewProfilePicture.text = getString(R.string.label_profile_picture)
+            }
+
+            UPLOAD_DRIVING_LICENCE -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_driving_license)
+                textViewProfilePicture.text = getString(R.string.label_driving_license)
+            }
+
+            UPLOAD_GOVERNMENT_ID -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_government_id)
+                textViewProfilePicture.text = getString(R.string.label_government_id)
+            }
+
+            UPLOAD_BANK_DETAILS -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text = getString(R.string.label_bank_details)
+                textViewProfilePicture.text = getString(R.string.label_attach_bank_account_details)
+            }
+
+            UPLOAD_VEHICLE_PUC -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_documents)
+                textViewProfilePicture.text = getString(R.string.label_vehicle_puc)
+            }
+
+            UPLOAD_VEHICLE_INSURANCE -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_documents)
+                textViewProfilePicture.text = getString(R.string.label_vehicle_insurance)
+            }
+
+            UPLOAD_REGISTRATION_CERTIFICATION -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_documents)
+                textViewProfilePicture.text =
+                    getString(R.string.label_vehicle_registration_certificate)
+            }
+
+            UPLOAD_VEHICLE_PERMIT -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_documents)
+                textViewProfilePicture.text = getString(R.string.label_vehicle_permit)
+            }
+
+            UPLOAD_FRONTBACK_WITH_NUMBER_PLATE -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_photos)
+                textViewProfilePicture.text = getString(R.string.label_front_back_with_number_plate)
+            }
+
+            UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_photos)
+                textViewProfilePicture.text = getString(R.string.label_left_right_side_exterior)
+            }
+
+            UPLOAD_CHASIS_NUMBER_IMAGES -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_photos)
+                textViewProfilePicture.text = getString(R.string.label_chassis_number_images)
+            }
+
+            UPLOAD_YOUR_PHOTO_WITH_VEHICLE -> {
+                includedTopContent.textViewHello.text = getString(R.string.label_upload)
+                includedTopContent.textViewWelcomeBack.text =
+                    getString(R.string.label_vehicle_photos)
+                textViewProfilePicture.text = getString(R.string.label_your_photo_with_vehicle)
+            }
         }
         includedTopContent.textViewYouHaveMissed.text = getString(
             R.string.label_don_t_worry_only_you_can_see_your_personal_data_no_one_else_will_be_able_to_see_it
@@ -224,33 +388,70 @@ class DriverPersonalProfilePictureFragment :
 
     private fun setUpClickListener() = with(binding) {
         constraintUploadDocuments.setOnClickListener {
-
-            mediaSelectHelper.canSelectMultipleImages(false)
             mediaSelectHelper.selectOptionsForImagePicker(false)
 
         }
 
         driverProfilePictureImagesAdapter.setOnItemClickListener {
-            driverProfilePictureImagesAdapter.removeItem(it)
+            if (it.local) {
+                driverProfilePictureImagesAdapter.removeItem(it)
+            } else {
+                if (statusCode == PERSONAL_PROFILE_SCREEN) {
+
+                } else if (statusCode == UPLOAD_DRIVING_LICENCE) {
+                    apiViewModel.removeSpecificDocument(Request(id = "11", document = it.images))
+                }
+            }
             updateCount()
         }
 
         buttonSave.setOnClickListener {
             showLoader()
-            val requestBody: RequestBody = MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart(
-                    "profile_image",
-                    Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment
-                        ?: "",
-                    RequestBody.create(
-                        "image/*".toMediaTypeOrNull(),
-                        File(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)
-                    )
-                )
-                .build()
-            if (arguments?.getString("statusCode") == "1001") {
-                apiViewModel.updateProfileImage(requestBody)
+            if (statusCode == PERSONAL_PROFILE_SCREEN) {
+                if (driverProfilePictureImagesAdapter.items?.get(0)?.local == true) {
+                    val requestBody: RequestBody = MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart(
+                            "profile_image",
+                            Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment
+                                ?: "",
+                            RequestBody.create(
+                                "image/*".toMediaTypeOrNull(),
+                                File(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)
+                            )
+                        )
+                        .build()
+                    apiViewModel.updateProfileImage(requestBody)
+                } else {
+                    hideLoader()
+                    navigator.goBack()
+                }
+            } else if (statusCode == UPLOAD_DRIVING_LICENCE) {
+                for (item in driverProfilePictureImagesAdapter.items!!) {
+                    if (item.local) {
+                        val requestBody: RequestBody = MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart(
+                                "documents[]",
+                                Uri.parse(item.images)?.lastPathSegment
+                                    ?: "",
+                                RequestBody.create(
+                                    "image/*".toMediaTypeOrNull(),
+                                    File(item.images)
+                                )
+                            )
+                            .addFormDataPart("document_id", document_id ?: "")
+                            .addFormDataPart("type", DRIVER_DOC)
+                            .build()
+                        apiViewModel.updateDocument(requestBody)
+                    } else {
+                        hideLoader()
+                    }
+                }
+            } else if (statusCode == UPLOAD_GOVERNMENT_ID) {
+
+            } else if (statusCode == UPLOAD_BANK_DETAILS) {
+
             }
             // session.isProfilePictureAdded = true
             //navigator.goBack()
@@ -258,18 +459,28 @@ class DriverPersonalProfilePictureFragment :
     }
 
     private fun setUpImages() {
-        Log.i("TAG", "setUpImages: ")
+//        mediaSelectHelper.canSelectMultipleImages(false)
         mediaSelectHelper.registerCallback(object : MediaSelector {
             override fun onImageUri(uri: Uri) {
                 super.onImageUri(uri)
-                driverProfilePictureImagesAdapter.isBitMap = false
-                driverProfilePictureImagesAdapter.addItem(
-                    DriverProfilePictureImages(images = uri.path)
-                )
+                if (statusCode == PERSONAL_PROFILE_SCREEN) {
+                    driverProfilePictureImagesAdapter.isBitMap = false
+                    driverProfilePictureImagesAdapter.clearAllItem()
+                    driverProfilePictureImagesAdapter.addItem(
+                        DriverProfilePictureImages(images = uri.path, local = true)
+                    )
+                } else if (statusCode == UPLOAD_DRIVING_LICENCE) {
+                    driverProfilePictureImagesAdapter.isBitMap = false
+                    driverProfilePictureImagesAdapter.addItem(
+                        DriverProfilePictureImages(images = uri.path, local = true)
+                    )
+                }
+
                 updateCount()
             }
+
             override fun onAnyFileSelected(outPutFileAny: OutPutFileAny) {
-                Log.i("TAG", "onAnyFileSelected: "+outPutFileAny.type)
+                Log.i("TAG", "onAnyFileSelected: " + outPutFileAny.type)
                 binding.recyclerViewImages.show()
                 when (outPutFileAny.type) {
                     FileType.Image -> {
@@ -277,7 +488,7 @@ class DriverPersonalProfilePictureFragment :
                         driverProfilePictureImagesAdapter.addItem(
                             DriverProfilePictureImages(images = outPutFileAny.uri.path)
                         )
-                        Log.i("TAG", "onAnyFileSelected:11 "+outPutFileAny.uri.path)
+                        Log.i("TAG", "onAnyFileSelected:11 " + outPutFileAny.uri.path)
                         updateCount()
                     }
 

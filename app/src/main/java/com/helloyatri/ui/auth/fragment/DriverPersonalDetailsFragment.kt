@@ -1,7 +1,6 @@
 package com.helloyatri.ui.auth.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -19,11 +18,8 @@ import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.CityModel
 import com.helloyatri.data.model.DriverResponse
-import com.helloyatri.data.model.LoginResponse
-import com.helloyatri.data.request.DriverProfilePictureImages
 import com.helloyatri.databinding.AuthDriverPersonalDetailsFragmentBinding
 import com.helloyatri.exception.ApplicationException
-import com.helloyatri.network.APIFactory
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.common.fieldselection.bottomsheet.CommonFieldSelectionBottomSheet

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
 import com.helloyatri.data.request.DriverProfilePictureDetails
-import com.helloyatri.data.request.DriverProfilePictureImages
+import com.helloyatri.data.model.DriverProfilePictureImages
 import com.helloyatri.databinding.AuthDriverCompleteDriverLicenceFragmentBinding
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureDetailsAdapter
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureImagesAdapter
@@ -98,7 +98,8 @@ class DriverRequiredDocumentLicenceFragment :
                     FileType.Image -> {
                         driverRequiredDocumentsLicenseImagesAdapter.isBitMap = false
                         driverRequiredDocumentsLicenseImagesAdapter.addItem(
-                                DriverProfilePictureImages(images = outPutFileAny.uri.path))
+                                DriverProfilePictureImages(images = outPutFileAny.uri.path)
+                        )
                         updateCount()
                     }
 
@@ -119,7 +120,8 @@ class DriverRequiredDocumentLicenceFragment :
                                     driverRequiredDocumentsLicenseImagesAdapter.addItem(
                                             DriverProfilePictureImages(
                                                     images = outPutFileAny.uri.path,
-                                                    imageBitmap = bitmap))
+                                                    imageBitmap = bitmap)
+                                    )
                                 }
                         updateCount()
                     }
@@ -144,8 +146,10 @@ class DriverRequiredDocumentLicenceFragment :
         driverRequiredDocumentsLicenseDetailsAdapter.setItems(
                 driverRequiredDocumentsLicenseDetailsList, 1)
 
-        driverRequiredDocumentsLicenseImagesAdapter.addItem(DriverProfilePictureImages(
-                images = "https://images.unsplash.com/photo-1623795457659-f6b530b2e383?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"))
+        driverRequiredDocumentsLicenseImagesAdapter.addItem(
+            DriverProfilePictureImages(
+                images = "https://images.unsplash.com/photo-1623795457659-f6b530b2e383?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+        )
         updateCount()
     }
 

@@ -14,6 +14,10 @@ import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
+import com.helloyatri.utils.Constants.DRIVER_REQUIRED_DOCUMENT
+import com.helloyatri.utils.Constants.PERSONAL_PROFILE_SCREEN
+import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
+import com.helloyatri.utils.Constants.VEHICLE_PHOTO
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -172,13 +176,13 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
                 1 -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = "1001"))
+                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = PERSONAL_PROFILE_SCREEN))
                         .replace(true)
                 }
 
                 2 -> {
                     navigator.load(DriverRequiredDocumentsFragment::class.java)
-                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = "11"))
+                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = DRIVER_REQUIRED_DOCUMENT))
                         .replace(true)
                 }
             }
@@ -192,14 +196,14 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
                 1 -> {
                     navigator.load(DriverRequiredDocumentsFragment::class.java)
-                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = "12"))
+                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = VEHICLE_DOCUMENT))
                         .replace(true)
 //                    navigator.load(DriverVehicleDocumentsFragment::class.java).replace(true)
                 }
 
                 2 -> {
                     navigator.load(DriverRequiredDocumentsFragment::class.java)
-                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = "13"))
+                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = VEHICLE_PHOTO))
                         .replace(true)
                     //  navigator.load(DriverVehiclePhotosFragment::class.java).replace(true)
                 }

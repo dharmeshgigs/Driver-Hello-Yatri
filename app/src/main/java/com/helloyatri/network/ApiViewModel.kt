@@ -12,6 +12,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentViewModel() {
 
+    val removeSpecificDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun removeSpecificDocument(request: Request) {
+        run {
+            removeSpecificDocumentLiveData.value = Resource.loading()
+            removeSpecificDocumentLiveData.value = authRepo.removeSpecificDocument(request)
+        }
+    }
+
     val resendOtpLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun resendOtp(request: Request) {
@@ -73,6 +82,15 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
             updateProfileImageLiveData.value = authRepo.updateProfileImage(body)
         }
     }
+
+    val uploadDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun updateDocument(body: RequestBody) {
+        run {
+            uploadDocumentLiveData.value = Resource.loading()
+            uploadDocumentLiveData.value = authRepo.uploadDocument(body)
+        }
+    }
+
 
     val getDriverProfileLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     fun getDriverProfile() {

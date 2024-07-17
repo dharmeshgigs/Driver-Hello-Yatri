@@ -1,7 +1,7 @@
 package com.helloyatri.ui.auth.adapter
 
 import android.view.ViewGroup
-import com.helloyatri.data.request.DriverProfilePictureImages
+import com.helloyatri.data.model.DriverProfilePictureImages
 import com.helloyatri.databinding.AuthDriverPersonalProfilePictureImageRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder
@@ -35,7 +35,8 @@ class DriverProfilePictureImagesAdapter :
     }
 
     override fun onBindDataHolder(holder: ViewHolder, position: Int,
-                                  item: DriverProfilePictureImages) {
+                                  item: DriverProfilePictureImages
+    ) {
         holder.bind(item)
     }
 }

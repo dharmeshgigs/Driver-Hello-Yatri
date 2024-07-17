@@ -6,6 +6,7 @@ import com.helloyatri.data.model.Driver
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -38,6 +39,9 @@ interface AuthService {
     @GET(APIFactory.AuthApi.GET_CITIES)
     suspend fun getCities() : Response<JsonObject>
 
+    @DELETE(APIFactory.AuthApi.DELETE_USER_PROFILE)
+    suspend fun deleteUserImage(): Response<JsonObject>
+
     @POST(APIFactory.AuthApi.SEND_OTP_MOBILE_NUMBER)
     suspend fun sendOtpToMobileNumber(@Body request: Request) : Response<JsonObject>
 
@@ -52,5 +56,11 @@ interface AuthService {
 
     @GET(APIFactory.AuthApi.GET_VEHICLE_PHOTOS)
     suspend fun getVehiclePhotos() : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.UPLOAD_DOCUMENT)
+    suspend fun uploadDocument(@Body request : RequestBody) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.REMOVE_SPECIFIC_DOCUMENT)
+    suspend fun removeSpecificDocument(@Body request: Request) : Response<JsonObject>
 
 }
