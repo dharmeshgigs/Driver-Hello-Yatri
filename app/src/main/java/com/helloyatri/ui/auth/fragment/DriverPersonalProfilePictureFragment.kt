@@ -262,6 +262,11 @@ class DriverPersonalProfilePictureFragment :
         mediaSelectHelper.registerCallback(object : MediaSelector {
             override fun onImageUri(uri: Uri) {
                 super.onImageUri(uri)
+                driverProfilePictureImagesAdapter.isBitMap = false
+                driverProfilePictureImagesAdapter.addItem(
+                    DriverProfilePictureImages(images = uri.path)
+                )
+                updateCount()
             }
             override fun onAnyFileSelected(outPutFileAny: OutPutFileAny) {
                 Log.i("TAG", "onAnyFileSelected: "+outPutFileAny.type)
