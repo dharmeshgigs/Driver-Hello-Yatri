@@ -221,54 +221,86 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Driving Licence")
                 }
 
                 "Goverment Id" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_GOVERNMENT_ID))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_GOVERNMENT_ID,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Goverment Id")
                 }
 
                 "Bank Details" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_BANK_DETAILS))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_BANK_DETAILS,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Bank Details")
                 }
 
                 "Vehicle PUC" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_VEHICLE_PUC))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_VEHICLE_PUC,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Vehicle PUC")
                 }
 
                 "Vehicle Insurance" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_VEHICLE_INSURANCE))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_VEHICLE_INSURANCE,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Vehicle Insurance")
                 }
 
                 "Vehicle Registration Certificate" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_REGISTRATION_CERTIFICATION))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_REGISTRATION_CERTIFICATION,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Vehicle Registration Certificate")
                 }
 
                 "Vehicle Permit" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_VEHICLE_PERMIT))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_VEHICLE_PERMIT,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Vehicle Permit")
                 }
 
                 "Front-back with Number plage" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_FRONTBACK_WITH_NUMBER_PLATE))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_FRONTBACK_WITH_NUMBER_PLATE,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Front-back with Number plage")
 
@@ -276,7 +308,12 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
 
                 "Left-Right Side Exterior" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Left-Right Side Exterior")
 
@@ -284,7 +321,12 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
 
                 "Chassis Number Images" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_CHASIS_NUMBER_IMAGES))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_CHASIS_NUMBER_IMAGES,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Chassis Number Images")
 
@@ -292,7 +334,12 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
 
                 "Your photo with vehicle" -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPLOAD_YOUR_PHOTO_WITH_VEHICLE))
+                        .setBundle(
+                            DriverPersonalProfilePictureFragment.createBundle(
+                                statusCode = UPLOAD_YOUR_PHOTO_WITH_VEHICLE,
+                                document_id = getAllVehicleDocumentMutableList[position].id.toString()
+                            )
+                        )
                         .replace(true)
                     Log.i("TAG", "setUpClickListener: " + "Your photo with vehicle")
 

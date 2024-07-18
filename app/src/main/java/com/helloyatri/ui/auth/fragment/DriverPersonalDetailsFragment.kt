@@ -142,13 +142,13 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
                         binding.includedGender.editText.setText(
                             String.format(
                                 "%s",
-                                response.data?.gender
+                                response.data?.gender ?: getString(R.string.hint_select_gender)
                             )
                         )
                         binding.includedCityYouDriveIn.editText.setText(
                             String.format(
                                 "%s",
-                                response.data?.driveInCity
+                                response.data?.driveInCity ?:getString(R.string.hint_select_city)
                             )
                         )
                     }

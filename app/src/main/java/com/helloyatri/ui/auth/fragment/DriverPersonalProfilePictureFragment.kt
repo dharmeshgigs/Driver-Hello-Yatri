@@ -42,6 +42,9 @@ import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_INSURANCE
 import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_PERMIT
 import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_PUC
 import com.helloyatri.utils.Constants.UPLOAD_YOUR_PHOTO_WITH_VEHICLE
+import com.helloyatri.utils.Constants.VEHICLE_DOC
+import com.helloyatri.utils.Constants.VEHICLE_IMAGE
+import com.helloyatri.utils.Constants.VEHICLE_PHOTO
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.fileselector.FileType
@@ -108,8 +111,8 @@ class DriverPersonalProfilePictureFragment :
 //            }
 //        })
 
+
         getProfile()
-        getRequiredDriverDocumentAPI()
         initObservers()
 
     }
@@ -160,12 +163,16 @@ class DriverPersonalProfilePictureFragment :
                         hideLoader()
                         val response =
                             Gson().fromJson(it.data.toString(), DriverResponse::class.java)
-                        driverProfilePictureImagesAdapter.addItem(
-                            DriverProfilePictureImages(
-                                images = response.data?.profileImage.toString(),
-                                local = false
+                        response.data.let {
+                            driverProfilePictureImagesAdapter.addItem(
+                                DriverProfilePictureImages(
+                                    images = it?.profileImage.toString(),
+                                    local = false
+                                )
                             )
-                        )
+                        }
+                        driverProfilePictureImagesAdapter.notifyDataSetChanged()
+
                         updateCount()
                     }
 
@@ -210,7 +217,7 @@ class DriverPersonalProfilePictureFragment :
             }
         }
 
-        apiViewModel.getRequiredAllDocumentLiveData.observe(this) { resource ->
+        apiViewModel.getVehicleDocumentLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
@@ -218,25 +225,81 @@ class DriverPersonalProfilePictureFragment :
                         val response =
                             Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
                         response?.data?.let {
+                            getuploadedDriverArrayList.clear()
                             for (item in response.data!!) {
                                 if (item.id.toString() == document_id) {
-                                    item.uploadedDriverDocument?.uploadedArray?.let { it1 ->
+                                    id = item.uploaded_vehicle_document?.id.toString()
+                                    item.uploaded_vehicle_document?.uploadedArray?.let { it1 ->
                                         getuploadedDriverArrayList.addAll(
                                             it1
                                         )
                                     }
                                 }
                             }
+                            Log.i("TAG", "initObservers: " + getuploadedDriverArrayList.size)
+                            driverProfilePictureImagesAdapter.clearAllItem()
                             for (item in getuploadedDriverArrayList) {
                                 driverProfilePictureImagesAdapter.addItem(
                                     DriverProfilePictureImages(
                                         images = item,
-                                        local = false
+                                        local = false,
+                                        id = id
                                     )
                                 )
                             }
                             updateCount()
-                            setUpData()
+//                            setUpData()
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+
+        }
+
+        apiViewModel.getVehiclePhotosLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
+                        response?.data?.let {
+                            getuploadedDriverArrayList.clear()
+                            for (item in response.data!!) {
+                                if (item.id.toString() == document_id) {
+                                    id = item.uploaded_vehicle_document?.id.toString()
+                                    item.uploaded_vehicle_document?.uploadedArray?.let { it1 ->
+                                        getuploadedDriverArrayList.addAll(
+                                            it1
+                                        )
+                                    }
+                                }
+                            }
+                            Log.i("TAG", "initObservers:22 " + getuploadedDriverArrayList.size)
+                            driverProfilePictureImagesAdapter.clearAllItem()
+                            for (item in getuploadedDriverArrayList) {
+                                driverProfilePictureImagesAdapter.addItem(
+                                    DriverProfilePictureImages(
+                                        images = item,
+                                        local = false,
+                                        id = id
+                                    )
+                                )
+                            }
+                            updateCount()
                         } ?: run {
                             showSomethingMessage()
                         }
@@ -256,11 +319,111 @@ class DriverPersonalProfilePictureFragment :
             }
         }
 
+
+        apiViewModel.getRequiredAllDocumentLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
+                        response?.data?.let {
+                            getuploadedDriverArrayList.clear()
+                            for (item in response.data!!) {
+                                if (item.id.toString() == document_id) {
+                                    id = item.uploadedDriverDocument?.id.toString()
+                                    item.uploadedDriverDocument?.uploadedArray?.let { it1 ->
+                                        getuploadedDriverArrayList.addAll(
+                                            it1
+                                        )
+                                    }
+                                }
+                            }
+                            Log.i("TAG", "initObservers: " + getuploadedDriverArrayList.size)
+                            driverProfilePictureImagesAdapter.clearAllItem()
+                            for (item in getuploadedDriverArrayList) {
+                                driverProfilePictureImagesAdapter.addItem(
+                                    DriverProfilePictureImages(
+                                        images = item,
+                                        local = false,
+                                        id = id
+                                    )
+                                )
+                            }
+
+//                            if (statusCode == UPLOAD_BANK_DETAILS) {
+//                                if (driverProfilePictureImagesAdapter.items?.size!! > 1) {
+//                                    apiViewModel.removeSpecificDocument(
+//                                        Request(
+//                                            id = driverProfilePictureDetailsAdapter.items?.let { it1 ->
+//                                                driverProfilePictureImagesAdapter.items?.get(
+//                                                    it1.lastIndex-1
+//                                                )?.id
+//                                            },
+//                                            document = driverProfilePictureDetailsAdapter.items?.let { it1 ->
+//                                                driverProfilePictureImagesAdapter.items?.get(
+//                                                    it1.lastIndex-1
+//                                                )?.images
+//                                            })
+//                                    )
+//                                }
+//
+//                            }
+                            updateCount()
+//                            setUpData()
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
+
+
+        apiViewModel.removeSpecificDocumentLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    if (statusCode == UPLOAD_DRIVING_LICENCE || statusCode == UPLOAD_GOVERNMENT_ID || statusCode == UPLOAD_BANK_DETAILS) {
+                        getRequiredDriverDocumentAPI()
+                    } else if (statusCode == UPLOAD_VEHICLE_PUC || statusCode == UPLOAD_VEHICLE_INSURANCE || statusCode == UPLOAD_REGISTRATION_CERTIFICATION || statusCode == UPLOAD_VEHICLE_PERMIT) {
+                        apiViewModel.getVehicleDocument()
+                    }else if (statusCode == UPLOAD_FRONTBACK_WITH_NUMBER_PLATE || statusCode == UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR || statusCode == UPLOAD_CHASIS_NUMBER_IMAGES || statusCode == UPLOAD_YOUR_PHOTO_WITH_VEHICLE){
+                        apiViewModel.getVehiclePhotos()
+                    }
+//                    val response =
+//                        Gson().fromJson(resource.toString(), UploadDocumentModel::class.java)
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> hideLoader()
+            }
+
+        }
+
     }
 
     private val driverProfilePictureDetailsList = ArrayList<DriverProfilePictureDetails>()
     var statusCode: String? = null
     var document_id: String? = null
+    var id: String? = null
 
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -280,6 +443,12 @@ class DriverPersonalProfilePictureFragment :
     private fun getProfile() {
         if (statusCode == UPDATE_PROFILE_PICTURE) {
             apiViewModel.getDriverProfile()
+        } else if (statusCode == UPLOAD_DRIVING_LICENCE || statusCode == UPLOAD_GOVERNMENT_ID || statusCode == UPLOAD_BANK_DETAILS) {
+            getRequiredDriverDocumentAPI()
+        } else if (statusCode == UPLOAD_VEHICLE_PUC || statusCode == UPLOAD_VEHICLE_INSURANCE || statusCode == UPLOAD_REGISTRATION_CERTIFICATION || statusCode == UPLOAD_VEHICLE_PERMIT) {
+            apiViewModel.getVehicleDocument()
+        } else if (statusCode == UPLOAD_FRONTBACK_WITH_NUMBER_PLATE || statusCode == UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR || statusCode == UPLOAD_CHASIS_NUMBER_IMAGES || statusCode == UPLOAD_YOUR_PHOTO_WITH_VEHICLE){
+            apiViewModel.getVehiclePhotos()
         }
     }
 
@@ -398,8 +567,12 @@ class DriverPersonalProfilePictureFragment :
             } else {
                 if (statusCode == PERSONAL_PROFILE_SCREEN) {
 
-                } else if (statusCode == UPLOAD_DRIVING_LICENCE) {
-                    apiViewModel.removeSpecificDocument(Request(id = "11", document = it.images))
+                } else if (statusCode == UPLOAD_DRIVING_LICENCE || statusCode == UPLOAD_GOVERNMENT_ID || statusCode == UPLOAD_BANK_DETAILS) {
+                    apiViewModel.removeSpecificDocument(Request(id = it.id, document = it.images))
+                } else if (statusCode == UPLOAD_VEHICLE_PUC || statusCode == UPLOAD_VEHICLE_INSURANCE || statusCode == UPLOAD_REGISTRATION_CERTIFICATION || statusCode == UPLOAD_VEHICLE_PERMIT) {
+                    apiViewModel.removeSpecificDocument(Request(id = it.id, document = it.images))
+                } else if (statusCode == UPLOAD_FRONTBACK_WITH_NUMBER_PLATE || statusCode == UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR || statusCode == UPLOAD_CHASIS_NUMBER_IMAGES || statusCode == UPLOAD_YOUR_PHOTO_WITH_VEHICLE) {
+                    apiViewModel.removeSpecificDocument(Request(id = it.id, document = it.images))
                 }
             }
             updateCount()
@@ -426,7 +599,7 @@ class DriverPersonalProfilePictureFragment :
                     hideLoader()
                     navigator.goBack()
                 }
-            } else if (statusCode == UPLOAD_DRIVING_LICENCE) {
+            } else if (statusCode == UPLOAD_DRIVING_LICENCE || statusCode == UPLOAD_GOVERNMENT_ID || statusCode == UPLOAD_BANK_DETAILS) {
                 for (item in driverProfilePictureImagesAdapter.items!!) {
                     if (item.local) {
                         val requestBody: RequestBody = MultipartBody.Builder()
@@ -446,14 +619,59 @@ class DriverPersonalProfilePictureFragment :
                         apiViewModel.updateDocument(requestBody)
                     } else {
                         hideLoader()
+//                        navigator.goBack()
                     }
                 }
-            } else if (statusCode == UPLOAD_GOVERNMENT_ID) {
-
-            } else if (statusCode == UPLOAD_BANK_DETAILS) {
-
+            } else if (statusCode == UPLOAD_VEHICLE_PUC || statusCode == UPLOAD_VEHICLE_INSURANCE || statusCode == UPLOAD_REGISTRATION_CERTIFICATION ||
+                statusCode == UPLOAD_VEHICLE_PERMIT
+            ) {
+                for (item in driverProfilePictureImagesAdapter.items!!) {
+                    if (item.local) {
+                        val requestBody: RequestBody = MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart(
+                                "documents[]",
+                                Uri.parse(item.images)?.lastPathSegment
+                                    ?: "",
+                                RequestBody.create(
+                                    "image/*".toMediaTypeOrNull(),
+                                    File(item.images)
+                                )
+                            )
+                            .addFormDataPart("document_id", document_id ?: "")
+                            .addFormDataPart("type", VEHICLE_DOC)
+                            .build()
+                        apiViewModel.updateDocument(requestBody)
+                    } else {
+                        hideLoader()
+//                        navigator.goBack()
+                    }
+                }
+            } else if (statusCode == UPLOAD_FRONTBACK_WITH_NUMBER_PLATE || statusCode == UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR || statusCode == UPLOAD_CHASIS_NUMBER_IMAGES || statusCode == UPLOAD_YOUR_PHOTO_WITH_VEHICLE) {
+                for (item in driverProfilePictureImagesAdapter.items!!) {
+                    if (item.local) {
+                        val requestBody: RequestBody = MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart(
+                                "documents[]",
+                                Uri.parse(item.images)?.lastPathSegment
+                                    ?: "",
+                                RequestBody.create(
+                                    "image/*".toMediaTypeOrNull(),
+                                    File(item.images)
+                                )
+                            )
+                            .addFormDataPart("document_id", document_id ?: "")
+                            .addFormDataPart("type", VEHICLE_IMAGE)
+                            .build()
+                        apiViewModel.updateDocument(requestBody)
+                    } else {
+                        hideLoader()
+//                        navigator.goBack()
+                    }
+                }
             }
-            // session.isProfilePictureAdded = true
+            session.isProfilePictureAdded = true
             //navigator.goBack()
         }
     }
@@ -463,17 +681,45 @@ class DriverPersonalProfilePictureFragment :
         mediaSelectHelper.registerCallback(object : MediaSelector {
             override fun onImageUri(uri: Uri) {
                 super.onImageUri(uri)
-                if (statusCode == PERSONAL_PROFILE_SCREEN) {
-                    driverProfilePictureImagesAdapter.isBitMap = false
-                    driverProfilePictureImagesAdapter.clearAllItem()
-                    driverProfilePictureImagesAdapter.addItem(
-                        DriverProfilePictureImages(images = uri.path, local = true)
-                    )
-                } else if (statusCode == UPLOAD_DRIVING_LICENCE) {
-                    driverProfilePictureImagesAdapter.isBitMap = false
-                    driverProfilePictureImagesAdapter.addItem(
-                        DriverProfilePictureImages(images = uri.path, local = true)
-                    )
+                when (statusCode) {
+                    PERSONAL_PROFILE_SCREEN -> {
+                        driverProfilePictureImagesAdapter.isBitMap = false
+                        driverProfilePictureImagesAdapter.clearAllItem()
+                        driverProfilePictureImagesAdapter.addItem(
+                            DriverProfilePictureImages(images = uri.path, local = true)
+                        )
+                    }
+
+                    UPLOAD_DRIVING_LICENCE, UPLOAD_GOVERNMENT_ID, UPLOAD_BANK_DETAILS-> {
+                        driverProfilePictureImagesAdapter.isBitMap = false
+                        driverProfilePictureImagesAdapter.addItem(
+                            DriverProfilePictureImages(images = uri.path, local = true)
+                        )
+                    }
+
+                    UPLOAD_VEHICLE_PUC, UPLOAD_VEHICLE_INSURANCE, UPLOAD_REGISTRATION_CERTIFICATION, UPLOAD_VEHICLE_PERMIT ->{
+                        driverProfilePictureImagesAdapter.isBitMap = false
+                        driverProfilePictureImagesAdapter.addItem(
+                            DriverProfilePictureImages(images = uri.path, local = true)
+                        )
+                    }
+
+                    UPLOAD_FRONTBACK_WITH_NUMBER_PLATE, UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR, UPLOAD_CHASIS_NUMBER_IMAGES, UPLOAD_YOUR_PHOTO_WITH_VEHICLE ->{
+                        driverProfilePictureImagesAdapter.isBitMap = false
+                        driverProfilePictureImagesAdapter.addItem(
+                            DriverProfilePictureImages(images = uri.path, local = true)
+                        )
+                    }
+
+
+//                    UPLOAD_BANK_DETAILS -> {
+//                        driverProfilePictureImagesAdapter.isBitMap = false
+//
+//                     //   driverProfilePictureImagesAdapter.clearAllItem()
+//                        driverProfilePictureImagesAdapter.addItem(
+//                            DriverProfilePictureImages(images = uri.path, local = true)
+//                        )
+//                    }
                 }
 
                 updateCount()
