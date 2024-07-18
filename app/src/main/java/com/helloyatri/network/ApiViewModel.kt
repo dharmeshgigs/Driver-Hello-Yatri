@@ -175,4 +175,12 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val deleteUserImageLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun deleteUserImage() {
+        run {
+            deleteUserImageLiveData.value = Resource.loading()
+            deleteUserImageLiveData.value = authRepo.deleteUserImage()
+        }
+    }
+
 }

@@ -190,6 +190,7 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
             ResourcesCompat.getFont(requireContext(), R.font.lufga_regular)
         )
         countryCodePicker.setAutoDetectedCountry(true)
+        countryCodePicker.setCountryForPhoneCode(91)
         countryCode = countryCodePicker.selectedCountryCodeWithPlus
         countryShortCode = countryCodePicker.selectedCountryNameCode
         includedMobileNumber.textViewCountryCode.text = countryCode

@@ -80,6 +80,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewNote"
+            style="@style/TextViewLufgaRegularBlack10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:text="@string/label_note_please_upload_both_sides_of_driving_license_e"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/constraintUploadDocuments" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewImages"
             android:layout_width="0dp"
@@ -88,7 +101,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
             app:layout_constraintStart_toStartOf="@id/guideLineStart"
-            app:layout_constraintTop_toBottomOf="@id/constraintUploadDocuments"
+            app:layout_constraintTop_toBottomOf="@id/textViewNote"
             tools:itemCount="1"
             tools:listitem="@layout/auth_driver_personal_profile_picture_image_row_item" />
 

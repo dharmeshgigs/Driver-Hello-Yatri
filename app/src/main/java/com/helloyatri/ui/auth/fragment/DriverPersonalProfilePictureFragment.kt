@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -164,6 +165,7 @@ class DriverPersonalProfilePictureFragment :
                         val response =
                             Gson().fromJson(it.data.toString(), DriverResponse::class.java)
                         response.data.let {
+                            driverProfilePictureImagesAdapter.clearAllItem()
                             driverProfilePictureImagesAdapter.addItem(
                                 DriverProfilePictureImages(
                                     images = it?.profileImage.toString(),
@@ -418,6 +420,23 @@ class DriverPersonalProfilePictureFragment :
 
         }
 
+        apiViewModel.deleteUserImageLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    getProfile()
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
     }
 
     private val driverProfilePictureDetailsList = ArrayList<DriverProfilePictureDetails>()
@@ -435,7 +454,6 @@ class DriverPersonalProfilePictureFragment :
     override fun bindData() {
         setUpText()
         setUpRecyclerView()
-        setUpData()
         setUpClickListener()
         setUpImages()
     }
@@ -459,6 +477,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_profile_picture)
                 textViewProfilePicture.text = getString(R.string.label_profile_picture)
+                setUpData(resources.getStringArray(R.array.profile_image))
             }
 
             UPLOAD_DRIVING_LICENCE -> {
@@ -466,6 +485,8 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_driving_license)
                 textViewProfilePicture.text = getString(R.string.label_driving_license)
+                setUpData(resources.getStringArray(R.array.profile_image))
+                textViewNote.visibility = View.VISIBLE
             }
 
             UPLOAD_GOVERNMENT_ID -> {
@@ -473,12 +494,16 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_government_id)
                 textViewProfilePicture.text = getString(R.string.label_government_id)
+                setUpData(resources.getStringArray(R.array.profile_image))
+                textViewNote.text = getString(R.string.label_note_please_upload_both_sides_of_government_id)
+                textViewNote.visibility = View.VISIBLE
             }
 
             UPLOAD_BANK_DETAILS -> {
                 includedTopContent.textViewHello.text = getString(R.string.label_upload)
                 includedTopContent.textViewWelcomeBack.text = getString(R.string.label_bank_details)
                 textViewProfilePicture.text = getString(R.string.label_attach_bank_account_details)
+                setUpData(resources.getStringArray(R.array.profile_image))
             }
 
             UPLOAD_VEHICLE_PUC -> {
@@ -486,6 +511,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text = getString(R.string.label_vehicle_puc)
+                setUpData(resources.getStringArray(R.array.profile_image))
             }
 
             UPLOAD_VEHICLE_INSURANCE -> {
@@ -493,6 +519,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text = getString(R.string.label_vehicle_insurance)
+                setUpData(resources.getStringArray(R.array.profile_image))
             }
 
             UPLOAD_REGISTRATION_CERTIFICATION -> {
@@ -501,6 +528,7 @@ class DriverPersonalProfilePictureFragment :
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text =
                     getString(R.string.label_vehicle_registration_certificate)
+                setUpData(resources.getStringArray(R.array.profile_image))
             }
 
             UPLOAD_VEHICLE_PERMIT -> {
@@ -508,6 +536,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text = getString(R.string.label_vehicle_permit)
+                setUpData(resources.getStringArray(R.array.profile_image))
             }
 
             UPLOAD_FRONTBACK_WITH_NUMBER_PLATE -> {
@@ -515,6 +544,9 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_front_back_with_number_plate)
+                setUpData(resources.getStringArray(R.array.profile_image))
+                textViewNote.text = getString(R.string.label_note_please_upload_both_sides_front_and_back)
+                textViewNote.visibility = View.VISIBLE
             }
 
             UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR -> {
@@ -522,6 +554,9 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_left_right_side_exterior)
+                setUpData(resources.getStringArray(R.array.profile_image))
+                textViewNote.text = getString(R.string.label_note_please_upload_both_sides_exterior_left_right_side)
+                textViewNote.visibility = View.VISIBLE
             }
 
             UPLOAD_CHASIS_NUMBER_IMAGES -> {
@@ -529,6 +564,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_chassis_number_images)
+                setUpData(resources.getStringArray(R.array.profile_image))
             }
 
             UPLOAD_YOUR_PHOTO_WITH_VEHICLE -> {
@@ -536,6 +572,9 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_your_photo_with_vehicle)
+                setUpData(resources.getStringArray(R.array.profile_image))
+                textViewNote.text = getString(R.string.label_note_please_upload_your_photo_by_standing_in_front_of_your_vehicle)
+                textViewNote.visibility = View.VISIBLE
             }
         }
         includedTopContent.textViewYouHaveMissed.text = getString(
@@ -566,7 +605,7 @@ class DriverPersonalProfilePictureFragment :
                 driverProfilePictureImagesAdapter.removeItem(it)
             } else {
                 if (statusCode == PERSONAL_PROFILE_SCREEN) {
-
+                    apiViewModel.deleteUserImage()
                 } else if (statusCode == UPLOAD_DRIVING_LICENCE || statusCode == UPLOAD_GOVERNMENT_ID || statusCode == UPLOAD_BANK_DETAILS) {
                     apiViewModel.removeSpecificDocument(Request(id = it.id, document = it.images))
                 } else if (statusCode == UPLOAD_VEHICLE_PUC || statusCode == UPLOAD_VEHICLE_INSURANCE || statusCode == UPLOAD_REGISTRATION_CERTIFICATION || statusCode == UPLOAD_VEHICLE_PERMIT) {
@@ -776,24 +815,16 @@ class DriverPersonalProfilePictureFragment :
         })
     }
 
-    private fun setUpData() {
+    private fun setUpData(data : Array<String>) {
         driverProfilePictureDetailsList.clear()
-        driverProfilePictureDetailsList.add(
-            DriverProfilePictureDetails(
-                text = getString(R.string.label_please_upload_a_clear_selfie)
+        data.forEach {
+            driverProfilePictureDetailsList.add(
+                DriverProfilePictureDetails(
+                    text = it
+                )
             )
-        )
-        driverProfilePictureDetailsList.add(
-            DriverProfilePictureDetails(
-                text = getString(R.string.label_the_selfie_should_have_the_applicants_face_alone)
-            )
-        )
-        driverProfilePictureDetailsList.add(
-            DriverProfilePictureDetails(text = getString(R.string.label_upload_pdf_jpeg_png))
-        )
+        }
         driverProfilePictureDetailsAdapter.setItems(driverProfilePictureDetailsList, 1)
-
-
     }
 
     private fun updateCount() = with(binding) {

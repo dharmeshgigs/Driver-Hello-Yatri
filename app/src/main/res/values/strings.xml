@@ -226,7 +226,7 @@
     <string name="label_bank_account_details">Bank Account Details</string>
     <string name="label_government_id">Government ID</string>
     <string name="label_driving_license">Driving License</string>
-    <string name="label_note_please_upload_both_sides_of_driving_license_e">Note : Please upload both sides of Driving License.e</string>
+    <string name="label_note_please_upload_both_sides_of_driving_license_e">Note : Please upload both sides of Driving License.</string>
     <string name="label_photocopies_and_printouts_of_documents_will_not_be_accepted">Photocopies and printouts of documents will not be accepted.</string>
     <string name="label_the_photo_and_all_details_must_be_clearly_visible">The photo and all details must be clearly visible.</string>
     <string name="label_only_documents_that_are_less_than_10_mb_in_size_and_in_jpg_jpeg_png_or_pdf_format_will_be_accepted">Only documents that are less than 10 MB in size and in JPG, JPEG, PNG, or PDF format will be accepted.</string>
@@ -312,5 +312,13 @@
     <string name="label_create_new_password">Create new password</string>
     <string name="label_complete_the_reset_password_process">Complete the Reset password process</string>
     <string name="enter_password">Incorrect confirm password. Please enter same as new password.\n</string>
+    <string name="label_note_please_upload_both_sides_of_government_id">Note : Please upload both sides of Government ID.</string>
+
+
+    <string-array name="profile_image">
+        <item>@string/label_please_upload_a_clear_selfie</item>
+        <item>@string/label_the_selfie_should_have_the_applicants_face_alone</item>
+        <item>@string/label_upload_pdf_jpeg_png</item>
+    </string-array>
 
 </resources>
