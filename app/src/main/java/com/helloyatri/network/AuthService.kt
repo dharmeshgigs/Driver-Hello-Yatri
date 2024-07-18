@@ -63,4 +63,13 @@ interface AuthService {
     @POST(APIFactory.AuthApi.REMOVE_SPECIFIC_DOCUMENT)
     suspend fun removeSpecificDocument(@Body request: Request) : Response<JsonObject>
 
+    @GET(APIFactory.AuthApi.GET_VEHICLE_TYPE)
+    suspend fun getVehicleType() : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_VEHICLE_DETAILS)
+    suspend fun getVehicleDetails() : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.UPDATE_VEHICLE_DETAILS)
+    suspend fun updateVehicleDetails(@Body request: Request) : Response<JsonObject>
+
 }

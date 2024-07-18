@@ -29,6 +29,9 @@ object APIFactory {
         const val UPLOAD_DOCUMENT = "driver/upload-document"
         const val DELETE_USER_PROFILE = "profile"
         const val REMOVE_SPECIFIC_DOCUMENT = "driver/remove-uploaded-document"
+        const val GET_VEHICLE_TYPE = "driver/vehicle-types"
+        const val GET_VEHICLE_DETAILS = "driver/get-vehicle"
+        const val UPDATE_VEHICLE_DETAILS = "driver/store_vehicle"
 
 //        const val RESEND_OTP = "driver/resetPassword"
 

@@ -5,9 +5,16 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import com.gamingyards.sms.app.utils.Status
+import com.google.gson.Gson
 import com.helloyatri.R
+import com.helloyatri.data.model.GetAllRequiredDocument
+import com.helloyatri.data.model.GetTypeModel
+import com.helloyatri.data.model.GetVehicleDetailsModel
 import com.helloyatri.databinding.AuthDriverVehicleDetailsFragmentBinding
 import com.helloyatri.exception.ApplicationException
+import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.common.fieldselection.bottomsheet.CommonFieldSelectionBottomSheet
 import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection
@@ -17,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragmentBinding>() {
+    private val apiViewModel by viewModels<ApiViewModel>()
 
     private val commonFieldSelectionBottomSheetForVehicleType by lazy {
         CommonFieldSelectionBottomSheet()
@@ -44,6 +52,72 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
         setUpEditText()
         setUpClickListener()
         setUpData()
+        getVehicleDetailsAPI()
+        getVehicleTypeAPI()
+        initObservers()
+    }
+
+    private fun initObservers() {
+
+        apiViewModel.getVehicleDetailsLiveData.observe(this){resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), GetVehicleDetailsModel::class.java)
+                        response?.data?.let {
+
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+                }
+                Status.ERROR ->{
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+                Status.LOADING -> hideLoader()
+            }
+        }
+
+        apiViewModel.getVehicleTypeLiveData.observe(this){resource ->
+            when(resource.status){
+                Status.SUCCESS ->{
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), GetTypeModel::class.java)
+                        response?.data?.let {
+
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }                }
+                Status.ERROR ->{
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+                Status.LOADING -> hideLoader()
+            }
+        }
+
+    }
+
+    private fun getVehicleTypeAPI() {
+        apiViewModel.getVehicleType()
+    }
+
+    private fun getVehicleDetailsAPI() {
+        apiViewModel.getVehicleDetails()
     }
 
     private fun setUpText() = with(binding) {
@@ -226,4 +300,6 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(false).build()
     }
+
+
 }

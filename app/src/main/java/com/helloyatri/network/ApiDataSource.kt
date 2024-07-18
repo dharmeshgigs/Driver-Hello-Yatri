@@ -79,7 +79,19 @@ class ApiDataSource @Inject constructor(
         return run2 { authService.getVehiclePhotos() }
     }
 
+    override suspend fun getVehicleType(): Resource<JsonObject> {
+        return run2 { authService.getVehicleType() }
+    }
+
+    override suspend fun getVehicleDetails(): Resource<JsonObject> {
+        return run2 { authService.getVehicleDetails() }
+    }
+
     override suspend fun removeSpecificDocument(request: Request): Resource<JsonObject> {
         return run2 { authService.removeSpecificDocument(request) }
+    }
+
+    override suspend fun updateVehicleDetails(request: Request): Resource<JsonObject> {
+        return run2 { authService.updateVehicleDetails(request) }
     }
 }

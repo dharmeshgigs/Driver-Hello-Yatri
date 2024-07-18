@@ -151,4 +151,28 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val getVehicleTypeLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun getVehicleType(){
+        run {
+            getVehicleTypeLiveData.value = Resource.loading()
+            getVehicleTypeLiveData.value = authRepo.getVehicleType()
+        }
+    }
+
+    val getVehicleDetailsLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun getVehicleDetails(){
+        run {
+            getVehicleDetailsLiveData.value = Resource.loading()
+            getVehicleDetailsLiveData.value = authRepo.getVehicleDetails()
+        }
+    }
+
+    val updateVehicleDetailsLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun updateVehicleDetails(request: Request) {
+        run {
+            updateVehicleDetailsLiveData.value = Resource.loading()
+            updateVehicleDetailsLiveData.value = authRepo.updateVehicleDetails(request)
+        }
+    }
+
 }

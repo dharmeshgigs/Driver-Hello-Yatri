@@ -33,8 +33,11 @@ interface AuthRepo {
     suspend fun getRequiredAllDocument() : Resource<JsonObject>
     suspend fun getVehicleDocument() : Resource<JsonObject>
     suspend fun getVehiclePhotos() : Resource<JsonObject>
+    suspend fun getVehicleType() : Resource<JsonObject>
+    suspend fun getVehicleDetails() : Resource<JsonObject>
 
     suspend fun removeSpecificDocument(request: Request) : Resource<JsonObject>
+    suspend fun updateVehicleDetails(request: Request) : Resource<JsonObject>
 
 
 }
