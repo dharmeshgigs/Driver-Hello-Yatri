@@ -33,6 +33,7 @@ class SplashActivity : BaseActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             when {
                 appSession.isDriverVerified && appSession.isLoggedIn == true -> {
+//                    loadActivity(DriverDocumentsActivity::class.java).byFinishingCurrent().start()
                     loadActivity(HomeActivity::class.java).byFinishingAll().start()
                 }
 

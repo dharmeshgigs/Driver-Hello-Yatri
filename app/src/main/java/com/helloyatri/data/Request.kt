@@ -12,5 +12,11 @@ data class Request(
     @SerializedName("gender") var gender: String? = null,
     @SerializedName("drive_in_city") var driverInCity: String? = null,
     @SerializedName("id") var id: String? = null,
-    @SerializedName("document") var document: String? = null
+    @SerializedName("document") var document: String? = null,
+    @SerializedName("vehicle_type") var vehicleType: String? = null,
+    @SerializedName("no_of_sheets") var noOfSheets: String? = null,
+    @SerializedName("vehicle_number") var vehicleNumber: String? = null,
+    @SerializedName("fuel_type") var fuelType: String? = null,
+    @SerializedName("model_year") var modelYear: String? = null,
+    @SerializedName("vehicle_name") var vehicleName: String? = null,
 )

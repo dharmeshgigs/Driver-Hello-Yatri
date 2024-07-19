@@ -76,6 +76,12 @@ class CommonFieldSelectionBottomSheet :
         return this
     }
 
+//    fun setVehicleTypeList(
+//        optionList: ArrayList<DataFuel>): CommonFieldSelectionBottomSheet {
+//        commonFieldSelectionBottomSheetAdapter.setItems(optionList, 1)
+//        return this
+//    }
+
     fun setSelectedOption(selectedOption: String?): CommonFieldSelectionBottomSheet {
         this.selectedOption = selectedOption
         return this

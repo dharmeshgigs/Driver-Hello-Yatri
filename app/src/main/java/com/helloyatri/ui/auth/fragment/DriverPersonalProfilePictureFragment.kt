@@ -485,7 +485,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_driving_license)
                 textViewProfilePicture.text = getString(R.string.label_driving_license)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
                 textViewNote.visibility = View.VISIBLE
             }
 
@@ -494,7 +494,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_government_id)
                 textViewProfilePicture.text = getString(R.string.label_government_id)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
                 textViewNote.text = getString(R.string.label_note_please_upload_both_sides_of_government_id)
                 textViewNote.visibility = View.VISIBLE
             }
@@ -503,7 +503,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewHello.text = getString(R.string.label_upload)
                 includedTopContent.textViewWelcomeBack.text = getString(R.string.label_bank_details)
                 textViewProfilePicture.text = getString(R.string.label_attach_bank_account_details)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
             }
 
             UPLOAD_VEHICLE_PUC -> {
@@ -511,7 +511,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text = getString(R.string.label_vehicle_puc)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
             }
 
             UPLOAD_VEHICLE_INSURANCE -> {
@@ -519,7 +519,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text = getString(R.string.label_vehicle_insurance)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
             }
 
             UPLOAD_REGISTRATION_CERTIFICATION -> {
@@ -528,7 +528,7 @@ class DriverPersonalProfilePictureFragment :
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text =
                     getString(R.string.label_vehicle_registration_certificate)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
             }
 
             UPLOAD_VEHICLE_PERMIT -> {
@@ -536,7 +536,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_documents)
                 textViewProfilePicture.text = getString(R.string.label_vehicle_permit)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
             }
 
             UPLOAD_FRONTBACK_WITH_NUMBER_PLATE -> {
@@ -544,7 +544,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_front_back_with_number_plate)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
                 textViewNote.text = getString(R.string.label_note_please_upload_both_sides_front_and_back)
                 textViewNote.visibility = View.VISIBLE
             }
@@ -765,7 +765,6 @@ class DriverPersonalProfilePictureFragment :
             }
 
             override fun onAnyFileSelected(outPutFileAny: OutPutFileAny) {
-                Log.i("TAG", "onAnyFileSelected: " + outPutFileAny.type)
                 binding.recyclerViewImages.show()
                 when (outPutFileAny.type) {
                     FileType.Image -> {

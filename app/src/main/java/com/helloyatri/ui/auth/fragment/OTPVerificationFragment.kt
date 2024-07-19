@@ -3,6 +3,7 @@ package com.helloyatri.ui.auth.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -111,7 +112,13 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                     session.isDriverVerified = it.status ?: false
                                 }
                                 if (getSourceScreen == SignUpFragment::class.java.simpleName || getSourceScreen == LoginFragment::class.java.simpleName) {
+//                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
+//                                        .byFinishingAll()
+//                                        .start()
                                     if (session.isAllDocumentUploaded()) {
+                                        Log.i("TAG", "initObservers: "+session.isDriverVerified)
+                                        Log.i("TAG", "initObservers: "+session.user?.status)
+
                                         if (session.isDriverVerified && session.user?.status == 1) {
                                             navigator.loadActivity(HomeActivity::class.java)
                                                 .byFinishingAll()

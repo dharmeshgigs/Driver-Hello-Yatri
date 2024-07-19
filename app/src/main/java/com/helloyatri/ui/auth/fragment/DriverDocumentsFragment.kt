@@ -161,9 +161,11 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
         }
 
         buttonSubmit.setOnClickListener {
-            session.isDriverVerified = true
-            session.isLoggedIn = true
-            navigator.loadActivity(HomeActivity::class.java).byFinishingAll().start()
+//            session.isDriverVerified = true
+//            session.isLoggedIn = true
+//            navigator.loadActivity(HomeActivity::class.java).byFinishingAll().start()
+            navigator.load(DriverVerificationFragment::class.java)
+                .replace(false)
         }
     }
 

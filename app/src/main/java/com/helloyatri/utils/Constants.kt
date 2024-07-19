@@ -24,4 +24,6 @@ object Constants {
     const val DRIVER_DOC = "1"
     const val VEHICLE_DOC = "2"
     const val VEHICLE_IMAGE = "3"
+    const val REQUEST_CALL_PERMISSION = 1
+
 }
