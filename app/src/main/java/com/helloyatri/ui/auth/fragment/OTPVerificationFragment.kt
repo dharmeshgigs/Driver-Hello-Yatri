@@ -130,7 +130,11 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                             .start()
                                     }
                                 } else if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
-                                    navigator.load(ResetPasswordFragment::class.java)
+                                    navigator.load(ResetPasswordFragment::class.java).setBundle(
+                                        createBundle(
+                                            sourceScreen = OTPVerificationFragment::class.java.simpleName
+                                        )
+                                    )
                                         .replace(false)
                                 }
                             } ?: run {
@@ -164,7 +168,11 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                 session.user = response.data
                                 session.userSession = token
                                 if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
-                                    navigator.load(ResetPasswordFragment::class.java)
+                                    navigator.load(ResetPasswordFragment::class.java).setBundle(
+                                        createBundle(
+                                            sourceScreen = OTPVerificationFragment::class.java.simpleName
+                                        )
+                                    )
                                         .replace(false)
                                 } else {
                                     getDriverStatus()

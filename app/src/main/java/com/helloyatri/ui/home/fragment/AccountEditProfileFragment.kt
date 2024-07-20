@@ -15,6 +15,9 @@ import com.hbb20.CountryCodePicker
 import com.helloyatri.R
 import com.helloyatri.databinding.AccountEditProfileFragmentBinding
 import com.helloyatri.exception.ApplicationException
+import com.helloyatri.ui.auth.fragment.DriverVerificationFragment
+import com.helloyatri.ui.auth.fragment.OTPVerificationFragment
+import com.helloyatri.ui.auth.fragment.ResetPasswordFragment
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.common.fieldselection.bottomsheet.CommonFieldSelectionBottomSheet
 import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection
@@ -160,10 +163,15 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
         }
 
         textViewChangePassword.setOnClickListener {
-            includedPassword.editText.isFocusableInTouchMode = true
-            includedPassword.editText.isClickable = true
-            includedPassword.editText.setTextColor(
-                    ContextCompat.getColor(requireContext(), R.color.black))
+//            includedPassword.editText.isFocusableInTouchMode = true
+//            includedPassword.editText.isClickable = true
+//            includedPassword.editText.setTextColor(
+//                    ContextCompat.getColor(requireContext(), R.color.black))
+            navigator.load(ResetPasswordFragment::class.java).setBundle(
+                OTPVerificationFragment.createBundle(
+                    sourceScreen = AccountEditProfileFragment::class.java.simpleName,
+                )
+            ).replace(false)
         }
 
         imageViewPassword.setOnClickListener {

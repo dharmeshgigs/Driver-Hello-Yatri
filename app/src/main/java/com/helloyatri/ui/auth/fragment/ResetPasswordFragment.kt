@@ -21,6 +21,7 @@ import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
+import com.helloyatri.ui.home.fragment.AccountEditProfileFragment
 import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.changeStatusBarColor
 import com.helloyatri.utils.extension.trimmedText
@@ -29,6 +30,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     private val apiViewModel by viewModels<ApiViewModel>()
+
+    private val getSourceScreen by lazy {
+        arguments?.getString(OTPVerificationFragment.SOURCE_SCREEN)
+    }
+
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?,
         attachToRoot: Boolean
@@ -47,6 +53,8 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     private fun getDriverStatus() {
         apiViewModel.getDriverStatus()
     }
+
+
 
     private fun initObservers() {
 
@@ -148,13 +156,24 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     }
 
     private fun setUpText() = with(binding) {
-        includedTopContent.textViewHello.text = getString(R.string.label_reset_password)
-        includedTopContent.textViewWelcomeBack.text = getString(R.string.label_create_new_password)
-        includedTopContent.textViewYouHaveMissed.text =
-            getString(R.string.label_complete_the_reset_password_process)
+        if(isPreviousScreenOTP()) {
+            includedOldPassword.root.visibility = View.GONE
+            includedTopContent.textViewHello.text = getString(R.string.label_reset_password)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_create_new_password)
+            includedTopContent.textViewYouHaveMissed.text =
+                getString(R.string.label_complete_the_reset_password_process)
+        } else {
+            includedOldPassword.root.visibility = View.VISIBLE
+            includedTopContent.textViewHello.text = getString(R.string.label_change_password)
+            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_change_password_subtitle)
+            includedTopContent.textViewYouHaveMissed.text =
+                getString(R.string.label_change_password_msg)
+        }
+
     }
 
     private fun setUpEditText() = with(binding) {
+        includedOldPassword.textViewTitle.text = getString(R.string.label_old_password)
         includedNewPassword.textViewTitle.text = getString(R.string.new_password)
         includedConfirmPassword.textViewTitle.text = getString(R.string.confirm_password)
     }
@@ -162,6 +181,10 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     private fun setUpButton() = with(binding) {
         buttonNext.isClickable = false
         buttonNext.isEnabled = false
+
+        includedOldPassword.editText.doAfterTextChanged {
+            enableNextButton()
+        }
         includedNewPassword.editText.doAfterTextChanged {
             enableNextButton()
         }
@@ -171,19 +194,37 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     }
 
     private fun enableNextButton() = with(binding) {
-        if (includedNewPassword.editText.trimmedText.length == includedConfirmPassword.editText.trimmedText.length &&
-            includedConfirmPassword.editText.trimmedText.length >= 8
-        ) {
-            buttonNext.isClickable = true
-            buttonNext.isEnabled = true
-            buttonNext.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
+        if(isPreviousScreenOTP()) {
+            if (includedNewPassword.editText.trimmedText.length == includedConfirmPassword.editText.trimmedText.length &&
+                includedConfirmPassword.editText.trimmedText.length >= 8
+            ) {
+                buttonNext.isClickable = true
+                buttonNext.isEnabled = true
+                buttonNext.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
+            } else {
+                buttonNext.isClickable = false
+                buttonNext.isEnabled = false
+                buttonNext.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.grey)
+            }
         } else {
-            buttonNext.isClickable = false
-            buttonNext.isEnabled = false
-            buttonNext.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.grey)
+            if (includedOldPassword.editText.trimmedText.trim().length >= 8 &&
+                includedNewPassword.editText.trimmedText.length == includedConfirmPassword.editText.trimmedText.length &&
+                includedConfirmPassword.editText.trimmedText.length >= 8
+            ) {
+                buttonNext.isClickable = true
+                buttonNext.isEnabled = true
+                buttonNext.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
+            } else {
+                buttonNext.isClickable = false
+                buttonNext.isEnabled = false
+                buttonNext.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.grey)
+            }
         }
+
     }
 
     private fun setTextDecorator() = with(binding) {
@@ -216,6 +257,19 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
         try {
             hideKeyBoard()
 
+            if(!isPreviousScreenOTP()) {
+                validator.submit(includedOldPassword.editText).checkEmpty()
+                    .errorMessage(getString(R.string.validation_please_enter_old_password))
+                    .checkMinDigits(Constants.MIN_PASSWORD)
+                    .errorMessage(getString(R.string.validation_please_enter_minimum_8_characters))
+                    .matchPatter(Constants.PASSWORD_REX).errorMessage(
+                        getString(
+                            R.string.validation_password_should_be_contained_1_uppercase_1_lowercase_1_digit_and_1_special_character
+                        )
+                    )
+                    .check()
+            }
+
             validator.submit(includedNewPassword.editText).checkEmpty()
                 .errorMessage(getString(R.string.validation_please_enter_password))
                 .checkMinDigits(Constants.MIN_PASSWORD)
@@ -239,11 +293,15 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
             if (includedNewPassword.editText.text.toString()
                     .trim() == includedConfirmPassword.editText.text.toString().trim()
             ) {
-                apiViewModel.resetPassword(
-                    Request(
-                        password = includedNewPassword.editText.text.toString().trim()
+                if(isPreviousScreenOTP()) {
+                    apiViewModel.resetPassword(
+                        Request(
+                            password = includedNewPassword.editText.text.toString().trim()
+                        )
                     )
-                )
+                } else {
+
+                }
             } else {
                 showMessage(getString(R.string.enter_password))
             }
@@ -309,5 +367,9 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
 
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(false).build()
+    }
+
+    private fun isPreviousScreenOTP() : Boolean {
+        return getSourceScreen.equals(OTPVerificationFragment::class.java.simpleName)
     }
 }
