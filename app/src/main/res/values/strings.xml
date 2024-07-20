@@ -331,4 +331,9 @@ will be accepted.</string>
         <item>@string/label_document_less_than_10MB</item>
     </string-array>
 
+    <string name="label_change_password_subtitle">Create new Password</string>
+    <string name="label_change_password_msg">Complete the change password process</string>
+    <string name="label_old_password">Old Password</string>
+    <string name="validation_please_enter_old_password">Please enter old password</string>
+
 </resources>
