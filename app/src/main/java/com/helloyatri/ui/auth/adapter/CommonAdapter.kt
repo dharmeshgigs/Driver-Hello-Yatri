@@ -19,11 +19,25 @@ class CommonAdapter :
         override fun bind(item: DataDocument) = with(binding) {
             textViewDocumentName.text = item.name
 
-            if (item.isDataAdded) {
-                root.strokeLineColor =
-                    ContextCompat.getColor(root.context, R.color.strokeGreenColor)
-            } else {
-                root.strokeLineColor = ContextCompat.getColor(root.context, R.color.grey)
+//            if (item.isDataAdded) {
+//                root.strokeLineColor =
+//                    ContextCompat.getColor(root.context, R.color.strokeGreenColor)
+//            } else {
+//                root.strokeLineColor = ContextCompat.getColor(root.context, R.color.grey)
+//            }
+
+            when (item.uploadedDriverDocument?.status) {
+                1, 0 -> {
+                    root.strokeLineColor =
+                        ContextCompat.getColor(root.context, R.color.strokeGreenColor)
+                }
+                2 -> {
+                    root.strokeLineColor =
+                        ContextCompat.getColor(root.context, R.color.redColor)
+                }
+                else -> {
+                    root.strokeLineColor = ContextCompat.getColor(root.context, R.color.grey)
+                }
             }
 
             root.setOnClickListener {

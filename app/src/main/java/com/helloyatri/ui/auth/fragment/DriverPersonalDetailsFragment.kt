@@ -36,7 +36,6 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
     private lateinit var countryCodePicker: CountryCodePicker
     private var countryCode: String? = null
     private var countryShortCode: String? = null
-    val getCities by lazy { MutableLiveData<Resource<JsonObject>>() }
     val getAllCities by lazy { ArrayList<CommonFieldSelection>() }
 
     private val commonFieldSelectionBottomSheetForGender by lazy {
@@ -139,12 +138,14 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
                                 response.data?.mobile
                             )
                         )
-                        binding.includedGender.editText.setText(
-                            String.format(
-                                "%s",
-                                response.data?.gender ?: getString(R.string.hint_select_gender)
+                        response.data?.gender?.let {
+                            binding.includedGender.editText.setText(
+                                response.data.gender
                             )
-                        )
+                        }?: run {
+                            binding.includedGender.editText.setHint(getString(R.string.hint_select_gender))
+                        }
+
                         response.data?.driveInCity?.let {
                             binding.includedCityYouDriveIn.editText.setText(
                                 response.data?.driveInCity

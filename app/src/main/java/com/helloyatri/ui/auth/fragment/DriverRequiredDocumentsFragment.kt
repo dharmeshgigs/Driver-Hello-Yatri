@@ -24,7 +24,13 @@ import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.auth.adapter.CommonAdapter
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment
+import com.helloyatri.utils.Constants.BANK_DETAILS
+import com.helloyatri.utils.Constants.CHASSIS_NUMBER_IMAGES
 import com.helloyatri.utils.Constants.DRIVER_REQUIRED_DOCUMENT
+import com.helloyatri.utils.Constants.DRIVING_LICENCE
+import com.helloyatri.utils.Constants.FRONT_BACK_WITH_NUMBER_PLAGE
+import com.helloyatri.utils.Constants.GOVERNMENT_ID
+import com.helloyatri.utils.Constants.LEFT_RIGHT_SIDE_EXTERIOR
 import com.helloyatri.utils.Constants.UPLOAD_BANK_DETAILS
 import com.helloyatri.utils.Constants.UPLOAD_CHASIS_NUMBER_IMAGES
 import com.helloyatri.utils.Constants.UPLOAD_DRIVING_LICENCE
@@ -37,6 +43,12 @@ import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_PERMIT
 import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_PUC
 import com.helloyatri.utils.Constants.UPLOAD_YOUR_PHOTO_WITH_VEHICLE
 import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
+import com.helloyatri.utils.Constants.VEHICLE_INSURANCE
+import com.helloyatri.utils.Constants.VEHICLE_PERMIT
+import com.helloyatri.utils.Constants.VEHICLE_PUC
+import com.helloyatri.utils.Constants.VEHICLE_REGISTRATION_CERTIFICATE
+import com.helloyatri.utils.Constants.YOUR_PHOTO_WITH_VEHICLE
+import com.helloyatri.utils.extension.enableButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -90,12 +102,22 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
-                    resource?.data?.let {
+                    resource?.data?.let { it ->
                         val response =
                             Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
                         response?.data?.let {
                             getAllVehicleDocumentMutableList.clear()
                             getAllVehicleDocumentMutableList.addAll(response.data)
+                            var isEnable = true
+
+                            response.data.forEach {
+                                if (it.isRequired == 1 && (it.uploadedDriverDocument == null || it.uploadedDriverDocument?.uploadedArray == null
+                                            || it.uploadedDriverDocument?.uploadedArray?.size == 0)
+                                ) {
+                                    isEnable = false
+                                }
+                            }
+                            enableButton(isEnable)
                             setUpData()
                         } ?: run {
                             showSomethingMessage()
@@ -120,12 +142,22 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
-                    resource?.data?.let {
+                    resource?.data?.let { it ->
                         val response =
                             Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
                         response?.data?.let {
                             getAllVehicleDocumentMutableList.clear()
                             getAllVehicleDocumentMutableList.addAll(response.data)
+                            var isEnable = true
+
+                            response.data.forEach {
+                                if (it.isRequired == 1 && (it.uploaded_vehicle_document == null || it.uploaded_vehicle_document?.uploadedArray == null
+                                            || it.uploaded_vehicle_document?.uploadedArray?.size == 0)
+                                ) {
+                                    isEnable = false
+                                }
+                            }
+                            enableButton(isEnable)
                             setUpData()
                         } ?: run {
                             showSomethingMessage()
@@ -151,13 +183,22 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
-                    resource?.data?.let {
+                    resource?.data?.let { it ->
                         val response =
                             Gson().fromJson(it.toString(), GetAllRequiredDocument::class.java)
                         response?.data?.let {
                             getAllVehicleDocumentMutableList.clear()
                             getAllVehicleDocumentMutableList.addAll(response.data)
-                            Log.i("TAG", "initObservers: " + response.data.toString())
+                            var isEnable = true
+
+                            response.data.forEach {
+                                if (it.isRequired == 1 && (it.uploaded_vehicle_document == null || it.uploaded_vehicle_document?.uploadedArray == null
+                                            || it.uploaded_vehicle_document?.uploadedArray?.size == 0)
+                                ) {
+                                    isEnable = false
+                                }
+                            }
+                            enableButton(isEnable)
                             setUpData()
                         } ?: run {
                             showSomethingMessage()
@@ -177,7 +218,6 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                 Status.LOADING -> showLoader()
             }
         }
-
 
     }
 
@@ -212,7 +252,7 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
     private fun setUpClickListener() {
         driverRequiredDocumentsAdapter.setOnItemClickPositionListener { _, position ->
             when (getAllVehicleDocumentMutableList[position].name) {
-                "Driving Licence" -> {
+                DRIVING_LICENCE -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -220,10 +260,10 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                                 document_id = getAllVehicleDocumentMutableList[position].id.toString()
                             )
                         )
-                        .replace(true)
+                        .replace(false)
                 }
 
-                "Goverment Id" -> {
+                GOVERNMENT_ID -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -234,7 +274,7 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                         .replace(true)
                 }
 
-                "Bank Details" -> {
+                BANK_DETAILS -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -245,7 +285,7 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                         .replace(true)
                 }
 
-                "Vehicle PUC" -> {
+                VEHICLE_PUC -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -254,10 +294,9 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Vehicle PUC")
                 }
 
-                "Vehicle Insurance" -> {
+                VEHICLE_INSURANCE -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -266,10 +305,9 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Vehicle Insurance")
                 }
 
-                "Vehicle Registration Certificate" -> {
+                VEHICLE_REGISTRATION_CERTIFICATE -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -278,10 +316,9 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Vehicle Registration Certificate")
                 }
 
-                "Vehicle Permit" -> {
+                VEHICLE_PERMIT -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -290,10 +327,9 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Vehicle Permit")
                 }
 
-                "Front-back with Number plage" -> {
+                FRONT_BACK_WITH_NUMBER_PLAGE-> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -302,11 +338,10 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Front-back with Number plage")
 
                 }
 
-                "Left-Right Side Exterior" -> {
+                LEFT_RIGHT_SIDE_EXTERIOR -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -315,11 +350,10 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Left-Right Side Exterior")
 
                 }
 
-                "Chassis Number Images" -> {
+                CHASSIS_NUMBER_IMAGES -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -328,11 +362,10 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Chassis Number Images")
 
                 }
 
-                "Your photo with vehicle" -> {
+                YOUR_PHOTO_WITH_VEHICLE -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
                         .setBundle(
                             DriverPersonalProfilePictureFragment.createBundle(
@@ -341,8 +374,6 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                             )
                         )
                         .replace(true)
-                    Log.i("TAG", "setUpClickListener: " + "Your photo with vehicle")
-
                 }
 
             }
@@ -364,7 +395,7 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
         }
 
         binding.buttonSave.setOnClickListener {
-            session.isRequiredDocumentsAdded = true
+          //  session.isRequiredDocumentsAdded = true
             navigator.goBack()
         }
     }
@@ -382,17 +413,25 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
 //                        isDataAdded = session.isBankAccountDetailsAdded))
 //        driverRequiredDocumentsAdapter.setItems(driverRequiredDocumentsList, 1)
         driverRequiredDocumentsAdapter.setItems(getAllVehicleDocumentMutableList.toList(), 1)
-        if (session.isDrivingLicenseAdded && session.isGovernmentIDAdded && session.isBankAccountDetailsAdded) {
-            binding.buttonSave.isClickable = true
-            binding.buttonSave.isEnabled = true
-            binding.buttonSave.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
-        } else {
-            binding.buttonSave.isClickable = false
-            binding.buttonSave.isEnabled = false
-            binding.buttonSave.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.grey)
-        }
+//        if (session.isDrivingLicenseAdded && session.isGovernmentIDAdded && session.isBankAccountDetailsAdded) {
+//            enableButton()
+//        } else {
+//            disableButton()
+//        }
+    }
+
+    private fun disableButton() {
+        binding.buttonSave.isClickable = false
+        binding.buttonSave.isEnabled = false
+        binding.buttonSave.backgroundTintList =
+            ContextCompat.getColorStateList(requireContext(), R.color.grey)
+    }
+
+    private fun enableButton(isenable: Boolean) = with(binding) {
+        buttonSave.apply {
+            isClickable = isenable
+            isEnabled = isenable
+        }.enableButton(isenable)
     }
 
     override fun setUpToolbar() = with(toolbar) {
@@ -401,7 +440,7 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
 
     override fun onResume() {
         super.onResume()
-
         setUpData()
     }
+
 }

@@ -123,6 +123,9 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                         } else {
                                             navigator.load(DriverVerificationFragment::class.java)
                                                 .replace(false)
+//                                            navigator.loadActivity(DriverDocumentsActivity::class.java)
+//                                                .byFinishingAll()
+//                                                .start()
                                         }
                                     } else {
                                         navigator.loadActivity(DriverDocumentsActivity::class.java)
@@ -130,7 +133,11 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                             .start()
                                     }
                                 } else if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
-                                    navigator.load(ResetPasswordFragment::class.java)
+                                    navigator.load(ResetPasswordFragment::class.java).setBundle(
+                                        createBundle(
+                                            sourceScreen = OTPVerificationFragment::class.java.simpleName
+                                        )
+                                    )
                                         .replace(false)
                                 }
                             } ?: run {
@@ -164,7 +171,11 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                 session.user = response.data
                                 session.userSession = token
                                 if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
-                                    navigator.load(ResetPasswordFragment::class.java)
+                                    navigator.load(ResetPasswordFragment::class.java).setBundle(
+                                        createBundle(
+                                            sourceScreen = OTPVerificationFragment::class.java.simpleName
+                                        )
+                                    )
                                         .replace(false)
                                 } else {
                                     getDriverStatus()
@@ -216,7 +227,7 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
             }
 //            when (it.code) {
 //                APIFactory.ResponseCode.SUCCESS -> {
-//                    this@OTPVerificationFragment.getOTP = it.data?.otp
+//                    mailto:this@otpverificationfragment.getotp = it.data?.otp
 //                    countDownTimer()
 //                }
 //

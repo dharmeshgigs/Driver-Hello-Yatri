@@ -105,6 +105,20 @@
             tools:itemCount="1"
             tools:listitem="@layout/auth_driver_personal_profile_picture_image_row_item" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLabelReason"
+            style="@style/TextViewLufgaRegularBlack10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:textColor="@color/colorRed"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:text="@string/label_note_please_upload_both_sides_of_driving_license_e"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewImages" />
         <View
             android:id="@+id/viewDivider"
             android:layout_width="0dp"
@@ -113,7 +127,7 @@
             android:background="@color/grey"
             app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
             app:layout_constraintStart_toStartOf="@id/guideLineStart"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewImages" />
+            app:layout_constraintTop_toBottomOf="@id/textViewLabelReason" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDetails"

@@ -18,6 +18,7 @@
     <color name="seekbarGreenColor">#78B75B</color>
     <color name="seekbarYellowColor">#FFB800</color>
     <color name="seekbarRedColor">#F32E2E</color>
+    <color name="redColor">#FF0000</color>
     <color name="seekbarSecondaryColor">#D9D9D9</color>
     <color name="colorBgSelection">#FAFAFA</color>
     <color name="lightBlue">#3987F4</color>

@@ -109,6 +109,8 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
 
     }
 
+
+
     fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
@@ -20,6 +21,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -169,12 +171,15 @@ fun AppCompatEditText.setTextConstraint(
         allowAlphanumeric && allowSpace -> {
             "[a-zA-Z0-9 ]*"
         }
+
         allowAlphanumeric && !allowSpace -> {
             "[a-zA-Z0-9]*"
         }
+
         !allowAlphanumeric && allowSpace -> {
             "[a-zA-Z ]*"
         }
+
         else -> {
             "[a-zA-Z]*"
         }
@@ -214,7 +219,7 @@ fun Number?.numberFormatter(
             numValue / 10.0.pow((base * 3).toDouble())
         ) + suffix[base]).also { return it }
     } else {
-        DecimalFormat(if (prefix == "")formatWithoutSuffix else "$prefix$formatWithoutSuffix").format(
+        DecimalFormat(if (prefix == "") formatWithoutSuffix else "$prefix$formatWithoutSuffix").format(
             this ?: 0.00
         )
     }
@@ -423,8 +428,8 @@ fun getDatePickerDialogFrom(
     context: Context,
     timeInMillis: Long? = null,
     isForTo: Boolean = false,
-    selectedDate: String?=null,
-    dateFormat: String?=null,
+    selectedDate: String? = null,
+    dateFormat: String? = null,
     onDateSelected: (formattedDate: String, timeInMillis: Long?) -> Unit
 ): MaterialDatePicker<Long> {
 
@@ -474,18 +479,28 @@ fun getDatePickerDialogFrom(
     return materialDatePicker
 }
 
-fun Fragment.requirePermission(permissionName:String, callback: (Boolean) -> Unit) {
+fun Fragment.requirePermission(permissionName: String, callback: (Boolean) -> Unit) {
     val request = requireActivity().permissionsBuilder(permissionName).build()
     request.onAccepted {
         callback(true)
     }.onDenied {
 
     }.onPermanentlyDenied {
-        Log.d("Hello Yatri","Permanent Denied")
+        Log.d("Hello Yatri", "Permanent Denied")
         callback(false)
 
     }.onShouldShowRationale { _, nonce ->
         nonce.use()
     }
     request.send()
+}
+
+fun Button.enableButton(isEnable: Boolean) {
+    backgroundTintList = ContextCompat.getColorStateList(
+        this.context, if (isEnable)
+            R.color.colorPrimary
+        else
+            R.color.grey
+
+    )
 }

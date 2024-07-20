@@ -1,21 +1,26 @@
 package com.helloyatri.ui.auth.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gamingyards.sms.app.utils.Status
+import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverDocuments
+import com.helloyatri.data.model.DriverStatusResponse
 import com.helloyatri.databinding.AuthDriverDocumentsFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.Constants.DRIVER_REQUIRED_DOCUMENT
-import com.helloyatri.utils.Constants.PERSONAL_PROFILE_SCREEN
+import com.helloyatri.utils.Constants.UPDATE_PROFILE_PICTURE
 import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
 import com.helloyatri.utils.Constants.VEHICLE_PHOTO
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +50,8 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i("TAG", "onCreate: ")
+
         driverDocumentsList.clear()
         driverDocumentsList.add(
             DriverDocuments(
@@ -84,6 +91,7 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                 isDataAdded = session.isVehiclePhotosAdded
             )
         )
+
 //        apiViewModel.getDriverStatus.get(this, {
 //            hideLoader()
 //            when(it.code) {
@@ -133,10 +141,68 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 //        })
     }
 
+
     override fun bindData() {
+        apiViewModel.getDriverStatus()
         setUpText()
         setUpRecyclerView()
         setUpClickListener()
+        initObservers()
+        Log.i("TAG", "bindData: ")
+
+    }
+
+    private fun initObservers() {
+        apiViewModel.getDriverStatus.observe(this) { it ->
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.LOADING -> showLoader()
+                    Status.SUCCESS -> {
+                        Log.i("TAG", "initObservers: "+it.message)
+                        hideLoader()
+                        it.data?.let { it ->
+                            val response =
+                                Gson().fromJson(it, DriverStatusResponse::class.java)
+                            response?.data?.let { driverStatus ->
+                                driverStatus.addVehicle?.let {
+                                    session.isAddVehicle = it.status ?: false
+                                }
+                                driverStatus.profileImage?.let {
+                                    session.isProfilePictureAdded = it.status ?: false
+                                }
+                                driverStatus.profileInfo?.let {
+                                    session.isPersonalDetailsAdded = it.status ?: false
+                                }
+                                driverStatus.requiredDocuments?.let {
+                                    session.isRequiredDocumentsAdded = it.status ?: false
+                                }
+                                driverStatus.vehicleDocuments?.let {
+                                    session.isVehicleDocumentsAdded = it.status ?: false
+                                }
+                                driverStatus.vehicleImages?.let {
+                                    session.isVehiclePhotosAdded = it.status ?: false
+                                }
+                                driverStatus.verificationPending?.let {
+                                    session.isDriverVerified = it.status ?: false
+                                }
+                            } ?: run {
+                                showSomethingMessage()
+                            }
+
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        hideLoader()
+                        val error =
+                            resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                        showErrorMessage(error)
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpText() = with(binding) {
@@ -178,7 +244,7 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
                 1 -> {
                     navigator.load(DriverPersonalProfilePictureFragment::class.java)
-                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = PERSONAL_PROFILE_SCREEN))
+                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPDATE_PROFILE_PICTURE))
                         .replace(true)
                 }
 

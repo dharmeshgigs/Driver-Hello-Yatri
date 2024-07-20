@@ -133,9 +133,9 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
 
                 Status.ERROR -> {
                     hideLoader()
-                    val error =
-                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
-                    showErrorMessage(error)
+//                    val error =
+//                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+//                    showErrorMessage(error)
                 }
 
                 Status.LOADING -> hideLoader()
@@ -256,9 +256,9 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
         includedVehicleType.editText.doAfterTextChanged {
             checkEmptyEditText()
         }
-        includedNumberOfSeats.editText.doAfterTextChanged {
-            checkEmptyEditText()
-        }
+//        includedNumberOfSeats.editText.doAfterTextChanged {
+//            checkEmptyEditText()
+//        }
         includedVehicleNumber.editText.doAfterTextChanged {
             checkEmptyEditText()
         }
@@ -271,9 +271,9 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
     }
 
     private fun checkEmptyEditText() = with(binding) {
+        Log.i("TAG", "checkEmptyEditText: "+capacity)
         if (includedVehicleName.editText.trimmedText.isEmpty()
                 .not() && includedVehicleType.editText.trimmedText.isEmpty()
-                .not() && includedNumberOfSeats.editText.trimmedText.isEmpty()
                 .not() && includedVehicleNumber.editText.trimmedText.isEmpty()
                 .not() && includedVehicleFuelType.editText.trimmedText.isEmpty()
                 .not() && includedVehicleModelYear.editText.trimmedText.isEmpty().not()
@@ -349,8 +349,8 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
             validator.submit(includedVehicleType.editText).checkEmpty()
                 .errorMessage(getString(R.string.validation_please_select_vehicle_type)).check()
 
-            validator.submit(includedNumberOfSeats.editText).checkEmpty()
-                .errorMessage(getString(R.string.validation_please_select_no_of_seats)).check()
+//            validator.submit(includedNumberOfSeats.editText).checkEmpty()
+//                .errorMessage(getString(R.string.validation_please_select_no_of_seats)).check()
 
             validator.submit(includedVehicleNumber.editText).checkEmpty()
                 .errorMessage(getString(R.string.validation_please_enter_vehicle_number))
@@ -370,13 +370,12 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
                 Request(
                     name = data?.name ?:includedVehicleName.editText.text.toString().trim(),
                     vehicleType = vehicleId,
-                    noOfSheets = data?.noOfSheets?:includedNumberOfSeats.editText.text.toString().trim(),
+                    noOfSheets = data?.noOfSheets?:"1",
                     vehicleNumber = data?.vehicleNumber?:includedVehicleNumber.editText.text.toString().trim(),
                     fuelType = data?.fuelType?:includedVehicleFuelType.editText.text.toString().trim(),
                     modelYear = data?.modelYear?:includedVehicleModelYear.editText.text.toString().trim()
                 )
             )
-//
 
         } catch (e: ApplicationException) {
             Log.i("TAG", "validate: "+e.message)
@@ -399,7 +398,6 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
         includedVehicleFuelType.editText.setText(data?.fuelType ?: "")
         includedVehicleModelYear.editText.setText(data?.modelYear ?: "")
     }
-
 
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(false).build()
