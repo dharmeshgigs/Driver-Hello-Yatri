@@ -34,7 +34,6 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
     private val apiViewModel by viewModels<ApiViewModel>()
     private var countDownTimer: CountDownTimer? = null
     private var start = false
-    private var getOTP: String? = null
 
     companion object {
         const val SOURCE_SCREEN = "sourceScreen"
@@ -116,8 +115,6 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
 //                                        .byFinishingAll()
 //                                        .start()
                                     if (session.isAllDocumentUploaded()) {
-                                        Log.i("TAG", "initObservers: "+session.isDriverVerified)
-                                        Log.i("TAG", "initObservers: "+session.user?.status)
 
                                         if (session.isDriverVerified && session.user?.status == 1) {
                                             navigator.loadActivity(HomeActivity::class.java)

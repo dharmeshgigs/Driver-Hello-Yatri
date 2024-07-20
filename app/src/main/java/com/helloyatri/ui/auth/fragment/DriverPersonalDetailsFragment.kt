@@ -145,12 +145,16 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
                                 response.data?.gender ?: getString(R.string.hint_select_gender)
                             )
                         )
-                        binding.includedCityYouDriveIn.editText.setText(
-                            String.format(
-                                "%s",
-                                response.data?.driveInCity ?:getString(R.string.hint_select_city)
+                        response.data?.driveInCity?.let {
+                            binding.includedCityYouDriveIn.editText.setText(
+                                response.data?.driveInCity
                             )
-                        )
+                        } ?: run {
+                            binding.includedCityYouDriveIn.editText.setHint(
+                                getString(R.string.hint_select_city)
+                            )
+                        }
+
                     }
 
                     Status.ERROR -> {
@@ -228,7 +232,7 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
 
     private fun setUpEditText() = with(binding) {
         includedFullName.textViewTitle.text = getString(R.string.hint_full_name)
-        includedFullName.editText.hint = getString(R.string.hint_ex_rahul)
+        includedFullName.editText.hint = getString(R.string.dummy_username_value)
         includedUserId.textViewTitle.text = getString(R.string.title_user_id)
         includedUserId.editText.hint = getString(R.string.hint_ex_rahul_patel)
         includedMobileNumber.textViewTitle.text = getString(R.string.title_mobile_number)
@@ -240,7 +244,7 @@ class DriverPersonalDetailsFragment : BaseFragment<AuthDriverPersonalDetailsFrag
         includedFullName.editText.imeOptions = EditorInfo.IME_ACTION_NEXT
         includedUserId.editText.imeOptions = EditorInfo.IME_ACTION_NEXT
         includedMobileNumber.editText.imeOptions = EditorInfo.IME_ACTION_DONE
-        includedFullName.editText.isFocusable = false
+//        includedFullName.editText.isFocusable = false
         includedUserId.editText.isFocusable = false
         includedMobileNumber.editText.isFocusable = false
         includedMobileNumber.imageViewVerify.isVisible(true)

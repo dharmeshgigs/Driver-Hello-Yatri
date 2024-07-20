@@ -82,7 +82,7 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
                                         phonenumber = it.mobile,
                                         countrycode = it.mobile_txt
                                             ?: binding.includedMobileNumber.textViewCountryCode.text.toString()
-                                                .trim(),
+                                                .trim().plus(" ").plus(binding.includedMobileNumber.editText.toString().trim()) ,
                                         sourceScreen = SignUpFragment::class.java.simpleName,
                                         name = it.name
                                             ?: binding.includedFullName.editText.text.toString()
