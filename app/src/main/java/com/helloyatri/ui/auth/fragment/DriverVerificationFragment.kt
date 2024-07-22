@@ -69,7 +69,6 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
                 }
 
             } else if (position == 1) {
-
                 openGoogleMaps(
                     driverVerificationDataList[position].lat.toString(),
                     driverVerificationDataList[position].long.toString()
@@ -89,41 +88,11 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
     }
 
     private fun makePhoneCall(phoneNumber: String) {
-        if (context?.let {
-                ContextCompat.checkSelfPermission(
-                    it,
-                    Manifest.permission.CALL_PHONE
-                )
-            } != PackageManager.PERMISSION_GRANTED) {
-            activity?.let {
-                ActivityCompat.requestPermissions(
-                    it,
-                    arrayOf(Manifest.permission.CALL_PHONE),
-                    REQUEST_CALL_PERMISSION
-                )
-            }
-        } else {
-            val intent = Intent(Intent.ACTION_CALL).apply {
-                data = Uri.parse("tel:$phoneNumber")
-            }
-            if (intent.resolveActivity(requireContext().packageManager) != null) {
-                startActivity(intent)
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CALL_PERMISSION) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-
-                phoneNumber?.let { makePhoneCall(it) }
-            }
-        }
+        val intent = Intent(Intent.ACTION_DIAL)
+        // Set the data to the phone number
+        intent.data = Uri.parse("tel:$phoneNumber")
+        // Start the activity with the intent
+        startActivity(intent)
     }
 
     private fun openGoogleMaps(latitude: String, longitude: String) {
