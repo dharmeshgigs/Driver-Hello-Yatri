@@ -183,4 +183,38 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val getHomeLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getHomeData() {
+        run {
+            getHomeLiveData.value = Resource.loading()
+            getHomeLiveData.value = authRepo.getHomeScreenData()
+        }
+    }
+
+    val updateCurrentLocationLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun updateCurrentLocation(request: Request) {
+        run {
+            updateCurrentLocationLiveData.value = Resource.loading()
+            updateCurrentLocationLiveData.value = authRepo.updateCurrentLocation(request)
+        }
+    }
+
+    val updateDriverAvalabilityLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun updateDriverAvalability(request: Request) {
+        run {
+            updateDriverAvalabilityLiveData.value = Resource.loading()
+            updateDriverAvalabilityLiveData.value = authRepo.updateDriverAvalability(request)
+        }
+    }
+
+    val getAllAddressLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAllAddress() {
+        run {
+            getAllAddressLiveData.value = Resource.loading()
+            getAllAddressLiveData.value = authRepo.getAllAddress()
+        }
+    }
+
 }

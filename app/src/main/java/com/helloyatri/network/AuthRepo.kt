@@ -38,6 +38,10 @@ interface AuthRepo {
 
     suspend fun removeSpecificDocument(request: Request) : Resource<JsonObject>
     suspend fun updateVehicleDetails(request: Request) : Resource<JsonObject>
+    suspend fun updateDriverAvalability(request: Request) : Resource<JsonObject>
+    suspend fun updateCurrentLocation(request: Request) : Resource<JsonObject>
+    suspend fun getHomeScreenData() : Resource<JsonObject>
+    suspend fun getAllAddress() : Resource<JsonObject>
 
 
 }

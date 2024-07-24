@@ -32,6 +32,10 @@ object APIFactory {
         const val GET_VEHICLE_TYPE = "driver/vehicle-types"
         const val GET_VEHICLE_DETAILS = "driver/get-vehicle"
         const val UPDATE_VEHICLE_DETAILS = "driver/store_vehicle"
+        const val GET_HOME_DATA = "getHomeScreenData"
+        const val UPDATE_CURRENT_LOCATION = "updateCurrentLoccation"
+        const val UPDATE_DRIVER_AVALABILITY = "driver/updateDriverAvailability"
+        const val GET_ALL_ADDRESS = "address"
 
 //        const val RESEND_OTP = "driver/resetPassword"
 

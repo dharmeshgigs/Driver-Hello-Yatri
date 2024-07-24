@@ -1,12 +1,19 @@
 package com.helloyatri.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gamingyards.sms.app.utils.Status
+import com.google.gson.Gson
 import com.helloyatri.R
+import com.helloyatri.data.model.Driver
+import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.HomeAcitivtyBinding
+import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.home.dialog.LogoutDialogFragment
 import com.helloyatri.ui.home.fragment.AccountAllReviewsFragment
@@ -28,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
+    private val apiViewModel by viewModels<ApiViewModel>()
 
     private val sideMenuAdapter by lazy {
         SideMenuAdapter()
@@ -50,8 +58,37 @@ class HomeActivity : BaseActivity() {
         setUpSideMenu()
         setUpSideMenuClickListener()
         load(HomeFragment::class.java).replace(false)
-        homeAcitivtyBinding.navigationDrawerContent.imageViewUserProfile.loadImageFromServerWithPlaceHolder(
-                "https://plus.unsplash.com/premium_photo-1669047668540-9e1712e29f1f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+        initObservers()
+//        homeAcitivtyBinding.navigationDrawerContent.imageViewUserProfile.loadImageFromServerWithPlaceHolder(
+//                "https://plus.unsplash.com/premium_photo-1669047668540-9e1712e29f1f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+    }
+
+    private fun initObservers() {
+        apiViewModel.getDriverProfileLiveData.observe(this){resource ->
+            when(resource.status){
+                Status.SUCCESS -> {
+                    val response =
+                        Gson().fromJson(resource.data.toString(), DriverResponse::class.java)
+                    setUserData(response.data)
+                    Log.i("TAG", "initObservers: "+response.data.toString())
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {
+
+                }
+            }
+
+        }
+    }
+
+    private fun setUserData(data: Driver?) = with(homeAcitivtyBinding) {
+        navigationDrawerContent.imageViewUserProfile.loadImageFromServerWithPlaceHolder(data?.profileImage ?: "")
+        navigationDrawerContent.textViewUserName.text = buildString {
+            append("Hello \n ")
+            append(data?.name)
+        }
     }
 
     fun openDrawer() {
@@ -137,6 +174,15 @@ class HomeActivity : BaseActivity() {
     private fun setUpToolbar() = with(homeAcitivtyBinding) {
         setToolbar(customToolbar)
         showToolbar(false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getProfileAPI()
+    }
+
+    private fun getProfileAPI() {
+        apiViewModel.getDriverProfile()
     }
 
 }

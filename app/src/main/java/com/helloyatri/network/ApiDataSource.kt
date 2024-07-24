@@ -94,4 +94,20 @@ class ApiDataSource @Inject constructor(
     override suspend fun updateVehicleDetails(request: Request): Resource<JsonObject> {
         return run2 { authService.updateVehicleDetails(request) }
     }
+
+    override suspend fun updateDriverAvalability(request: Request): Resource<JsonObject> {
+        return run2 {authService.updateDriverAvalability(request)  }
+    }
+
+    override suspend fun updateCurrentLocation(request: Request): Resource<JsonObject> {
+        return run2 { authService.updateCurrentLocation(request) }
+    }
+
+    override suspend fun getHomeScreenData(): Resource<JsonObject> {
+        return run2 { authService.getHomeScreenData() }
+    }
+
+    override suspend fun getAllAddress(): Resource<JsonObject> {
+        return run2 { authService.getAllAddress() }
+    }
 }

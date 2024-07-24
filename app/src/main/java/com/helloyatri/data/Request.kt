@@ -19,4 +19,7 @@ data class Request(
     @SerializedName("fuel_type") var fuelType: String? = null,
     @SerializedName("model_year") var modelYear: String? = null,
     @SerializedName("vehicle_name") var vehicleName: String? = null,
+    @SerializedName("latitude") var latitude: String? = null,
+    @SerializedName("longitude") var longitude: String? = null,
+    @SerializedName("availability") var availability: String? = null,
 )

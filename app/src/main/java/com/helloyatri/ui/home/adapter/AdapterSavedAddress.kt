@@ -14,8 +14,10 @@ class AdapterSavedAddress :
             BaseHolder<SavedAddress>(binding.root) {
 
         override fun bind(item: SavedAddress) = with(binding) {
-            textViewSave.text = String.format("Save %s", adapterPosition + 1)
-            textViewAddress.text = item.saveAddress
+           // textViewSave.text = String.format("Save %s", adapterPosition + 1)
+            textViewSave.text = item.name ?:""
+       //     textViewAddress.text = item.saveAddress
+            textViewAddress.text = item.location ?:""
 
             root.setOnClickListener {
                 onClickListener?.invoke(item)

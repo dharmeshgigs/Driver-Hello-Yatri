@@ -3,6 +3,7 @@ package com.helloyatri.ui.home.fragment
 import android.net.Uri
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,17 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import com.gamingyards.sms.app.utils.Status
+import com.google.gson.Gson
 import com.hbb20.CountryCodePicker
 import com.helloyatri.R
+import com.helloyatri.data.Request
+import com.helloyatri.data.model.Driver
+import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.AccountEditProfileFragmentBinding
 import com.helloyatri.exception.ApplicationException
+import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.auth.fragment.DriverVerificationFragment
 import com.helloyatri.ui.auth.fragment.OTPVerificationFragment
 import com.helloyatri.ui.auth.fragment.ResetPasswordFragment
@@ -28,6 +36,10 @@ import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.fileselector.MediaSelectHelper
 import com.helloyatri.utils.fileselector.MediaSelector
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,6 +53,9 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
     private var countryShortCode: String? = null
     private var selectedImage: String? = null
     private var isCountryPickerEnable: Boolean = false
+    private val apiViewModel by viewModels<ApiViewModel>()
+    private var data: Driver? = null
+
 
     private val commonFieldSelectionBottomSheetForGender by lazy {
         CommonFieldSelectionBottomSheet()
@@ -50,23 +65,115 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
         CommonFieldSelectionBottomSheet()
     }
 
-    override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                   attachToRoot: Boolean): AccountEditProfileFragmentBinding {
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): AccountEditProfileFragmentBinding {
         return AccountEditProfileFragmentBinding.inflate(layoutInflater)
     }
 
     override fun bindData() {
         setUpEditText()
-        setUpData()
+        apiViewModel.getDriverProfile()
+//        setUpData()
+        initObservers()
         setUpClickListener()
         setImagePicker()
         setUpCountryCode()
     }
 
+    private fun initObservers() {
+        apiViewModel.getDriverProfileLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    val response =
+                        Gson().fromJson(resource.data.toString(), DriverResponse::class.java)
+                    data = response.data
+                    setUserData(response.data)
+                    Log.i("TAG", "initObservers: " + response.data.toString())
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                }
+
+                Status.LOADING -> {
+                    hideLoader()
+                }
+            }
+        }
+
+        apiViewModel.updateProfileLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    resource?.data?.let {
+                        val response =
+                            Gson().fromJson(it.toString(), DriverResponse::class.java)
+                        response?.data?.let {
+                            showMessage(response.message ?: "")
+                            navigator.goBack()
+                        } ?: run {
+                            showSomethingMessage()
+                        }
+                    } ?: run {
+                        showSomethingMessage()
+                    }
+
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                    val error =
+                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                    showErrorMessage(error)
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
+    }
+
+    private fun setUserData(data: Driver?) = with(binding) {
+        imageViewUserProfile.loadImageFromServerWithPlaceHolder(
+            data?.profileImage ?: ""
+        )
+        includedFullName.editText.setText(data?.name ?: "")
+        includedUserId.editText.setText(data?.userId ?: "")
+        includedMobileNumber.textViewCountryCode.text = String.format("%s", "+91")
+        includedMobileNumber.editText.setText(data?.mobile ?: "")
+        includedPassword.editText.setText(String.format("%s", "rahul@123"))
+
+        data?.gender?.let {
+            binding.includedGender.editText.setText(
+                data.gender
+            )
+        } ?: run {
+            binding.includedGender.editText.setHint(getString(R.string.hint_select_gender))
+        }
+        data?.driveInCity?.let {
+            binding.includedCityYouDriveIn.editText.setText(
+                data?.driveInCity
+            )
+        } ?: run {
+            binding.includedCityYouDriveIn.editText.setHint(
+                getString(R.string.hint_select_city)
+            )
+        }
+        commonFieldSelectionBottomSheetForGender.setOnOkButtonClickListener {
+            includedGender.editText.setText(it.options)
+        }
+        commonFieldSelectionBottomSheetForCity.setOnOkButtonClickListener {
+            includedCityYouDriveIn.editText.setText(it.options)
+        }
+    }
+
     private fun setUpCountryCode() = with(binding) {
         countryCodePicker = CountryCodePicker(context)
         countryCodePicker.setTypeFace(
-                ResourcesCompat.getFont(requireContext(), R.font.lufga_regular))
+            ResourcesCompat.getFont(requireContext(), R.font.lufga_regular)
+        )
         countryCodePicker.setDialogBackground(R.drawable.bg_round_rect_white_radius_15)
         countryCodePicker.setOnCountryChangeListener {
             countryCode = countryCodePicker.selectedCountryCodeWithPlus
@@ -89,13 +196,17 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
         includedCityYouDriveIn.textViewTitle.text = getString(R.string.title_city_you_drive_in)
         includedCityYouDriveIn.editText.hint = getString(R.string.hint_select_city)
         includedUserId.editText.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.hintColor))
+            ContextCompat.getColor(requireContext(), R.color.hintColor)
+        )
         includedMobileNumber.editText.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.hintColor))
+            ContextCompat.getColor(requireContext(), R.color.hintColor)
+        )
         includedMobileNumber.textViewCountryCode.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.hintColor))
+            ContextCompat.getColor(requireContext(), R.color.hintColor)
+        )
         includedPassword.editText.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.hintColor))
+            ContextCompat.getColor(requireContext(), R.color.hintColor)
+        )
         includedUserId.editText.isFocusableInTouchMode = false
         includedUserId.editText.isClickable = false
         includedMobileNumber.editText.isFocusableInTouchMode = false
@@ -118,7 +229,8 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
 
     private fun setUpData() = with(binding) {
         imageViewUserProfile.loadImageFromServerWithPlaceHolder(
-                "https://plus.unsplash.com/premium_photo-1669047668540-9e1712e29f1f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+            "https://plus.unsplash.com/premium_photo-1669047668540-9e1712e29f1f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        )
         includedFullName.editText.setText(String.format("%s", "Rahul Patel"))
         includedUserId.editText.setText(String.format("%s", "rahul_patel"))
         includedMobileNumber.textViewCountryCode.text = String.format("%s", "+91")
@@ -157,9 +269,11 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
             includedMobileNumber.textViewCountryCode.isFocusableInTouchMode = true
             includedMobileNumber.textViewCountryCode.isClickable = true
             includedMobileNumber.editText.setTextColor(
-                    ContextCompat.getColor(requireContext(), R.color.black))
+                ContextCompat.getColor(requireContext(), R.color.black)
+            )
             includedMobileNumber.textViewCountryCode.setTextColor(
-                    ContextCompat.getColor(requireContext(), R.color.black))
+                ContextCompat.getColor(requireContext(), R.color.black)
+            )
         }
 
         textViewChangePassword.setOnClickListener {
@@ -180,53 +294,69 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
 
         includedGender.editText.setOnClickListener {
             commonFieldSelectionBottomSheetForGender.setOptionsList(
-                    optionList = arrayListOf(CommonFieldSelection(options = "Male"),
-                            CommonFieldSelection(options = "Female"),
-                            CommonFieldSelection(options = "Other"))).setTitle("Select Gender")
-                    .setSelectedOption(includedGender.editText.trimmedText)
-                    .show(childFragmentManager, null)
+                optionList = arrayListOf(
+                    CommonFieldSelection(options = "Male"),
+                    CommonFieldSelection(options = "Female"),
+                    CommonFieldSelection(options = "Other")
+                )
+            ).setTitle("Select Gender")
+                .setSelectedOption(includedGender.editText.trimmedText)
+                .show(childFragmentManager, null)
         }
 
         includedCityYouDriveIn.editText.setOnClickListener {
             commonFieldSelectionBottomSheetForCity.setOptionsList(
-                    optionList = arrayListOf(CommonFieldSelection(options = "Ahmedabad"),
-                            CommonFieldSelection(options = "Vadodara"),
-                            CommonFieldSelection(options = "Mumbai"),
-                            CommonFieldSelection(options = "Goa"))).setTitle("Select City")
-                    .setSelectedOption(includedCityYouDriveIn.editText.trimmedText)
-                    .show(childFragmentManager, null)
+                optionList = arrayListOf(
+                    CommonFieldSelection(options = "Ahmedabad"),
+                    CommonFieldSelection(options = "Vadodara"),
+                    CommonFieldSelection(options = "Mumbai"),
+                    CommonFieldSelection(options = "Goa")
+                )
+            ).setTitle("Select City")
+                .setSelectedOption(includedCityYouDriveIn.editText.trimmedText)
+                .show(childFragmentManager, null)
         }
     }
 
     private fun validate() = with(binding) {
         try {
             validator.submit(includedFullName.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_enter_full_name))
-                    .checkMinDigits(Constants.MIN_NAME)
-                    .errorMessage(getString(R.string.validation_please_enter_valid_full_name))
-                    .check()
+                .errorMessage(getString(R.string.validation_please_enter_full_name))
+                .checkMinDigits(Constants.MIN_NAME)
+                .errorMessage(getString(R.string.validation_please_enter_valid_full_name))
+                .check()
 
             validator.submit(includedUserId.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_enter_user_id))
-                    .checkMinDigits(Constants.MIN_NAME)
-                    .errorMessage(getString(R.string.validation_please_enter_valid_user_id)).check()
+                .errorMessage(getString(R.string.validation_please_enter_user_id))
+                .checkMinDigits(Constants.MIN_NAME)
+                .errorMessage(getString(R.string.validation_please_enter_valid_user_id)).check()
 
             validator.submit(includedMobileNumber.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_enter_mobile_number))
-                    .checkMinDigits(Constants.MIN_NUMBER)
-                    .errorMessage(getString(R.string.validation_please_enter_valid_mobile_number))
-                    .check()
+                .errorMessage(getString(R.string.validation_please_enter_mobile_number))
+                .checkMinDigits(Constants.MIN_NUMBER)
+                .errorMessage(getString(R.string.validation_please_enter_valid_mobile_number))
+                .check()
 
             validator.submit(includedPassword.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_enter_password)).check()
+                .errorMessage(getString(R.string.validation_please_enter_password)).check()
 
             validator.submit(includedGender.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_select_gender)).check()
+                .errorMessage(getString(R.string.validation_please_select_gender)).check()
 
             validator.submit(includedCityYouDriveIn.editText).checkEmpty()
-                    .errorMessage(getString(R.string.validation_please_select_city)).check()
+                .errorMessage(getString(R.string.validation_please_select_city)).check()
 
-            navigator.goBack()
+//          navigator.goBack()
+
+            showLoader()
+            apiViewModel.updateProfile(
+                Request(
+                    name = (binding.includedFullName.editText.text ?: data?.name).toString(),
+                    gender = (binding.includedGender.editText.text ?: data?.gender).toString(),
+                    driverInCity = (binding.includedCityYouDriveIn.editText.text
+                        ?: data?.driveInCity).toString()
+                )
+            )
 
         } catch (e: ApplicationException) {
             showMessage(e.message)
@@ -236,18 +366,22 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
     private fun showHidePassword(view: View) {
         if (view.id == R.id.imageViewPassword) {
             if (binding.includedPassword.editText.transformationMethod.equals(
-                            PasswordTransformationMethod.getInstance())) {
+                    PasswordTransformationMethod.getInstance()
+                )
+            ) {
                 binding.includedPassword.editText.transformationMethod =
-                        HideReturnsTransformationMethod.getInstance()
+                    HideReturnsTransformationMethod.getInstance()
                 binding.includedPassword.editText.setSelection(
-                        binding.includedPassword.editText.text?.length ?: 0)
+                    binding.includedPassword.editText.text?.length ?: 0
+                )
                 (view as AppCompatImageView).setImageResource(R.drawable.ic_password_show)
             } else {
                 (view as AppCompatImageView).setImageResource(R.drawable.ic_password_hide)
                 binding.includedPassword.editText.transformationMethod =
-                        PasswordTransformationMethod.getInstance()
+                    PasswordTransformationMethod.getInstance()
                 binding.includedPassword.editText.setSelection(
-                        binding.includedPassword.editText.text?.length ?: 0)
+                    binding.includedPassword.editText.text?.length ?: 0
+                )
 
             }
         }
@@ -269,6 +403,7 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
 
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(true).showBackButton(true).setToolbarTitle(getString(R.string.title_profile))
-                .build()
+            .build()
     }
+
 }

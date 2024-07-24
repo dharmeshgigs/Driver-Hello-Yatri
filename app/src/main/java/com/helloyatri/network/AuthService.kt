@@ -72,4 +72,16 @@ interface AuthService {
     @POST(APIFactory.AuthApi.UPDATE_VEHICLE_DETAILS)
     suspend fun updateVehicleDetails(@Body request: Request) : Response<JsonObject>
 
+    @GET(APIFactory.AuthApi.GET_HOME_DATA)
+    suspend fun getHomeScreenData() : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.UPDATE_CURRENT_LOCATION)
+    suspend fun updateCurrentLocation(@Body request: Request) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.UPDATE_DRIVER_AVALABILITY)
+    suspend fun updateDriverAvalability(@Body request: Request) : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_ALL_ADDRESS)
+    suspend fun getAllAddress() : Response<JsonObject>
+
 }

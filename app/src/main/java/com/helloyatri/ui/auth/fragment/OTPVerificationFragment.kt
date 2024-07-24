@@ -111,27 +111,28 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                     session.isDriverVerified = it.status ?: false
                                 }
                                 if (getSourceScreen == SignUpFragment::class.java.simpleName || getSourceScreen == LoginFragment::class.java.simpleName) {
-//                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
-//                                        .byFinishingAll()
-//                                        .start()
-                                    if (session.isAllDocumentUploaded()) {
+                                    navigator.loadActivity(HomeActivity::class.java)
+                                        .byFinishingAll()
+                                        .start()
 
-                                        if (session.isDriverVerified && session.user?.status == 1) {
-                                            navigator.loadActivity(HomeActivity::class.java)
-                                                .byFinishingAll()
-                                                .start()
-                                        } else {
-                                            navigator.load(DriverVerificationFragment::class.java)
-                                                .replace(false)
-//                                            navigator.loadActivity(DriverDocumentsActivity::class.java)
+//                                    if (session.isAllDocumentUploaded()) {
+//
+//                                        if (session.isDriverVerified && session.user?.status == 1) {
+//                                            navigator.loadActivity(HomeActivity::class.java)
 //                                                .byFinishingAll()
 //                                                .start()
-                                        }
-                                    } else {
-                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
-                                            .byFinishingAll()
-                                            .start()
-                                    }
+//                                        } else {
+//                                            navigator.load(DriverVerificationFragment::class.java)
+//                                                .replace(false)
+////                                            navigator.loadActivity(DriverDocumentsActivity::class.java)
+////                                                .byFinishingAll()
+////                                                .start()
+//                                        }
+//                                    } else {
+//                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
+//                                            .byFinishingAll()
+//                                            .start()
+//                                    }
                                 } else if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
                                     navigator.load(ResetPasswordFragment::class.java).setBundle(
                                         createBundle(
