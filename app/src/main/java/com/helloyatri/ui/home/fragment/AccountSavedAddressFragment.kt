@@ -1,5 +1,6 @@
 package com.helloyatri.ui.home.fragment
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -19,7 +20,7 @@ import com.helloyatri.ui.home.adapter.AdapterSavedAddress
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBinding>() {
+class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBinding>(){
 
     private val adapterSavedAddress by lazy {
         AdapterSavedAddress()
@@ -30,8 +31,10 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
     private val getAllAddressMutableList: MutableList<SavedAddress> = mutableListOf()
 
 
-    override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                   attachToRoot: Boolean): AccountSavedAddressFragmentBinding {
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): AccountSavedAddressFragmentBinding {
         return AccountSavedAddressFragmentBinding.inflate(layoutInflater)
     }
 
@@ -43,8 +46,8 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
     }
 
     private fun initObservers() {
-        apiViewModel.getAllAddressLiveData.observe(this){resource ->
-            when(resource.status){
+        apiViewModel.getAllAddressLiveData.observe(this) { resource ->
+            when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
                     resource?.data?.let {
@@ -61,12 +64,14 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
                         showSomethingMessage()
                     }
                 }
+
                 Status.ERROR -> {
                     hideLoader()
                     val error =
                         resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                     showErrorMessage(error)
                 }
+
                 Status.LOADING -> hideLoader()
             }
         }
@@ -82,14 +87,25 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
     private fun setUpClickListener() = with(binding) {
         buttonAddNew.setOnClickListener {
             navigator.load(AccountAddNewAddressFragment::class.java)
-                    .setBundle(AccountAddNewAddressFragment.createBundle(isFromEdit = false))
-                    .replace(true)
+                .setBundle(AccountAddNewAddressFragment.createBundle(isFromEdit = false))
+                .replace(true)
         }
 
         adapterSavedAddress.setOnItemClickListener {
+            Log.i("TAG", "setUpClickListener: " + it.latitude)
+            Log.i("TAG", "setUpClickListener: " + it.name)
+            Log.i("TAG", "setUpClickListener: " + it.location)
             navigator.load(AccountAddNewAddressFragment::class.java)
-                    .setBundle(AccountAddNewAddressFragment.createBundle(isFromEdit = true))
-                    .replace(true)
+                .setBundle(
+                    AccountAddNewAddressFragment.createBundle(
+                        isFromEdit = true,
+                        lat = it.latitude,
+                        long = it.longitude,
+                        name = it.name,
+                        location = it.location
+                    )
+                )
+                .replace(true)
         }
     }
 
@@ -104,7 +120,7 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
 
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(true).showBackButton(true)
-                .setToolbarTitle(getString(R.string.title_saved_places)).build()
+            .setToolbarTitle(getString(R.string.title_saved_places)).build()
     }
 
     override fun onResume() {

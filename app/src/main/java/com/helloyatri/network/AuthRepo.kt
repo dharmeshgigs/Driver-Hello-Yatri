@@ -42,6 +42,7 @@ interface AuthRepo {
     suspend fun updateCurrentLocation(request: Request) : Resource<JsonObject>
     suspend fun getHomeScreenData() : Resource<JsonObject>
     suspend fun getAllAddress() : Resource<JsonObject>
+    suspend fun updateAddress(request: Request) : Resource<JsonObject>
 
 
 }

@@ -1,5 +1,6 @@
 package com.helloyatri.network
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
@@ -215,6 +216,35 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
             getAllAddressLiveData.value = Resource.loading()
             getAllAddressLiveData.value = authRepo.getAllAddress()
         }
+    }
+
+    val updateAddressLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun updateAddress(request: Request) {
+        run {
+            updateAddressLiveData.value = Resource.loading()
+            updateAddressLiveData.value = authRepo.updateAddress(request)
+        }
+    }
+
+    private val _sharedData = MutableLiveData<String>()
+    val sharedData: LiveData<String> get() = _sharedData
+
+    fun setSharedData(data: String) {
+        _sharedData.value = data
+    }
+
+    private val _lattitudeData = MutableLiveData<String>()
+    val lattitudeData: LiveData<String> get() = _lattitudeData
+
+    fun setLatitudeData(data: String) {
+        _lattitudeData.value = data
+    }
+
+    private val _longitudeData = MutableLiveData<String>()
+    val longitudeData: LiveData<String> get() = _longitudeData
+
+    fun setLongitudeData(data: String) {
+        _longitudeData.value = data
     }
 
 }

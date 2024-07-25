@@ -84,4 +84,7 @@ interface AuthService {
     @GET(APIFactory.AuthApi.GET_ALL_ADDRESS)
     suspend fun getAllAddress() : Response<JsonObject>
 
+    @POST(APIFactory.AuthApi.UPDATE_ADDRESS)
+    suspend fun updateAddress(@Body request: Request) : Response<JsonObject>
+
 }

@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundColor">
+    android:layout_height="match_parent">
 
     <com.helloyatri.utils.toolbar.CustomToolbar
         android:id="@+id/customToolbar"
@@ -12,19 +11,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/backgroundColor"
         app:showBackButton="false" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewStaticMap"
+    <fragment
+        android:id="@+id/mapView"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/layoutConfirmStartPoint"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0"
-        app:srcCompat="@drawable/image_pin_map" />
+        app:layout_constraintVertical_bias="0"/>
+<!--    <com.google.android.gms.maps.MapView-->
+<!--        android:id="@+id/mapView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/layoutConfirmStartPoint"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0"/>-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/imageViewStaticMap"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/layoutConfirmStartPoint"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0"-->
+<!--        app:srcCompat="@drawable/image_pin_map" />-->
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewCurrentLocation"
@@ -32,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_20sdp"
-        app:layout_constraintBottom_toBottomOf="@id/imageViewStaticMap"
+        app:layout_constraintBottom_toBottomOf="@id/mapView"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_current_location" />
 
@@ -41,7 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewStaticMap">
+        android:background="@color/backgroundColor"
+        app:layout_constraintTop_toBottomOf="@id/mapView">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideLineStart"
@@ -87,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="Confirm your start point"
+            android:text="@string/title_address"
             app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/guideLineStart"
@@ -128,7 +151,7 @@
             android:elevation="@dimen/_1sdp"
             android:paddingHorizontal="@dimen/_25sdp"
             android:paddingVertical="@dimen/_8sdp"
-            android:text="@string/label_confirm_start_point"
+            android:text="@string/btn_save"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideLineEnd"

@@ -110,4 +110,8 @@ class ApiDataSource @Inject constructor(
     override suspend fun getAllAddress(): Resource<JsonObject> {
         return run2 { authService.getAllAddress() }
     }
+
+    override suspend fun updateAddress(request: Request): Resource<JsonObject> {
+        return run2 { authService.updateAddress(request) }
+    }
 }
