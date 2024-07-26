@@ -10,9 +10,12 @@ import androidx.core.content.ContextCompat
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import androidx.fragment.app.viewModels
+import com.gamingyards.sms.app.utils.Status
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverVerification
 import com.helloyatri.databinding.AuthDriverVerificationFragmentBinding
+import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.auth.adapter.DriverVerificationAdapter
 import com.helloyatri.ui.base.BaseFragment
@@ -28,6 +31,8 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
 
     private val driverVerificationDataList = ArrayList<DriverVerification>()
     var phoneNumber: String? = null
+    private val apiViewModel by viewModels<ApiViewModel>()
+
 
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean
@@ -40,6 +45,23 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
         setUpRecyclerView()
         setUpData()
         setUpClickListener()
+        initObservers()
+
+    }
+
+    private fun initObservers() {
+        apiViewModel.updateDriverVerificationStatusLiveData.observe(this){resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+                    hideLoader()
+                    navigator.loadActivity(AuthActivity::class.java).byFinishingAll().start()
+                }
+                Status.ERROR -> {
+                    hideLoader()
+                }
+                Status.LOADING -> showLoader()
+            }
+        }
     }
 
     private fun setUpText() = with(binding) {
@@ -83,7 +105,8 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
 
         buttonYouVerified.setOnClickListener {
             session.isDriverVerified = true
-            navigator.loadActivity(AuthActivity::class.java).byFinishingAll().start()
+            apiViewModel.updateDriverVerificationStatus()
+//            navigator.loadActivity(AuthActivity::class.java).byFinishingAll().start()
         }
     }
 

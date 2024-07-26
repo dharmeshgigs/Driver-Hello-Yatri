@@ -43,6 +43,7 @@ interface AuthRepo {
     suspend fun getHomeScreenData() : Resource<JsonObject>
     suspend fun getAllAddress() : Resource<JsonObject>
     suspend fun updateAddress(request: Request) : Resource<JsonObject>
+    suspend fun updateDriverVerificationStatus() : Resource<JsonObject>
 
 
 }

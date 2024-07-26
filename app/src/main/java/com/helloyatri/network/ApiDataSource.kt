@@ -96,7 +96,7 @@ class ApiDataSource @Inject constructor(
     }
 
     override suspend fun updateDriverAvalability(request: Request): Resource<JsonObject> {
-        return run2 {authService.updateDriverAvalability(request)  }
+        return run2 { authService.updateDriverAvalability(request) }
     }
 
     override suspend fun updateCurrentLocation(request: Request): Resource<JsonObject> {
@@ -113,5 +113,9 @@ class ApiDataSource @Inject constructor(
 
     override suspend fun updateAddress(request: Request): Resource<JsonObject> {
         return run2 { authService.updateAddress(request) }
+    }
+
+    override suspend fun updateDriverVerificationStatus(): Resource<JsonObject> {
+        return run2 { authService.updateDriverVerificationStatus() }
     }
 }

@@ -17,6 +17,7 @@ import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.concurrent.thread
 
 @AndroidEntryPoint
 class AccountAddNewAddressFragment : BaseFragment<AccountAddNewPlaceFragmentBinding>() {
@@ -90,28 +91,29 @@ class AccountAddNewAddressFragment : BaseFragment<AccountAddNewPlaceFragmentBind
                 Status.SUCCESS -> {
                     hideLoader()
                     navigator.goBack()
-                    Log.i("TAG", "initObservers:update "+resourse.toString())
                 }
 
                 Status.ERROR -> {
                     hideLoader()
                 }
-                Status.LOADING -> hideLoader()
+                Status.LOADING -> showLoader()
             }
         }
 
     }
 
     private fun setData() = with(binding) {
-        includedNameThisPlace.editText.setText(
-            String.format(
-                "%s",
-                name ?: ""
+
+            includedNameThisPlace.editText.setText(
+                String.format(
+                    "%s",
+                    name ?: ""
+                )
             )
-        )
-        includedAddress.editText.setText(
-            String.format("%s", address ?: "")
-        )
+            includedAddress.editText.setText(
+                String.format("%s", address ?: "")
+            )
+
     }
 
     private fun setUpText() = with(binding) {

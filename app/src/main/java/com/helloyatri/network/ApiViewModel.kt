@@ -153,7 +153,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val getVehicleTypeLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-    fun getVehicleType(){
+    fun getVehicleType() {
         run {
             getVehicleTypeLiveData.value = Resource.loading()
             getVehicleTypeLiveData.value = authRepo.getVehicleType()
@@ -161,7 +161,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val getVehicleDetailsLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-    fun getVehicleDetails(){
+    fun getVehicleDetails() {
         run {
             getVehicleDetailsLiveData.value = Resource.loading()
             getVehicleDetailsLiveData.value = authRepo.getVehicleDetails()
@@ -245,6 +245,15 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
 
     fun setLongitudeData(data: String) {
         _longitudeData.value = data
+    }
+
+    val updateDriverVerificationStatusLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun updateDriverVerificationStatus() {
+        run {
+            updateDriverVerificationStatusLiveData.value = Resource.loading()
+            updateDriverVerificationStatusLiveData.value = authRepo.updateDriverVerificationStatus()
+        }
     }
 
 }

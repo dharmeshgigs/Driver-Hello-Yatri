@@ -37,6 +37,7 @@ object APIFactory {
         const val UPDATE_DRIVER_AVALABILITY = "driver/updateDriverAvailability"
         const val GET_ALL_ADDRESS = "address"
         const val UPDATE_ADDRESS = "address"
+        const val UPDATE_DRIVER_VERIFICATION_STATUS = "driver/update-driver-verification-status"
 
 //        const val RESEND_OTP = "driver/resetPassword"
 

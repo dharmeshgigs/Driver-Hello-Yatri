@@ -39,6 +39,7 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
     }
 
     override fun bindData() {
+        apiViewModel.getAllAddress()
         setUpRecyclerView()
         initObservers()
 //        setUpData()
@@ -92,9 +93,6 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
         }
 
         adapterSavedAddress.setOnItemClickListener {
-            Log.i("TAG", "setUpClickListener: " + it.latitude)
-            Log.i("TAG", "setUpClickListener: " + it.name)
-            Log.i("TAG", "setUpClickListener: " + it.location)
             navigator.load(AccountAddNewAddressFragment::class.java)
                 .setBundle(
                     AccountAddNewAddressFragment.createBundle(
@@ -123,8 +121,4 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
             .setToolbarTitle(getString(R.string.title_saved_places)).build()
     }
 
-    override fun onResume() {
-        super.onResume()
-        apiViewModel.getAllAddress()
-    }
 }
