@@ -50,7 +50,6 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("TAG", "onCreate: ")
 
         driverDocumentsList.clear()
         driverDocumentsList.add(
@@ -148,7 +147,6 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
         setUpRecyclerView()
         setUpClickListener()
         initObservers()
-        Log.i("TAG", "bindData: ")
 
     }
 
@@ -158,7 +156,7 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                 when (resource.status) {
                     Status.LOADING -> showLoader()
                     Status.SUCCESS -> {
-                        Log.i("TAG", "initObservers: "+it.message)
+
                         hideLoader()
                         it.data?.let { it ->
                             val response =

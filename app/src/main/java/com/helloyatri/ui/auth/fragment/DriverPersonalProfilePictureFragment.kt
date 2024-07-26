@@ -133,6 +133,7 @@ class DriverPersonalProfilePictureFragment :
 
                     Status.ERROR -> {
                         hideLoader()
+                        Log.i("TAG", "initObservers: "+resource.message)
                         val error =
                             resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                         showErrorMessage(error)
@@ -151,12 +152,15 @@ class DriverPersonalProfilePictureFragment :
                             Gson().fromJson(it.data.toString(), DriverResponse::class.java)
                         response.data.let {
                             driverProfilePictureImagesAdapter.clearAllItem()
-                            driverProfilePictureImagesAdapter.addItem(
-                                DriverProfilePictureImages(
-                                    images = it?.profileImage.toString(),
-                                    local = false
+                            Log.i("TAG", "initObservers:Profile "+ it?.profileImage)
+                            if (it?.profileImage !=null) {
+                                driverProfilePictureImagesAdapter.addItem(
+                                    DriverProfilePictureImages(
+                                        images = it.profileImage.toString(),
+                                        local = false
+                                    )
                                 )
-                            )
+                            }
                         }
                         driverProfilePictureImagesAdapter.notifyDataSetChanged()
 
@@ -758,188 +762,217 @@ class DriverPersonalProfilePictureFragment :
 
         buttonSave.setOnClickListener {
             showLoader()
-            if (statusCode == UPDATE_PROFILE_PICTURE) {
-                if (driverProfilePictureImagesAdapter.items?.get(0)?.local == true) {
-                    val requestBody: RequestBody = MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart(
-                            "profile_image",
-                            Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment
-                                ?: "",
-                            RequestBody.create(
-                                "image/*".toMediaTypeOrNull(),
-                                File(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)
-                            )
-                        )
-                        .build()
-                    apiViewModel.updateProfileImage(requestBody)
-                } else {
-                    hideLoader()
-                    navigator.goBack()
-                }
-            } else if (statusCode == UPLOAD_DRIVING_LICENCE || statusCode == UPLOAD_GOVERNMENT_ID) {
-                driverProfilePictureImagesAdapter.items?.filter {
-                    it.local
-                }?.let {
-                    if (it.isNotEmpty()) {
-                        val multiPartBodyBuilder = MultipartBody.Builder()
-                        multiPartBodyBuilder.setType(MultipartBody.FORM);
-                        multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
-                        multiPartBodyBuilder.addFormDataPart("type", DRIVER_DOC)
-                        it.forEach {
-                            val file = it.images?.let { it1 -> File(it1) }
+            when (statusCode) {
+                UPDATE_PROFILE_PICTURE -> {
+                    driverProfilePictureImagesAdapter.items?.filter {
+                        it.local
+                    }?.let {
+                        if (it.isNotEmpty()) {
+                            val multiPartBodyBuilder = MultipartBody.Builder()
+                            multiPartBodyBuilder.setType(MultipartBody.FORM)
                             multiPartBodyBuilder.addFormDataPart(
-                                Constants.Documents, file?.getName(), RequestBody.create(
-                                    "image/*".toMediaTypeOrNull(), file!!
+                                Constants.PROFILE_IMAGE,
+                                Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment,
+                                RequestBody.create(
+                                    "image/*".toMediaTypeOrNull(), File(
+                                        driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images
+                                    )
                                 )
                             )
+                            apiViewModel.updateProfileImage(multiPartBodyBuilder.build())
+                        } else {
+                            hideLoader()
+                            navigator.goBack()
                         }
-                        apiViewModel.updateDocument(multiPartBodyBuilder.build())
-                    } else {
-                        hideLoader()
-                        navigator.goBack()
                     }
-                } ?: run {
-                    hideLoader()
-                    navigator.goBack()
+        //                if (driverProfilePictureImagesAdapter.items?.get(0)?.local == true) {
+        //                    val requestBody: RequestBody = MultipartBody.Builder()
+        //                        .setType(MultipartBody.FORM)
+        //                        .addFormDataPart(
+        //                            "profile_image",
+        //                            Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment
+        //                                ?: "",
+        //                            RequestBody.create(
+        //                                "image/*".toMediaTypeOrNull(),
+        //                                File(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)
+        //                            )
+        //                        )
+        //                        .build()
+        //                    apiViewModel.updateProfileImage(requestBody)
+        //                } else {
+        //                    hideLoader()
+        //                    navigator.goBack()
+        //                }
                 }
-
-            }else if (statusCode == UPLOAD_BANK_DETAILS){
-                driverProfilePictureImagesAdapter.items?.filter {
-                    it.local
-                }?.let {
-                    if (it.isNotEmpty()) {
-                        val multiPartBodyBuilder = MultipartBody.Builder()
-                        multiPartBodyBuilder.setType(MultipartBody.FORM);
-                        multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
-                        multiPartBodyBuilder.addFormDataPart("type", DRIVER_DOC)
-                        multiPartBodyBuilder.addFormDataPart(
-                            Constants.Documents,
-                            Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment,
-                            RequestBody.create(
-                                "image/*".toMediaTypeOrNull(), File(
-                                    driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images
+                UPLOAD_DRIVING_LICENCE, UPLOAD_GOVERNMENT_ID -> {
+                    driverProfilePictureImagesAdapter.items?.filter {
+                        it.local
+                    }?.let {
+                        if (it.isNotEmpty()) {
+                            val multiPartBodyBuilder = MultipartBody.Builder()
+                            multiPartBodyBuilder.setType(MultipartBody.FORM);
+                            multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
+                            multiPartBodyBuilder.addFormDataPart("type", DRIVER_DOC)
+                            it.forEach {
+                                val file = it.images?.let { it1 -> File(it1) }
+                                multiPartBodyBuilder.addFormDataPart(
+                                    Constants.Documents, file?.getName(), RequestBody.create(
+                                        "image/*".toMediaTypeOrNull(), file!!
+                                    )
                                 )
-                            )
-                        )
-                        apiViewModel.updateDocument(multiPartBodyBuilder.build())
-                    } else {
+                            }
+                            apiViewModel.updateDocument(multiPartBodyBuilder.build())
+                        } else {
+                            hideLoader()
+                            navigator.goBack()
+                        }
+                    } ?: run {
                         hideLoader()
                         navigator.goBack()
                     }
-                } ?: run {
-                    hideLoader()
-                    navigator.goBack()
-                }
-            } else if (statusCode == UPLOAD_REGISTRATION_CERTIFICATION || statusCode == UPLOAD_VEHICLE_PERMIT) {
-                driverProfilePictureImagesAdapter.items?.filter {
-                    it.local
-                }?.let {
-                    if (it.isNotEmpty()) {
-                        val multiPartBodyBuilder = MultipartBody.Builder()
-                        multiPartBodyBuilder.setType(MultipartBody.FORM);
-                        multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
-                        multiPartBodyBuilder.addFormDataPart("type", VEHICLE_DOC)
-                        multiPartBodyBuilder.addFormDataPart(
-                            Constants.Documents,
-                            Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment,
-                            RequestBody.create(
-                                "image/*".toMediaTypeOrNull(), File(
-                                    driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images
-                                )
-                            )
-                        )
-                        apiViewModel.updateDocument(multiPartBodyBuilder.build())
-                    } else {
-                        hideLoader()
-                        navigator.goBack()
-                    }
-                } ?: run {
-                    hideLoader()
-                    navigator.goBack()
-                }
 
-            } else if (statusCode == UPLOAD_VEHICLE_PUC || statusCode == UPLOAD_VEHICLE_INSURANCE) {
-                driverProfilePictureImagesAdapter.items?.filter {
-                    it.local
-                }?.let { it ->
-                    if (it.isNotEmpty()) {
-                        val multiPartBodyBuilder = MultipartBody.Builder()
-                        multiPartBodyBuilder.setType(MultipartBody.FORM);
-                        multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
-                        multiPartBodyBuilder.addFormDataPart("type", VEHICLE_DOC)
-                        it.forEach {
-                            val file = it.images?.let { it1 -> File(it1) }
+                }
+                UPLOAD_BANK_DETAILS -> {
+                    driverProfilePictureImagesAdapter.items?.filter {
+                        it.local
+                    }?.let {
+                        if (it.isNotEmpty()) {
+                            val multiPartBodyBuilder = MultipartBody.Builder()
+                            multiPartBodyBuilder.setType(MultipartBody.FORM);
+                            multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
+                            multiPartBodyBuilder.addFormDataPart("type", DRIVER_DOC)
                             multiPartBodyBuilder.addFormDataPart(
-                                Constants.Documents, file?.getName(), RequestBody.create(
-                                    "image/*".toMediaTypeOrNull(), file!!
+                                Constants.Documents,
+                                Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment,
+                                RequestBody.create(
+                                    "image/*".toMediaTypeOrNull(), File(
+                                        driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images
+                                    )
                                 )
                             )
+                            apiViewModel.updateDocument(multiPartBodyBuilder.build())
+                        } else {
+                            hideLoader()
+                            navigator.goBack()
                         }
-                        apiViewModel.updateDocument(multiPartBodyBuilder.build())
-                    } else {
+                    } ?: run {
                         hideLoader()
                         navigator.goBack()
                     }
-                } ?: run {
-                    hideLoader()
-                    navigator.goBack()
                 }
-
-            } else if (statusCode == UPLOAD_CHASIS_NUMBER_IMAGES ) {
-                driverProfilePictureImagesAdapter.items?.filter {
-                    it.local
-                }?.let {
-                    if (it.isNotEmpty()) {
-                        val multiPartBodyBuilder = MultipartBody.Builder()
-                        multiPartBodyBuilder.setType(MultipartBody.FORM)
-                        multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
-                        multiPartBodyBuilder.addFormDataPart("type", VEHICLE_IMAGE)
-                        multiPartBodyBuilder.addFormDataPart(
-                            Constants.Documents,
-                            Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment,
-                            RequestBody.create(
-                                "image/*".toMediaTypeOrNull(), File(
-                                    driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images
-                                )
-                            )
-                        )
-                        apiViewModel.updateDocument(multiPartBodyBuilder.build())
-                    } else {
-                        hideLoader()
-                        navigator.goBack()
-                    }
-                } ?: run {
-                    hideLoader()
-                    navigator.goBack()
-                }
-            } else if (statusCode == UPLOAD_FRONTBACK_WITH_NUMBER_PLATE || statusCode == UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR || statusCode == UPLOAD_YOUR_PHOTO_WITH_VEHICLE) {
-                driverProfilePictureImagesAdapter.items?.filter {
-                    it.local
-                }?.let {
-                    if (it.isNotEmpty()) {
-                        val multiPartBodyBuilder = MultipartBody.Builder()
-                        multiPartBodyBuilder.setType(MultipartBody.FORM);
-                        multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
-                        multiPartBodyBuilder.addFormDataPart("type", VEHICLE_IMAGE)
-                        it.forEach {
-                            val file = it.images?.let { it1 -> File(it1) }
+                UPLOAD_REGISTRATION_CERTIFICATION, UPLOAD_VEHICLE_PERMIT -> {
+                    driverProfilePictureImagesAdapter.items?.filter {
+                        it.local
+                    }?.let {
+                        if (it.isNotEmpty()) {
+                            val multiPartBodyBuilder = MultipartBody.Builder()
+                            multiPartBodyBuilder.setType(MultipartBody.FORM);
+                            multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
+                            multiPartBodyBuilder.addFormDataPart("type", VEHICLE_DOC)
                             multiPartBodyBuilder.addFormDataPart(
-                                Constants.Documents, file?.getName(), RequestBody.create(
-                                    "image/*".toMediaTypeOrNull(), file!!
+                                Constants.Documents,
+                                Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment,
+                                RequestBody.create(
+                                    "image/*".toMediaTypeOrNull(), File(
+                                        driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images
+                                    )
                                 )
-                            );
+                            )
+                            apiViewModel.updateDocument(multiPartBodyBuilder.build())
+                        } else {
+                            hideLoader()
+                            navigator.goBack()
                         }
-                        apiViewModel.updateDocument(multiPartBodyBuilder.build())
-                    } else {
+                    } ?: run {
                         hideLoader()
                         navigator.goBack()
                     }
-                } ?: run {
-                    hideLoader()
-                    navigator.goBack()
-                }
 
+                }
+                UPLOAD_VEHICLE_PUC, UPLOAD_VEHICLE_INSURANCE -> {
+                    driverProfilePictureImagesAdapter.items?.filter {
+                        it.local
+                    }?.let { it ->
+                        if (it.isNotEmpty()) {
+                            val multiPartBodyBuilder = MultipartBody.Builder()
+                            multiPartBodyBuilder.setType(MultipartBody.FORM);
+                            multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
+                            multiPartBodyBuilder.addFormDataPart("type", VEHICLE_DOC)
+                            it.forEach {
+                                val file = it.images?.let { it1 -> File(it1) }
+                                multiPartBodyBuilder.addFormDataPart(
+                                    Constants.Documents, file?.getName(), RequestBody.create(
+                                        "image/*".toMediaTypeOrNull(), file!!
+                                    )
+                                )
+                            }
+                            apiViewModel.updateDocument(multiPartBodyBuilder.build())
+                        } else {
+                            hideLoader()
+                            navigator.goBack()
+                        }
+                    } ?: run {
+                        hideLoader()
+                        navigator.goBack()
+                    }
+
+                }
+                UPLOAD_CHASIS_NUMBER_IMAGES -> {
+                    driverProfilePictureImagesAdapter.items?.filter {
+                        it.local
+                    }?.let {
+                        if (it.isNotEmpty()) {
+                            val multiPartBodyBuilder = MultipartBody.Builder()
+                            multiPartBodyBuilder.setType(MultipartBody.FORM)
+                            multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
+                            multiPartBodyBuilder.addFormDataPart("type", VEHICLE_IMAGE)
+                            multiPartBodyBuilder.addFormDataPart(
+                                Constants.Documents,
+                                Uri.parse(driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images)?.lastPathSegment,
+                                RequestBody.create(
+                                    "image/*".toMediaTypeOrNull(), File(
+                                        driverProfilePictureImagesAdapter.items?.getOrNull(0)?.images
+                                    )
+                                )
+                            )
+                            apiViewModel.updateDocument(multiPartBodyBuilder.build())
+                        } else {
+                            hideLoader()
+                            navigator.goBack()
+                        }
+                    } ?: run {
+                        hideLoader()
+                        navigator.goBack()
+                    }
+                }
+                UPLOAD_FRONTBACK_WITH_NUMBER_PLATE, UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR, UPLOAD_YOUR_PHOTO_WITH_VEHICLE -> {
+                    driverProfilePictureImagesAdapter.items?.filter {
+                        it.local
+                    }?.let {
+                        if (it.isNotEmpty()) {
+                            val multiPartBodyBuilder = MultipartBody.Builder()
+                            multiPartBodyBuilder.setType(MultipartBody.FORM);
+                            multiPartBodyBuilder.addFormDataPart("document_id", document_id ?: "")
+                            multiPartBodyBuilder.addFormDataPart("type", VEHICLE_IMAGE)
+                            it.forEach {
+                                val file = it.images?.let { it1 -> File(it1) }
+                                multiPartBodyBuilder.addFormDataPart(
+                                    Constants.Documents, file?.getName(), RequestBody.create(
+                                        "image/*".toMediaTypeOrNull(), file!!
+                                    )
+                                );
+                            }
+                            apiViewModel.updateDocument(multiPartBodyBuilder.build())
+                        } else {
+                            hideLoader()
+                            navigator.goBack()
+                        }
+                    } ?: run {
+                        hideLoader()
+                        navigator.goBack()
+                    }
+
+                }
             }
             //session.isProfilePictureAdded = true
             //navigator.goBack()
