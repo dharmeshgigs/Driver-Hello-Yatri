@@ -35,6 +35,7 @@ import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
 import com.pusher.client.channel.Channel
 import com.pusher.client.connection.ConnectionEventListener
+import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
 import com.pusher.client.util.HttpChannelAuthorizer
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,34 +83,38 @@ class HomeActivity : BaseActivity() {
         val channelAuthorizer = HttpChannelAuthorizer("http://3.111.159.32/api/pusher/auth")
         channelAuthorizer.setHeaders(map)
 
-        val options = PusherOptions().setCluster(YOUR_APP_CLUSTER).setUseTLS(true).setChannelAuthorizer(channelAuthorizer)
+        val options = PusherOptions().setCluster(YOUR_APP_CLUSTER).setUseTLS(true)
+            .setChannelAuthorizer(channelAuthorizer)
         val pusher = Pusher(YOUR_APP_KEY, options)
         var userId = appSession.userId
-        Log.i("TAG", "setUpPushUp: "+userId)
+        Log.i("TAG", "setUpPushUp: " + userId)
         pusher.connect(object : ConnectionEventListener {
             override fun onConnectionStateChange(change: ConnectionStateChange) {
-                Log.i("TAG", "onConnectionStateChange: "+change.currentState )
-                Log.i("TAG", "onConnectionStateChange: "+change.previousState )
+                Log.i("TAG", "onConnectionStateChange: " + change.currentState)
+                Log.i("TAG", "onConnectionStateChange: " + change.previousState)
                 println(
                     "State changed to " + change.currentState +
                             " from " + change.previousState
                 )
+                if (change.currentState === ConnectionState.CONNECTED) {
+//    var channelName = "private-driver.$userId"
+//    val channel: Channel = pusher.subscribe(channelName)
+//    channel.bind(
+//        "NewRideRequest"
+//    ) { data ->
+//        println("Received event with data: $data")
+//        Log.i("TAG", "setUpPushUp: " + data.data)
+//    }
+                }
+
             }
 
             override fun onError(message: String?, code: String?, e: Exception?) {
                 println("There was a problem connecting!")
-                Log.i("TAG", "onError: "+message)
+                Log.i("TAG", "onError: " + message)
             }
         })
 
-
-        val channel: Channel = pusher.subscribe("private-driver.$userId")
-        channel.bind(
-            "NewRideRequest"
-        ) { data ->
-            println("Received event with data: $data")
-            Log.i("TAG", "setUpPushUp: "+data.data)
-        }
 
     }
 
