@@ -1,33 +1,35 @@
 package com.helloyatri.ui.home.fragment
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gamingyards.sms.app.utils.Status
 import com.google.gson.Gson
 import com.helloyatri.R
-import com.helloyatri.data.model.DataDocument
-import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.data.model.GetAllAddressModel
 import com.helloyatri.data.model.SavedAddress
 import com.helloyatri.databinding.AccountSavedAddressFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.base.BaseFragment
+import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterSavedAddress
+import com.helloyatri.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBinding>(){
+class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBinding>() {
 
     private val adapterSavedAddress by lazy {
         AdapterSavedAddress()
     }
 
-    private val savedAddressDataList = ArrayList<SavedAddress>()
-    private val apiViewModel by viewModels<ApiViewModel>()
+    private val apiViewModel: ApiViewModel by activityViewModels()
     private val getAllAddressMutableList: MutableList<SavedAddress> = mutableListOf()
 
 
@@ -42,7 +44,6 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
         apiViewModel.getAllAddress()
         setUpRecyclerView()
         initObservers()
-//        setUpData()
         setUpClickListener()
     }
 
@@ -57,7 +58,8 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
                         response?.data?.let {
                             getAllAddressMutableList.clear()
                             getAllAddressMutableList.addAll(response.data)
-                            adapterSavedAddress.setItems(getAllAddressMutableList, 1)
+                            getAllAddressMutableList.add(SavedAddress(id=0))
+                            setUpData()
                         } ?: run {
                             showSomethingMessage()
                         }
@@ -88,31 +90,29 @@ class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBind
     private fun setUpClickListener() = with(binding) {
         buttonAddNew.setOnClickListener {
             navigator.load(AccountAddNewAddressFragment::class.java)
-                .setBundle(AccountAddNewAddressFragment.createBundle(isFromEdit = false))
-                .replace(true)
+                .setBundle(AccountAddNewAddressFragment.createBundle(isFromEdit = false)).replace(false)
         }
 
         adapterSavedAddress.setOnItemClickListener {
-            navigator.load(AccountAddNewAddressFragment::class.java)
-                .setBundle(
-                    AccountAddNewAddressFragment.createBundle(
-                        isFromEdit = true,
-                        lat = it.latitude,
-                        long = it.longitude,
-                        name = it.name,
-                        location = it.location
-                    )
-                )
-                .replace(true)
+            if(it.id==0) {
+                buttonAddNew.performClick()
+                return@setOnItemClickListener
+            }
+            try {
+                navigator.load(AccountAddNewAddressFragment::class.java)
+                    .setBundle(
+                        AccountAddNewAddressFragment.createBundle(
+                            isFromEdit = true,
+                            data = Gson().toJson(it),
+                        )
+                    ).replace(false )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
     private fun setUpData() {
-        //savedAddressDataList.clear()
-//        savedAddressDataList.add(SavedAddress(saveAddress = "101 National Dr. San Bruno, CA 94580"))
-//        savedAddressDataList.add(SavedAddress(saveAddress = "102 National Dr. San Bruno, CA 94580"))
-//        savedAddressDataList.add(SavedAddress(saveAddress = "103 National Dr. San Bruno, CA 94580"))
-//        savedAddressDataList.add(SavedAddress(saveAddress = "104 National Dr. San Bruno, CA 94580"))
         adapterSavedAddress.setItems(getAllAddressMutableList, 1)
     }
 

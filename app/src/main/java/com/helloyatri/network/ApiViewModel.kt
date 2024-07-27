@@ -6,6 +6,7 @@ import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
+import com.helloyatri.data.model.SavedAddress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -218,33 +219,19 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val updateAddressLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val _updateAddressLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val updateAddressLiveData: MutableLiveData<Resource<JsonObject>> get() = _updateAddressLiveData
     fun updateAddress(request: Request) {
         run {
-            updateAddressLiveData.value = Resource.loading()
-            updateAddressLiveData.value = authRepo.updateAddress(request)
+            _updateAddressLiveData.value = Resource.loading()
+            _updateAddressLiveData.value = authRepo.updateAddress(request)
         }
     }
 
-    private val _sharedData = MutableLiveData<String>()
-    val sharedData: LiveData<String> get() = _sharedData
+    val _sharedData by lazy { MutableLiveData<Triple<String,String,String>>() }
 
-    fun setSharedData(data: String) {
-        _sharedData.value = data
-    }
-
-    private val _lattitudeData = MutableLiveData<String>()
-    val lattitudeData: LiveData<String> get() = _lattitudeData
-
-    fun setLatitudeData(data: String) {
-        _lattitudeData.value = data
-    }
-
-    private val _longitudeData = MutableLiveData<String>()
-    val longitudeData: LiveData<String> get() = _longitudeData
-
-    fun setLongitudeData(data: String) {
-        _longitudeData.value = data
+    fun setSharedData(address: String, lat: String, long: String) {
+        _sharedData.value = Triple(address,lat,long)
     }
 
     val updateDriverVerificationStatusLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
@@ -255,5 +242,4 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
             updateDriverVerificationStatusLiveData.value = authRepo.updateDriverVerificationStatus()
         }
     }
-
 }

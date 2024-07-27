@@ -43,7 +43,6 @@ class FragmentNavigationFactory @Inject constructor(val fragmentHandler: Fragmen
             navigationFactory.fragmentHandler.openFragment(fragment, FragmentHandler.Option.REPLACE, toBackStack, tag, sharedElements)
         }
 
-
         override fun setBundle(bundle: Bundle): FragmentActionPerformer<*> {
             fragment.arguments = bundle
             return this

@@ -46,5 +46,6 @@ object Constants {
     const val CHASSIS_NUMBER_IMAGES = "Chassis Number Images"
     const val YOUR_PHOTO_WITH_VEHICLE = "Your photo with vehicle"
     const val Documents = "documents[]"
+    const val PLACE_CATEGORY = 1
 
 }
