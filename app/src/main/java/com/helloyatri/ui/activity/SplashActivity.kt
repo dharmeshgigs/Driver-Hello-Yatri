@@ -8,7 +8,6 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import com.gamingyards.sms.app.utils.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverStatusResponse
@@ -16,6 +15,7 @@ import com.helloyatri.data.model.LoginResponse
 import com.helloyatri.data.model.OTPVerificationResponse
 import com.helloyatri.databinding.SplashActivityBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.auth.fragment.DriverVerificationFragment
 import com.helloyatri.ui.auth.fragment.ForgotPasswordFragment
 import com.helloyatri.ui.auth.fragment.LoginFragment

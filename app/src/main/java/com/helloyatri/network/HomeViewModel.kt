@@ -2,7 +2,6 @@ package com.helloyatri.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
