@@ -19,6 +19,7 @@ import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
+import com.helloyatri.utils.Constants
 import com.helloyatri.utils.Constants.DRIVER_REQUIRED_DOCUMENT
 import com.helloyatri.utils.Constants.UPDATE_PROFILE_PICTURE
 import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
@@ -139,8 +140,8 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 //                }
 //            }
 //        })
+        initObservers()
     }
-
 
     override fun bindData() {
         apiViewModel.getDriverStatus()
@@ -185,6 +186,7 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                                 driverStatus.verificationPending?.let {
                                     session.isDriverVerified = it.status ?: false
                                 }
+                                setUpMenu()
                             } ?: run {
                                 showSomethingMessage()
                             }
@@ -289,6 +291,11 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
     override fun onResume() {
         super.onResume()
+        setUpMenu()
+        apiViewModel.getDriverStatus()
+    }
+
+    private fun setUpMenu() {
         if (driverDocumentsList.isNotEmpty()) {
             driverDocumentsAdapter.setItems(driverDocumentsList, 1)
         }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import com.gamingyards.sms.app.utils.Status
 import com.google.gson.Gson
 import com.helloyatri.R
@@ -17,17 +16,13 @@ import com.helloyatri.ui.auth.fragment.DriverPersonalProfilePictureFragment
 import com.helloyatri.ui.auth.fragment.DriverRequiredDocumentsFragment
 import com.helloyatri.ui.auth.fragment.DriverVehicleDetailsFragment
 import com.helloyatri.ui.auth.fragment.DriverVerificationFragment
-import com.helloyatri.ui.auth.fragment.ForgotPasswordFragment
-import com.helloyatri.ui.auth.fragment.ResetPasswordFragment
 import com.helloyatri.ui.base.BaseActivity
-import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.Constants.ADD_VEHICLE
 import com.helloyatri.utils.Constants.DRIVER_REQUIRED_DOCUMENT
 import com.helloyatri.utils.Constants.UPDATE_PROFILE_INFO
 import com.helloyatri.utils.Constants.UPDATE_PROFILE_PICTURE
 import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
 import com.helloyatri.utils.Constants.VEHICLE_PHOTO
-import com.helloyatri.utils.Constants.VERIFICATION_COMPLETED
 import com.helloyatri.utils.Constants.VERIFICATION_PENDING
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -49,8 +44,13 @@ class DriverDocumentsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar()
-//        initObservers()
-        load(DriverDocumentsFragment::class.java).replace(false)
+        initObservers()
+        if (appSession.isInitial && appSession.isAllDocumentUploaded()) {
+            load(DriverVerificationFragment::class.java).clearHistory(null).replace(true)
+        } else {
+            load(DriverDocumentsFragment::class.java).clearHistory(null).replace(true)
+        }
+
     }
 
     private fun initObservers() {
@@ -60,6 +60,7 @@ class DriverDocumentsActivity : BaseActivity() {
                     Status.LOADING -> {
 
                     }
+
                     Status.SUCCESS -> {
 
                         it.data?.let {
@@ -69,34 +70,61 @@ class DriverDocumentsActivity : BaseActivity() {
                                 UPDATE_PROFILE_INFO.toInt() -> {
                                     load(DriverPersonalDetailsFragment::class.java).replace(false)
                                 }
+
                                 UPDATE_PROFILE_PICTURE.toInt() -> {
                                     load(DriverPersonalProfilePictureFragment::class.java)
-                                        .setBundle(DriverPersonalProfilePictureFragment.createBundle(statusCode = UPDATE_PROFILE_PICTURE))
+                                        .setBundle(
+                                            DriverPersonalProfilePictureFragment.createBundle(
+                                                statusCode = UPDATE_PROFILE_PICTURE
+                                            )
+                                        )
                                         .replace(false)
                                 }
+
                                 DRIVER_REQUIRED_DOCUMENT.toInt() -> {
                                     load(DriverRequiredDocumentsFragment::class.java)
-                                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = DRIVER_REQUIRED_DOCUMENT))
+                                        .setBundle(
+                                            DriverRequiredDocumentsFragment.createBundle(
+                                                statusCode = DRIVER_REQUIRED_DOCUMENT
+                                            )
+                                        )
                                         .replace(false)
                                 }
+
                                 ADD_VEHICLE.toInt() -> {
                                     load(DriverVehicleDetailsFragment::class.java).replace(true)
                                 }
+
                                 VEHICLE_DOCUMENT.toInt() -> {
                                     load(DriverRequiredDocumentsFragment::class.java)
-                                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = VEHICLE_DOCUMENT))
+                                        .setBundle(
+                                            DriverRequiredDocumentsFragment.createBundle(
+                                                statusCode = VEHICLE_DOCUMENT
+                                            )
+                                        )
                                         .replace(false)
                                 }
+
                                 VEHICLE_PHOTO.toInt() -> {
                                     load(DriverRequiredDocumentsFragment::class.java)
-                                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = VEHICLE_PHOTO))
+                                        .setBundle(
+                                            DriverRequiredDocumentsFragment.createBundle(
+                                                statusCode = VEHICLE_PHOTO
+                                            )
+                                        )
                                         .replace(false)
                                 }
+
                                 VEHICLE_PHOTO.toInt() -> {
                                     load(DriverRequiredDocumentsFragment::class.java)
-                                        .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = VEHICLE_PHOTO))
+                                        .setBundle(
+                                            DriverRequiredDocumentsFragment.createBundle(
+                                                statusCode = VEHICLE_PHOTO
+                                            )
+                                        )
                                         .replace(false)
                                 }
+
                                 VERIFICATION_PENDING.toInt() -> {
                                     load(DriverVerificationFragment::class.java)
                                         .replace(false)
