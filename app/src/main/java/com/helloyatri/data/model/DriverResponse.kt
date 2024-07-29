@@ -28,5 +28,7 @@ data class Driver(
     @SerializedName("type")
     val type: String?,
     @SerializedName("user_id")
-    val userId: String?
+    val userId: String?,
+    @SerializedName("id")
+    val id: Int?
 )

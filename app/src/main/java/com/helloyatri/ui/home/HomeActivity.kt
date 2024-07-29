@@ -34,6 +34,8 @@ import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
 import com.pusher.client.channel.Channel
+import com.pusher.client.channel.PrivateChannelEventListener
+import com.pusher.client.channel.PusherEvent
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
@@ -82,12 +84,17 @@ class HomeActivity : BaseActivity() {
 
         val channelAuthorizer = HttpChannelAuthorizer("http://3.111.159.32/api/pusher/auth")
         channelAuthorizer.setHeaders(map)
-
         val options = PusherOptions().setCluster(YOUR_APP_CLUSTER).setUseTLS(true)
             .setChannelAuthorizer(channelAuthorizer)
         val pusher = Pusher(YOUR_APP_KEY, options)
-        var userId = appSession.userId
+        var userId = appSession.user?.id.toString()
         Log.i("TAG", "setUpPushUp: " + userId)
+        Log.e("TAG", "Invoked")
+        var channelName = "private-driver.$userId"
+        val channel = pusher.subscribePrivate(channelName)
+        channel.bind(
+            "NewRideRequest", pushEvent
+        )
         pusher.connect(object : ConnectionEventListener {
             override fun onConnectionStateChange(change: ConnectionStateChange) {
                 Log.i("TAG", "onConnectionStateChange: " + change.currentState)
@@ -97,14 +104,9 @@ class HomeActivity : BaseActivity() {
                             " from " + change.previousState
                 )
                 if (change.currentState === ConnectionState.CONNECTED) {
-//    var channelName = "private-driver.$userId"
-//    val channel: Channel = pusher.subscribe(channelName)
-//    channel.bind(
-//        "NewRideRequest"
-//    ) { data ->
-//        println("Received event with data: $data")
-//        Log.i("TAG", "setUpPushUp: " + data.data)
-//    }
+                    var channelName = "private-driver.$userId"
+                    Log.e("TAG", "setUpPushUp: $channelName")
+
                 }
 
             }
@@ -114,8 +116,6 @@ class HomeActivity : BaseActivity() {
                 Log.i("TAG", "onError: " + message)
             }
         })
-
-
     }
 
     private fun initObservers() {
@@ -249,4 +249,27 @@ class HomeActivity : BaseActivity() {
         apiViewModel.getDriverProfile()
     }
 
+    val pushEvent = object : PrivateChannelEventListener {
+        override fun onEvent(event: PusherEvent?) {
+            event?.let {
+                Log.e("TAG", "onEvent ${Gson().toJson(event)}")
+            } ?: run {
+                Log.e("TAG", "onEvent null")
+            }
+        }
+
+        override fun onSubscriptionSucceeded(channelName: String?) {
+            Log.e("TAG", "Channel Name $channelName")
+        }
+
+        override fun onAuthenticationFailure(
+            message: String?,
+            e: java.lang.Exception?
+        ) {
+            e?.let {
+                it.printStackTrace()
+            }
+
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.helloyatri.core
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,5 +60,18 @@ class AppPreferences @Inject constructor(context: Context) {
         return sharedPreferences.getFloat(name, 0f)
     }
 
+    fun <T> putObject(key: String, obj : T) {
+        val editor = sharedPreferences.edit()
+        editor!!.putString(key, Gson().toJson(obj))
+        editor.apply()
+    }
 
+//    inline fun <reified T> getObject(key: String) : T? {
+//        val data = sharedPreferences.getString(key, null)
+//        data?.let {
+//            return Gson().fromJson(it, T::class.java)
+//        } ?: run {
+//
+//        }
+//    }
 }
