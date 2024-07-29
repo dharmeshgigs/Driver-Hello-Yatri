@@ -45,7 +45,11 @@ class DriverDocumentsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setUpToolbar()
 //        initObservers()
-        load(DriverDocumentsFragment::class.java).replace(false)
+        if (appSession.isInitial && appSession.isAllDocumentUploaded()) {
+            load(DriverVerificationFragment::class.java).clearHistory(null).replace(true)
+        } else {
+            load(DriverDocumentsFragment::class.java).clearHistory(null).replace(true)
+        }
     }
 
     private fun initObservers() {
