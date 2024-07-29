@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.network.Status
@@ -14,6 +15,7 @@ import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.HomeAcitivtyBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.HomeViewModel
 import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.home.dialog.LogoutDialogFragment
 import com.helloyatri.ui.home.fragment.AccountAllReviewsFragment
@@ -38,7 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
-    private val apiViewModel by viewModels<ApiViewModel>()
+    private val apiViewModel by viewModels<HomeViewModel>()
 
     private val sideMenuAdapter by lazy {
         SideMenuAdapter()
@@ -61,6 +63,13 @@ class HomeActivity : BaseActivity() {
         setUpSideMenu()
         setUpSideMenuClickListener()
         load(HomeFragment::class.java).replace(false)
+//        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(
+//            com.helloyatri.R.id.placeHolder,
+//            HomeFragment::class.java,
+//            null
+//        )
+//        transaction.commit()
         initObservers()
         //setUpPushUp()
 
@@ -162,6 +171,14 @@ class HomeActivity : BaseActivity() {
 
                 SideMenuTag.SAVED_ADDRESS -> {
                     load(AccountSavedAddressFragment::class.java).replace(true)
+//                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+//                    transaction.replace(
+//                        R.id.placeHolder,
+//                        AccountSavedAddressFragment(),
+//                        AccountSavedAddressFragment::class.java.simpleName
+//                    )
+//                    transaction.addToBackStack(AccountSavedAddressFragment::class.java.simpleName)
+//                    transaction.commit()
                 }
 
                 SideMenuTag.PREFERENCES -> {

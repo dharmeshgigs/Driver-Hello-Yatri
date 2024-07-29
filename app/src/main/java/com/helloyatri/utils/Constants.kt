@@ -47,4 +47,6 @@ object Constants {
     const val YOUR_PHOTO_WITH_VEHICLE = "Your photo with vehicle"
     const val Documents = "documents[]"
     const val PROFILE_IMAGE = "profile_image"
+    const val PLACE_CATEGORY = 1
+
 }

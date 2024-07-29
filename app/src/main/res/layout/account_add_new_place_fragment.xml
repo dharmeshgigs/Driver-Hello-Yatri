@@ -20,6 +20,16 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <include
+        android:id="@+id/includedCategory"
+        layout="@layout/include_select_category_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
         android:id="@+id/includedNameThisPlace"
         layout="@layout/include_name_edittext"
         android:layout_width="0dp"
@@ -27,7 +37,7 @@
         android:layout_marginTop="@dimen/_20sdp"
         app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
         app:layout_constraintStart_toStartOf="@id/guideLineStart"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/includedCategory" />
 
     <include
         android:id="@+id/includedAddress"

@@ -23,5 +23,4 @@ interface FragmentActionPerformer<T> {
     fun clearHistory(tag: String?): FragmentActionPerformer<*>
 
     fun hasData(passable: Passable<T>): FragmentActionPerformer<*>
-
 }

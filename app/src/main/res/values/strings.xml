@@ -335,5 +335,12 @@ will be accepted.</string>
     <string name="label_change_password_msg">Complete the change password process</string>
     <string name="label_old_password">Old Password</string>
     <string name="validation_please_enter_old_password">Please enter old password</string>
+    <string name="title_category">Category</string>
+    <string name="select_category">Select category</string>
+    <string name="option_home">Home</string>
+    <string name="option_work">Work</string>
+    <string name="option_school">School</string>
+    <string name="option_other">Other</string>
+    <string name="validation_please_select_category">Please select category</string>
 
 </resources>

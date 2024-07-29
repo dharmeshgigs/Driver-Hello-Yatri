@@ -87,6 +87,14 @@ class CommonFieldSelectionBottomSheet :
         return this
     }
 
+    fun setSelect(selectedOption: CommonFieldSelection?): CommonFieldSelectionBottomSheet {
+        selectedOption?.let {
+            this.selectedOption = it.options
+        }
+
+        return this
+    }
+
     fun setTitle(setTitle: String?): CommonFieldSelectionBottomSheet {
         this.setTitle = setTitle
         return this

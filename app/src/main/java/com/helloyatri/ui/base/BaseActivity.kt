@@ -164,11 +164,11 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
 
     override fun onBackPressed() {
         hideKeyboard()
-
-
         val currentFragment = getCurrentFragment<BaseFragment<*>>()
         if (currentFragment == null) super.onBackPressed()
-        else if (currentFragment.onBackActionPerform() && shouldGoBack()) super.onBackPressed()
+        else if (currentFragment.onBackActionPerform() && shouldGoBack()) {
+            supportFragmentManager.popBackStackImmediate()
+        }
 
         // pending animation
         // overridePendingTransition(R.anim.pop_enter, R.anim.pop_exit);

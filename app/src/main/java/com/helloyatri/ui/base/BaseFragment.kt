@@ -276,5 +276,14 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         showErrorSnackBar(getString(R.string.other_exception))
     }
 
+    fun goBack () {
+        (activity as BaseActivity).goBack()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
 }
 
