@@ -3,6 +3,8 @@ package com.helloyatri.core
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,5 +61,18 @@ class AppPreferences @Inject constructor(context: Context) {
         return sharedPreferences.getFloat(name, 0f)
     }
 
+    fun <T> putObject(key: String, value: T) {
+       sharedPreferences.edit().apply {
+           putString(key, Gson().toJson(value))
+       }.apply()
+    }
 
+    fun <T> getObject(key: String) : T? {
+        sharedPreferences.getString(key,null) ?.let {
+            val type = object : TypeToken<T>() {}.type
+            return Gson().fromJson(it,type)
+        } ?: run {
+            return null
+        }
+    }
 }
