@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverStatusResponse
@@ -17,17 +16,13 @@ import com.helloyatri.ui.auth.fragment.DriverPersonalProfilePictureFragment
 import com.helloyatri.ui.auth.fragment.DriverRequiredDocumentsFragment
 import com.helloyatri.ui.auth.fragment.DriverVehicleDetailsFragment
 import com.helloyatri.ui.auth.fragment.DriverVerificationFragment
-import com.helloyatri.ui.auth.fragment.ForgotPasswordFragment
-import com.helloyatri.ui.auth.fragment.ResetPasswordFragment
 import com.helloyatri.ui.base.BaseActivity
-import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.Constants.ADD_VEHICLE
 import com.helloyatri.utils.Constants.DRIVER_REQUIRED_DOCUMENT
 import com.helloyatri.utils.Constants.UPDATE_PROFILE_INFO
 import com.helloyatri.utils.Constants.UPDATE_PROFILE_PICTURE
 import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
 import com.helloyatri.utils.Constants.VEHICLE_PHOTO
-import com.helloyatri.utils.Constants.VERIFICATION_COMPLETED
 import com.helloyatri.utils.Constants.VERIFICATION_PENDING
 import dagger.hilt.android.AndroidEntryPoint
 

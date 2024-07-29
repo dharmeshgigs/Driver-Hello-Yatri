@@ -5,13 +5,8 @@ import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import android.Manifest
-import android.app.Activity
-import android.content.pm.PackageManager
 import androidx.fragment.app.viewModels
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverVerification
 import com.helloyatri.databinding.AuthDriverVerificationFragmentBinding
@@ -19,7 +14,6 @@ import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.auth.adapter.DriverVerificationAdapter
 import com.helloyatri.ui.base.BaseFragment
-import com.helloyatri.utils.Constants.REQUEST_CALL_PERMISSION
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

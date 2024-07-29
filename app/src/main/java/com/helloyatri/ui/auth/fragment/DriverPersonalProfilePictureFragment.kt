@@ -15,7 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -45,7 +45,6 @@ import com.helloyatri.utils.Constants.UPLOAD_VEHICLE_PUC
 import com.helloyatri.utils.Constants.UPLOAD_YOUR_PHOTO_WITH_VEHICLE
 import com.helloyatri.utils.Constants.VEHICLE_DOC
 import com.helloyatri.utils.Constants.VEHICLE_IMAGE
-import com.helloyatri.utils.Constants.VEHICLE_PHOTO
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.fileselector.FileType

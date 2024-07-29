@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.hbb20.CountryCodePicker
 import com.helloyatri.R
@@ -23,7 +23,6 @@ import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.AccountEditProfileFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
-import com.helloyatri.ui.auth.fragment.DriverVerificationFragment
 import com.helloyatri.ui.auth.fragment.OTPVerificationFragment
 import com.helloyatri.ui.auth.fragment.ResetPasswordFragment
 import com.helloyatri.ui.base.BaseFragment
@@ -36,10 +35,6 @@ import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.fileselector.MediaSelectHelper
 import com.helloyatri.utils.fileselector.MediaSelector
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint

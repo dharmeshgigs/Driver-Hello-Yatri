@@ -45,7 +45,6 @@ class NotificationMainAdapter :
 
         private fun setUpClickListener(item: NotificationsData) = with(binding) {
             rootConstraint.setOnClickListener {
-
                 if (item.isExpanded) {
                     items!!.find {
                         getItemIndex(it) > getItemIndex(item) && it.isExpanded == item.isExpanded
@@ -57,7 +56,6 @@ class NotificationMainAdapter :
                         //
                     }
                 }
-
                 toggleIsExpandedValue(item)
             }
         }

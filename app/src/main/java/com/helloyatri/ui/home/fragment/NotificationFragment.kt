@@ -3,8 +3,11 @@ package com.helloyatri.ui.home.fragment
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.helloyatri.R
 import com.helloyatri.databinding.FragmentNotificationBinding
+import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.NotificationMainAdapter
 import com.helloyatri.utils.getNotificationList
@@ -12,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
+    private val apiViewModel by viewModels<ApiViewModel>()
 
     private val notificationAdapter by lazy {
         NotificationMainAdapter()
@@ -23,8 +27,25 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
     }
 
     override fun bindData() {
-        setAdapter()
+
         setClickListener()
+        apiViewModel.getAllNotificationData()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        apiViewModel.getAllNotificationLiveData.observe(this){resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+                    hideLoader()
+                }
+                Status.ERROR -> {
+                    hideLoader()
+                    setAdapter()
+                }
+                Status.LOADING -> showLoader()
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

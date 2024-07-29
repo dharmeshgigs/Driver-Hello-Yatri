@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.Driver
@@ -28,18 +28,9 @@ import com.helloyatri.ui.home.fragment.RideActivityFragment
 import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
 import com.helloyatri.ui.home.sidemenu.SideMenuTag
-import com.helloyatri.utils.Constants.YOUR_APP_CLUSTER
-import com.helloyatri.utils.Constants.YOUR_APP_KEY
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
-import com.pusher.client.Pusher
-import com.pusher.client.PusherOptions
-import com.pusher.client.channel.Channel
 import com.pusher.client.channel.PrivateChannelEventListener
 import com.pusher.client.channel.PusherEvent
-import com.pusher.client.connection.ConnectionEventListener
-import com.pusher.client.connection.ConnectionState
-import com.pusher.client.connection.ConnectionStateChange
-import com.pusher.client.util.HttpChannelAuthorizer
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -71,51 +62,10 @@ class HomeActivity : BaseActivity() {
         setUpSideMenuClickListener()
         load(HomeFragment::class.java).replace(false)
         initObservers()
-        setUpPushUp()
+        //setUpPushUp()
 
 //        homeAcitivtyBinding.navigationDrawerContent.imageViewUserProfile.loadImageFromServerWithPlaceHolder(
 //                "https://plus.unsplash.com/premium_photo-1669047668540-9e1712e29f1f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
-    }
-
-    private fun setUpPushUp() {
-        val map = mutableMapOf<String, String>()
-        map["Accept"] = "application/json"
-        map["Authorization"] = "Bearer ".plus(appSession.userSession)
-
-        val channelAuthorizer = HttpChannelAuthorizer("http://3.111.159.32/api/pusher/auth")
-        channelAuthorizer.setHeaders(map)
-        val options = PusherOptions().setCluster(YOUR_APP_CLUSTER).setUseTLS(true)
-            .setChannelAuthorizer(channelAuthorizer)
-        val pusher = Pusher(YOUR_APP_KEY, options)
-        var userId = appSession.user?.id.toString()
-        Log.i("TAG", "setUpPushUp: " + userId)
-        Log.e("TAG", "Invoked")
-        var channelName = "private-driver.$userId"
-        val channel = pusher.subscribePrivate(channelName)
-        channel.bind(
-            "NewRideRequest", pushEvent
-        )
-        pusher.connect(object : ConnectionEventListener {
-            override fun onConnectionStateChange(change: ConnectionStateChange) {
-                Log.i("TAG", "onConnectionStateChange: " + change.currentState)
-                Log.i("TAG", "onConnectionStateChange: " + change.previousState)
-                println(
-                    "State changed to " + change.currentState +
-                            " from " + change.previousState
-                )
-                if (change.currentState === ConnectionState.CONNECTED) {
-                    var channelName = "private-driver.$userId"
-                    Log.e("TAG", "setUpPushUp: $channelName")
-
-                }
-
-            }
-
-            override fun onError(message: String?, code: String?, e: Exception?) {
-                println("There was a problem connecting!")
-                Log.i("TAG", "onError: " + message)
-            }
-        })
     }
 
     private fun initObservers() {

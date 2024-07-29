@@ -90,4 +90,10 @@ interface AuthService {
     @POST(APIFactory.AuthApi.UPDATE_ADDRESS)
     suspend fun updateDriverVerificationStatus() : Response<JsonObject>
 
+    @GET(APIFactory.AuthApi.GET_ALL_RIDE)
+    suspend fun getAllRide() : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_ALL_NOTIFICATION)
+    suspend fun getAllNotification() : Response<JsonObject>
+
 }

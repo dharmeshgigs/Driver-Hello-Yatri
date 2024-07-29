@@ -1,9 +1,7 @@
 package com.helloyatri.network
 
-import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
-import com.helloyatri.data.model.Driver
 import okhttp3.RequestBody
 import javax.inject.Inject
 
@@ -117,5 +115,13 @@ class ApiDataSource @Inject constructor(
 
     override suspend fun updateDriverVerificationStatus(): Resource<JsonObject> {
         return run2 { authService.updateDriverVerificationStatus() }
+    }
+
+    override suspend fun getAllRide(): Resource<JsonObject> {
+        return run2 { authService.getAllRide() }
+    }
+
+    override suspend fun getAllNotification(): Resource<JsonObject> {
+        return run2 { authService.getAllNotification() }
     }
 }

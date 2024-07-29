@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -21,7 +21,6 @@ import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
-import com.helloyatri.ui.home.fragment.AccountEditProfileFragment
 import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.changeStatusBarColor
 import com.helloyatri.utils.extension.trimmedText

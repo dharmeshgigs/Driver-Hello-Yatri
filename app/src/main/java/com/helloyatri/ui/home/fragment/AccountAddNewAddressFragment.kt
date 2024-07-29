@@ -1,15 +1,11 @@
 package com.helloyatri.ui.home.fragment
 
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.databinding.AccountAddNewPlaceFragmentBinding
@@ -17,7 +13,6 @@ import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.concurrent.thread
 
 @AndroidEntryPoint
 class AccountAddNewAddressFragment : BaseFragment<AccountAddNewPlaceFragmentBinding>() {

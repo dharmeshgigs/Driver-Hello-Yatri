@@ -1,4 +1,4 @@
-package com.gamingyards.sms.app.utils
+package com.helloyatri.network
 
 import androidx.annotation.IdRes
 

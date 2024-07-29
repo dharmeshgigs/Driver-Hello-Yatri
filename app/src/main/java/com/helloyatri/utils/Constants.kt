@@ -47,7 +47,4 @@ object Constants {
     const val YOUR_PHOTO_WITH_VEHICLE = "Your photo with vehicle"
     const val Documents = "documents[]"
     const val PROFILE_IMAGE = "profile_image"
-    const val YOUR_APP_KEY = "11288b3d484789c2c83d"
-    const val YOUR_APP_CLUSTER = "ap2"
-
 }

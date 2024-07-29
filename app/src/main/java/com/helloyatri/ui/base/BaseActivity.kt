@@ -17,14 +17,13 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 
 import com.helloyatri.R
 import com.helloyatri.core.Session
+import com.helloyatri.di.App
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.ui.activity.AuthActivity
-import com.helloyatri.ui.base.loader.Loader
 import com.helloyatri.ui.base.loader.LoadingDialog
 import com.helloyatri.ui.manager.ActivityBuilder
 import com.helloyatri.ui.manager.ActivityStarter
@@ -37,7 +36,10 @@ import com.helloyatri.utils.showView
 import com.helloyatri.utils.textdecorator.TextDecorator
 import com.helloyatri.utils.toolbar.CustomToolbar
 import com.helloyatri.utils.toolbar.MenuItem
+import com.pusher.client.channel.PrivateChannelEventListener
+import com.pusher.client.channel.PusherEvent
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -58,6 +60,8 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
     private var toolbar: CustomToolbar? = null
     internal var progressDialog: ProgressDialog? = null
     internal var alertDialog: AlertDialog? = null
+    private lateinit var myApp: App
+
 
     private val view by lazy {
         createViewBinding()
@@ -74,7 +78,7 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         super.onCreate(savedInstanceState)
 
         setContentView(createViewBinding())
-
+        myApp = application as App
         createFirebaseToken()/*if (toolbar != null)
             setSupportActionBar(toolbar)*/
 
@@ -84,18 +88,50 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         progressDialog!!.setMessage("Please wait...")
         progressDialog!!.setCancelable(false)
         progressDialog!!.setCanceledOnTouchOutside(false)
+        pusherConnection()
 
         setContentView(view)
 
+
+    }
+
+    private fun pusherConnection() {
+        if (appSession.isLoggedIn == true) {
+            myApp.pusherManager.initializePusher(
+                appSession.userId,
+                appSession.userSession
+            )
+            myApp.pusherManager.subscribeToEvent( object : PrivateChannelEventListener {
+                override fun onEvent(event: PusherEvent?) {
+
+                }
+
+                override fun onSubscriptionSucceeded(channelName: String?) {
+
+                }
+
+                override fun onAuthenticationFailure(message: String?, e: Exception?) {
+
+                }
+
+            })
+
+        }else{
+            Log.i("TAG", "pusherConnection: "+appSession.isLoggedIn)
+        }
     }
 
 
     private fun setUpAlertDialog() {
-        alertDialog = AlertDialog.Builder(this).setPositiveButton("ok", null).setTitle(R.string.app_name).create()
+        alertDialog =
+            AlertDialog.Builder(this).setPositiveButton("ok", null).setTitle(R.string.app_name)
+                .create()
     }
 
     fun <F : BaseFragment<*>> getCurrentFragment(): F? {
-        return if (findFragmentPlaceHolder() == 0) null else supportFragmentManager.findFragmentById(findFragmentPlaceHolder()) as F?
+        return if (findFragmentPlaceHolder() == 0) null else supportFragmentManager.findFragmentById(
+            findFragmentPlaceHolder()
+        ) as F?
     }
 
     abstract fun findFragmentPlaceHolder(): Int
@@ -109,13 +145,11 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
 
     }
 
-
-
     fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-   override fun toggleLoader(show: Boolean) {
+    override fun toggleLoader(show: Boolean) {
 
         if (show) {
             if (!progressDialog!!.isShowing) progressDialog!!.show()
@@ -146,8 +180,12 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
 
         val view = this.currentFocus
         if (view != null) {
-            val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            val inputManager =
+                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(
+                view.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
         }
 
     }
@@ -253,7 +291,10 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
      * Do not call build method on it, it will be called automatically.
      * @see TextDecorator
      * */
-    override fun setAndDecorateToolbarTitle(title: String, decorateToolbarTitle: (textDecorator: TextDecorator) -> TextDecorator): HasToolbar {
+    override fun setAndDecorateToolbarTitle(
+        title: String,
+        decorateToolbarTitle: (textDecorator: TextDecorator) -> TextDecorator
+    ): HasToolbar {
         toolbar?.setAndDecorateToolbarTitle(title, decorateToolbarTitle)
 
         return this
@@ -271,7 +312,10 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         return this
     }
 
-    override fun updateMenuItem(predicate: (MenuItem) -> Boolean, menuItemToUpdate: (MenuItem) -> Unit): HasToolbar {
+    override fun updateMenuItem(
+        predicate: (MenuItem) -> Boolean,
+        menuItemToUpdate: (MenuItem) -> Unit
+    ): HasToolbar {
         toolbar?.updateMenuItem(predicate = predicate, menuItemToUpdate = menuItemToUpdate)
 
         return this
@@ -324,7 +368,8 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
     fun showKeyboard() {
         val view = this.currentFocus
         if (view != null) {
-            val inputManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputManager =
+                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
     }
@@ -338,7 +383,10 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         return activityStarter.make(aClass)
     }
 
-    override fun <T : BaseFragment<*>> loadActivity(aClass: Class<out BaseActivity>, pageTClass: Class<T>): ActivityBuilder {
+    override fun <T : BaseFragment<*>> loadActivity(
+        aClass: Class<out BaseActivity>,
+        pageTClass: Class<T>
+    ): ActivityBuilder {
         return activityStarter.make(aClass).setPage(pageTClass)
     }
 
@@ -375,7 +423,8 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
             snackbar.setActionTextColor(Color.WHITE)
             //snackbar.setAction("OK") { snackbar.dismiss() }
             val snackView = snackbar.view
-            val textView: TextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text)
+            val textView: TextView =
+                snackView.findViewById(com.google.android.material.R.id.snackbar_text)
             textView.maxLines = 4
 
             val params = snackView.layoutParams as FrameLayout.LayoutParams
@@ -396,7 +445,8 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
             snackbar.setActionTextColor(Color.WHITE)
             //snackbar.setAction("OK") { snackbar.dismiss() }
             val snackView = snackbar.view
-            val textView: TextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text)
+            val textView: TextView =
+                snackView.findViewById(com.google.android.material.R.id.snackbar_text)
             textView.maxLines = 4
 
             val params = snackView.layoutParams as FrameLayout.LayoutParams

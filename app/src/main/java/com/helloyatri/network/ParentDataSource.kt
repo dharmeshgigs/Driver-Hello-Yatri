@@ -1,6 +1,5 @@
 package com.helloyatri.network
 
-import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import org.json.JSONObject
 import retrofit2.Response

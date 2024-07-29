@@ -1,9 +1,6 @@
 package com.helloyatri.network
 
 import androidx.lifecycle.MutableLiveData
-import com.gamingyards.sms.app.utils.Resource
-import com.gamingyards.sms.app.utils.Status
-import com.google.gson.JsonObject
 import com.helloyatri.ui.base.BaseFragment
 
 class ResLiveData<T> : MutableLiveData<Res<T>>(){

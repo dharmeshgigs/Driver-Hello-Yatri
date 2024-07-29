@@ -3,13 +3,12 @@ package com.helloyatri.ui.auth.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import com.gamingyards.sms.app.utils.Status
+import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -18,7 +17,6 @@ import com.helloyatri.data.model.LoginResponse
 import com.helloyatri.data.model.OTPVerificationResponse
 import com.helloyatri.databinding.AuthVerificationFragmentBinding
 import com.helloyatri.network.ApiViewModel
-import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.extension.clear
@@ -111,6 +109,7 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                     session.isDriverVerified = it.status ?: false
                                 }
                                 if (getSourceScreen == SignUpFragment::class.java.simpleName || getSourceScreen == LoginFragment::class.java.simpleName) {
+                                    session.isLoggedIn = true
                                     navigator.loadActivity(HomeActivity::class.java)
                                         .byFinishingAll()
                                         .start()

@@ -2,10 +2,8 @@ package com.helloyatri.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
-import com.helloyatri.data.model.Driver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -253,6 +251,24 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         run {
             updateDriverVerificationStatusLiveData.value = Resource.loading()
             updateDriverVerificationStatusLiveData.value = authRepo.updateDriverVerificationStatus()
+        }
+    }
+
+    val getAllRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAllRideData() {
+        run {
+            getAllRideLiveData.value = Resource.loading()
+            getAllRideLiveData.value = authRepo.getAllRide()
+        }
+    }
+
+    val getAllNotificationLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAllNotificationData() {
+        run {
+            getAllNotificationLiveData.value = Resource.loading()
+            getAllNotificationLiveData.value = authRepo.getAllNotification()
         }
     }
 

@@ -1,9 +1,7 @@
 package com.helloyatri.network
 
-import com.gamingyards.sms.app.utils.Resource
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
-import com.helloyatri.data.model.Driver
 import okhttp3.RequestBody
 
 interface AuthRepo {
@@ -44,6 +42,8 @@ interface AuthRepo {
     suspend fun getAllAddress() : Resource<JsonObject>
     suspend fun updateAddress(request: Request) : Resource<JsonObject>
     suspend fun updateDriverVerificationStatus() : Resource<JsonObject>
+    suspend fun getAllRide() : Resource<JsonObject>
+    suspend fun getAllNotification() : Resource<JsonObject>
 
 
 }
