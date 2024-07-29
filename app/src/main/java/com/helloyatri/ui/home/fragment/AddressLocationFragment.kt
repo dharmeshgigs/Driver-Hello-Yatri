@@ -97,7 +97,7 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
                     20.5937, 78.9629
                 )
             getAddress(location)
-            getCurrentLocation()
+//            getCurrentLocation()
         } else {
             location =
                 LatLng(
