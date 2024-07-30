@@ -17,6 +17,7 @@ import com.helloyatri.data.model.LoginResponse
 import com.helloyatri.data.model.OTPVerificationResponse
 import com.helloyatri.databinding.AuthVerificationFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.extension.clear
@@ -109,29 +110,27 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                                     session.isDriverVerified = it.status ?: false
                                 }
                                 if (getSourceScreen == SignUpFragment::class.java.simpleName || getSourceScreen == LoginFragment::class.java.simpleName) {
-                                    session.isLoggedIn = true
-                                    navigator.loadActivity(HomeActivity::class.java)
-                                        .byFinishingAll()
-                                        .start()
-
-//                                    if (session.isAllDocumentUploaded()) {
-//
-//                                        if (session.isDriverVerified && session.user?.status == 1) {
-//                                            navigator.loadActivity(HomeActivity::class.java)
+//                                    session.isLoggedIn = true
+//                                    navigator.loadActivity(HomeActivity::class.java)
+//                                        .byFinishingAll()
+//                                        .start()
+                                    if (session.isAllDocumentUploaded()) {
+                                        if (session.isDriverVerified && session.user?.status == 1) {
+                                            navigator.loadActivity(HomeActivity::class.java)
+                                                .byFinishingAll()
+                                                .start()
+                                        } else {
+                                            navigator.load(DriverVerificationFragment::class.java)
+                                                .replace(false)
+//                                            navigator.loadActivity(DriverDocumentsActivity::class.java)
 //                                                .byFinishingAll()
 //                                                .start()
-//                                        } else {
-//                                            navigator.load(DriverVerificationFragment::class.java)
-//                                                .replace(false)
-////                                            navigator.loadActivity(DriverDocumentsActivity::class.java)
-////                                                .byFinishingAll()
-////                                                .start()
-//                                        }
-//                                    } else {
-//                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
-//                                            .byFinishingAll()
-//                                            .start()
-//                                    }
+                                        }
+                                    } else {
+                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
+                                            .byFinishingAll()
+                                            .start()
+                                    }
                                 } else if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
                                     navigator.load(ResetPasswordFragment::class.java).setBundle(
                                         createBundle(

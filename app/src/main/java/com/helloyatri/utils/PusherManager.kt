@@ -1,14 +1,13 @@
 package com.helloyatri.utils
 
 import android.util.Log
+import com.helloyatri.pusher.CustomAuthorizer
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
 import com.pusher.client.channel.Channel
 import com.pusher.client.channel.PrivateChannelEventListener
 import com.pusher.client.channel.PusherEvent
-import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionStateChange
-import com.pusher.client.util.HttpChannelAuthorizer
 import java.lang.Exception
 
 class PusherManager {
@@ -22,23 +21,18 @@ class PusherManager {
 
 
     fun initializePusher(userId: String, userToken: String) {
-        val map = mutableMapOf<String, String>()
-        map["Accept"] = "application/json"
-        map["Authorization"] = "Bearer ".plus(userToken)
-        val channelAuthorizer = HttpChannelAuthorizer("http://3.111.159.32/api/pusher/auth")
-        channelAuthorizer.setHeaders(map)
+//        val map = mutableMapOf<String, String>()
+//        map["Accept"] = "application/json"
+//        map["Authorization"] = "Bearer ".plus(userToken)
+        val channelAuthorizer = CustomAuthorizer("http://3.111.159.32/api/pusher/auth", userToken)
         val options = PusherOptions().setCluster(YOUR_APP_CLUSTER).setUseTLS(true)
-            .setChannelAuthorizer(channelAuthorizer)
+            .setAuthorizer(channelAuthorizer)
         pusher = Pusher(YOUR_APP_KEY, options)
         channel = pusher?.subscribePrivate(YOUR_CHANNEL_NAME.plus(userId))
-        pusher?.connect(object : ConnectionEventListener {
+        pusher?.connect(object : com.pusher.client.connection.ConnectionEventListener {
             override fun onConnectionStateChange(change: ConnectionStateChange?) {
-
-                println("onConnectionStateChange:${change?.currentState}")
-                println("onConnectionStateChange:${change?.previousState}")
-                Log.i("TAG", "onConnectionStateChange: " + change?.currentState)
-                Log.i("TAG", "onConnectionStateChange: " + change?.previousState)
-
+                println("onConnectionStateChange Previous:${change?.previousState}")
+                println("onConnectionStateChange Current :${change?.currentState}")
             }
 
             override fun onError(message: String?, code: String?, e: Exception?) {
