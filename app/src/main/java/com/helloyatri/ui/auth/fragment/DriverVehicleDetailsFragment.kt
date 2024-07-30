@@ -56,7 +56,7 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getVehicleTypeAPI()
-        getVehicleDetailsAPI()
+
         initObservers()
         yearList.clear()
         for (year in 2024 downTo 1969) {
@@ -65,14 +65,9 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
     }
 
     override fun bindData() {
-
         setUpText()
         setUpEditText()
-
         setUpClickListener()
-        setUpData()
-
-
     }
 
     private val getAllVehicleTypeList: ArrayList<CommonFieldSelection> = ArrayList()
@@ -94,19 +89,23 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
                         response?.data?.let {
                             getAllVehicleTypeList.clear()
                             getAllVehicleTypeList.addAll(it)
+                            getVehicleDetailsAPI()
                         } ?: run {
-                            showSomethingMessage()
+                            getVehicleDetailsAPI()
+                            // showSomethingMessage()
                         }
                     } ?: run {
-                        showSomethingMessage()
+                        getVehicleDetailsAPI()
+                        // showSomethingMessage()
                     }
                 }
 
                 Status.ERROR -> {
                     hideLoader()
-                    val error =
-                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
-                    showErrorMessage(error)
+                    getVehicleDetailsAPI()
+//                    val error =
+//                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+//                    showErrorMessage(error)
                 }
 
                 Status.LOADING -> hideLoader()
@@ -146,10 +145,9 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
-                    resource?.data?.let { it ->
+                    resource?.data?.let {
                         val response =
                             Gson().fromJson(it.toString(), CommonResponse::class.java)
-                        Log.i("TAG", "initObservers: "+response.message)
                         showMessage(resource.message.toString())
                         session.isAddVehicle = true
                         navigator.goBack()
@@ -159,7 +157,6 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
                 }
 
                 Status.ERROR -> {
-                    Log.i("TAG", "initObservers: ")
                     hideLoader()
                     val error =
                         resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
@@ -189,7 +186,6 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
         )
 
         commonFieldSelectionBottomSheetForVehicleType.setOnOkButtonClickListener {
-            Log.i("TAG", "setUpText:capacity " + it.capacity)
             capacity = it.capacity ?: 0
             vehicleId = it.id.toString()
             includedVehicleType.editText.setText(it.options)
@@ -207,31 +203,6 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
         commonFieldSelectionBottomSheetForVehicleModelYear.setOnOkButtonClickListener {
             includedVehicleModelYear.editText.setText(it.options)
         }
-    }
-
-    private fun setUpData() = with(binding) {
-//        if (session.isAddVehicle) {
-//            includedVehicleName.editText.setText(String.format("%s", "Honda City"))
-//            includedVehicleType.editText.setText(String.format("%s", "Sedan"))
-//            includedNumberOfSeats.editText.setText(String.format("%s", "4"))
-//            includedVehicleNumber.editText.setText(String.format("%s", "GA04ED1111"))
-//            includedVehicleFuelType.editText.setText(String.format("%s", "Petrol"))
-//            includedVehicleModelYear.editText.setText(String.format("%s", "2019"))
-//            includedVehicleName.editText.isFocusable = false
-//            includedVehicleName.editText.isEnabled = false
-//            includedVehicleType.editText.isFocusable = false
-//            includedVehicleType.editText.isEnabled = false
-//            includedNumberOfSeats.editText.isFocusable = false
-//            includedNumberOfSeats.editText.isEnabled = false
-//            includedVehicleNumber.editText.isFocusable = false
-//            includedVehicleNumber.editText.isEnabled = false
-//            includedVehicleFuelType.editText.isFocusable = false
-//            includedVehicleFuelType.editText.isEnabled = false
-//            includedVehicleModelYear.editText.isFocusable = false
-//            includedVehicleModelYear.editText.isEnabled = false
-//        }
-
-
     }
 
     private fun setUpEditText() = with(binding) {
@@ -271,7 +242,6 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
     }
 
     private fun checkEmptyEditText() = with(binding) {
-        Log.i("TAG", "checkEmptyEditText: "+capacity)
         if (includedVehicleName.editText.trimmedText.isEmpty()
                 .not() && includedVehicleType.editText.trimmedText.isEmpty()
                 .not() && includedVehicleNumber.editText.trimmedText.isEmpty()
@@ -304,9 +274,7 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
         buttonSave.setOnClickListener {
             validate()
         }
-        //optionList = arrayListOf(CommonFieldSelection(options = "Sedan"),
-//                            CommonFieldSelection(options = "Hatchback"),
-//                            CommonFieldSelection(options = "Compact Sedan")))
+
         includedVehicleType.editText.setOnClickListener {
             commonFieldSelectionBottomSheetForVehicleType.setOptionsList(
                 optionList = getAllVehicleTypeList
@@ -349,9 +317,6 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
             validator.submit(includedVehicleType.editText).checkEmpty()
                 .errorMessage(getString(R.string.validation_please_select_vehicle_type)).check()
 
-//            validator.submit(includedNumberOfSeats.editText).checkEmpty()
-//                .errorMessage(getString(R.string.validation_please_select_no_of_seats)).check()
-
             validator.submit(includedVehicleNumber.editText).checkEmpty()
                 .errorMessage(getString(R.string.validation_please_enter_vehicle_number))
                 .checkMinDigits(Constants.MIN_NAME)
@@ -368,24 +333,25 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
 
             apiViewModel.updateVehicleDetails(
                 Request(
-                    name = data?.name ?:includedVehicleName.editText.text.toString().trim(),
+                    name = data?.name ?: includedVehicleName.editText.text.toString().trim(),
                     vehicleType = vehicleId,
-                    noOfSheets = data?.noOfSheets?:"1",
-                    vehicleNumber = data?.vehicleNumber?:includedVehicleNumber.editText.text.toString().trim(),
-                    fuelType = data?.fuelType?:includedVehicleFuelType.editText.text.toString().trim(),
-                    modelYear = data?.modelYear?:includedVehicleModelYear.editText.text.toString().trim()
+                    noOfSheets = data?.noOfSheets ?: "1",
+                    vehicleNumber = data?.vehicleNumber
+                        ?: includedVehicleNumber.editText.text.toString().trim(),
+                    fuelType = data?.fuelType ?: includedVehicleFuelType.editText.text.toString()
+                        .trim(),
+                    modelYear = data?.modelYear ?: includedVehicleModelYear.editText.text.toString()
+                        .trim()
                 )
             )
 
         } catch (e: ApplicationException) {
-            Log.i("TAG", "validate: "+e.message)
             showMessage(e.message)
         }
     }
 
     private fun setData(data: DataVehicle) = with(binding) {
         includedVehicleName.editText.setText(data?.name ?: "")
-        Log.i("TAG", "setData: "+getAllVehicleTypeList)
         for (item in getAllVehicleTypeList) {
             if (item.id == data.vehicleType) {
                 vehicleType = item.options
