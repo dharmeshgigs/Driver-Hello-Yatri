@@ -184,8 +184,9 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
 
         imageViewNotification.setOnClickListener {
-            navigator.loadActivity(IsolatedActivity::class.java, NotificationFragment::class.java)
-                .start()
+            navigator.load(NotificationFragment::class.java).replace(true)
+//            navigator.loadActivity(IsolatedActivity::class.java, NotificationFragment::class.java)
+//                .start()
         }
 
         textViewRideRequestOnlineOfflineStatus.setOnClickListener {
@@ -230,7 +231,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             textViewRideRequest.show()
             constraintLayoutRideRequest.show()
         }
-
     }
 
     private fun setUpUi() = with(binding) {
@@ -268,7 +268,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
     override fun onResume() {
         super.onResume()
-
     }
 
     private fun getHomeDataAPI() {

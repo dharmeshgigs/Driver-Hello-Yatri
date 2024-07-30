@@ -2,10 +2,13 @@ package com.helloyatri.ui.home.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.helloyatri.data.model.PaymentTab
 import com.helloyatri.data.model.TabTypeForPayment
 import com.helloyatri.databinding.AccountPaymentFragmentBinding
+import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AccountPaymentPagerAdapter
 import com.helloyatri.ui.home.dialog.CalenderDialog

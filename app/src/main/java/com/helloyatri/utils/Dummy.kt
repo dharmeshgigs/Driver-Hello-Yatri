@@ -49,6 +49,7 @@ fun Activity.getRidePickUpList(): ArrayList<RidePickUps> {
                 paymentType = "Online Payment"
             )
         )
+
         add(
             RidePickUps(
                 customerName = "Rahul Mehta",

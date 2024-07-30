@@ -125,6 +125,8 @@ class SplashActivity : BaseActivity() {
                                 driverStatus.verificationPending?.let {
                                     appSession.isDriverVerified = it.status ?: false
                                 }
+                                loadActivity(HomeActivity::class.java).byFinishingAll()
+                                    .start()
                                 if (appSession.isAllDocumentUploaded()) {
                                     if (appSession.isDriverVerified && appSession.user?.status == 1) {
                                         loadActivity(HomeActivity::class.java).byFinishingAll()

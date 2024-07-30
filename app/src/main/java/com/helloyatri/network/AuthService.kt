@@ -96,4 +96,7 @@ interface AuthService {
     @GET(APIFactory.AuthApi.GET_ALL_NOTIFICATION)
     suspend fun getAllNotification() : Response<JsonObject>
 
+    @GET(APIFactory.AuthApi.GET_ALL_PAYMENT)
+    suspend fun getAllPayment() : Response<JsonObject>
+
 }

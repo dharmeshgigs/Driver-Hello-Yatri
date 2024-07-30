@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"
-        tools:text="Today" />
+        tools:text="Today"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewIcon"

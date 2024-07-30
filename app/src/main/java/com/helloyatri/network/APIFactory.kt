@@ -40,6 +40,7 @@ object APIFactory {
         const val UPDATE_DRIVER_VERIFICATION_STATUS = "driver/update-driver-verification-status"
         const val GET_ALL_RIDE = "getallride"
         const val GET_ALL_NOTIFICATION = "getNotification"
+        const val GET_ALL_PAYMENT = "getAllPayment"
 
 
 //        const val RESEND_OTP = "driver/resetPassword"

@@ -2,16 +2,21 @@ package com.helloyatri.ui.home.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.data.model.AccountPaymentData
 import com.helloyatri.databinding.AccountPaymentReqAcceptFragmentBinding
+import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AdapterAccountPayment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AccountPaymentReqAcceptFragment : BaseFragment<AccountPaymentReqAcceptFragmentBinding>() {
+
+    private val apiViewModel by viewModels<ApiViewModel>()
 
     private val adapterAccountPayment by lazy {
         AdapterAccountPayment()
@@ -25,8 +30,26 @@ class AccountPaymentReqAcceptFragment : BaseFragment<AccountPaymentReqAcceptFrag
     }
 
     override fun bindData() {
+        apiViewModel.getAllPaymentAPI()
         setUpRecyclerView()
-        setUpData()
+
+        initObservers()
+
+    }
+
+    private fun initObservers() {
+        apiViewModel.getAllPaymentLiveData.observe(this){resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+                    hideLoader()
+                }
+                Status.ERROR -> {
+                    hideLoader()
+                    setUpData()
+                }
+                Status.LOADING -> showLoader()
+            }
+        }
     }
 
     private fun setUpRecyclerView() = with(binding) {

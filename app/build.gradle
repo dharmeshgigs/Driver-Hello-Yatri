@@ -103,7 +103,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.4'
 
     // lottie
-    implementation 'com.airbnb.android:lottie:5.2.0'
+    implementation 'com.airbnb.android:lottie:6.4.1'
 
     //crop image library
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'

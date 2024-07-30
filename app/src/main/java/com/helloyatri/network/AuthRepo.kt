@@ -44,6 +44,7 @@ interface AuthRepo {
     suspend fun updateDriverVerificationStatus() : Resource<JsonObject>
     suspend fun getAllRide() : Resource<JsonObject>
     suspend fun getAllNotification() : Resource<JsonObject>
+    suspend fun getAllPayment() : Resource<JsonObject>
 
 
 }

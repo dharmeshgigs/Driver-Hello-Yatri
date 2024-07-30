@@ -260,4 +260,13 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val getAllPaymentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAllPaymentAPI() {
+        run {
+            getAllPaymentLiveData.value = Resource.loading()
+            getAllPaymentLiveData.value = authRepo.getAllNotification()
+        }
+    }
+
 }
