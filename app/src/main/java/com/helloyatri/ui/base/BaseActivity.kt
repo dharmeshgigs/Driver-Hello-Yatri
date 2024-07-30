@@ -97,24 +97,24 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
 
     private fun pusherConnection() {
         if (appSession.isLoggedIn == true) {
-            myApp.pusherManager.initializePusher(
-                appSession.userId,
-                appSession.userSession
-            )
-            myApp.pusherManager.subscribeToEvent( object : PrivateChannelEventListener {
-                override fun onEvent(event: PusherEvent?) {
-
-                }
-
-                override fun onSubscriptionSucceeded(channelName: String?) {
-
-                }
-
-                override fun onAuthenticationFailure(message: String?, e: Exception?) {
-
-                }
-
-            })
+//            myApp.pusherManager.initializePusher(
+//                appSession.userId,
+//                appSession.userSession
+//            )
+//            myApp.pusherManager.subscribeToEvent( object : PrivateChannelEventListener {
+//                override fun onEvent(event: PusherEvent?) {
+//
+//                }
+//
+//                override fun onSubscriptionSucceeded(channelName: String?) {
+//
+//                }
+//
+//                override fun onAuthenticationFailure(message: String?, e: Exception?) {
+//
+//                }
+//
+//            })
 
         }else{
             Log.i("TAG", "pusherConnection: "+appSession.isLoggedIn)
