@@ -27,9 +27,9 @@ class DriverDocumentsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setUpToolbar()
         if (appSession.isInitial && appSession.isAllDocumentUploaded()) {
-            load(DriverVerificationFragment::class.java).clearHistory(null).replace(true)
+            load(DriverVerificationFragment::class.java).replace(false)
         } else {
-            load(DriverDocumentsFragment::class.java).clearHistory(null).replace(true)
+            load(DriverDocumentsFragment::class.java).replace(false)
         }
     }
 
