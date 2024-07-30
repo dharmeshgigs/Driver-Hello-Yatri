@@ -110,7 +110,6 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    //    val getCitiesLiveData by lazy { ResLiveData<ArrayList<CommonFieldSelection>>() }
     val getCitiesLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun getCities() {

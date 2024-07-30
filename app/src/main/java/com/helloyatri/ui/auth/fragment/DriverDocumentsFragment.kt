@@ -47,7 +47,11 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        resetDriverDetailsMenu()
+        resetVehicleDetailsMenu()
+    }
 
+    private fun resetDriverDetailsMenu() {
         driverDocumentsList.clear()
         driverDocumentsList.add(
             DriverDocuments(
@@ -67,7 +71,9 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                 isDataAdded = session.isRequiredDocumentsAdded
             )
         )
+    }
 
+    private fun resetVehicleDetailsMenu() {
         vehicleDocumentsList.clear()
         vehicleDocumentsList.add(
             DriverDocuments(
@@ -87,56 +93,7 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                 isDataAdded = session.isVehiclePhotosAdded
             )
         )
-
-//        apiViewModel.getDriverStatus.get(this, {
-//            hideLoader()
-//            when(it.code) {
-//                APIFactory.ResponseCode.SUCCESS -> {
-//                    driverDocumentsList.clear()
-//                    driverDocumentsList.add(
-//                        DriverDocuments(documentName = getString(R.string.label_personal_details),
-//                            isDataAdded = it.data?.profileInfo?.status?:false))
-//                    driverDocumentsList.add(
-//                        DriverDocuments(documentName = getString(R.string.label_profile_picture),
-//                            isDataAdded = it.data?.profileImage?.status?:false))
-//                    driverDocumentsList.add(
-//                        DriverDocuments(documentName = getString(R.string.label_required_documents),
-//                            isDataAdded = it.data?.requiredDocuments?.status?:false))
-//
-//                    vehicleDocumentsList.clear()
-//                    vehicleDocumentsList.add(
-//                        DriverDocuments(documentName = getString(R.string.label_add_a_vehicle),
-//                            isDataAdded = it.data?.addVehicle?.status?:false))
-//                    vehicleDocumentsList.add(
-//                        DriverDocuments(documentName = getString(R.string.label_vehicle_documents),
-//                            isDataAdded = it.data?.vehicleDocuments?.status?:false))
-//                    vehicleDocumentsList.add(
-//                        DriverDocuments(documentName = getString(R.string.label_vehicle_photos),
-//                            isDataAdded = it.data?.vehicleImages?.status?:false))
-//
-//                    driverDocumentsAdapter.setItems(driverDocumentsList, 1)
-//                    vehicleDocumentsAdapter.setItems(vehicleDocumentsList, 1)
-//
-//                    if ((it.data?.profileInfo?.status == true) && (it.data?.profileImage?.status == true) && (it.data?.requiredDocuments?.status == true) && (it.data?.addVehicle?.status == true) && (it.data?.vehicleDocuments?.status == true) && (it.data?.vehicleImages?.status == true)) {
-//                        binding.buttonSubmit.isClickable = true
-//                        binding.buttonSubmit.isEnabled = true
-//                        binding.buttonSubmit.backgroundTintList =
-//                            ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
-//                    } else {
-//                        binding.buttonSubmit.isClickable = false
-//                        binding.buttonSubmit.isEnabled = false
-//                        binding.buttonSubmit.backgroundTintList =
-//                            ContextCompat.getColorStateList(requireContext(), R.color.grey)
-//                    }
-//                }
-//
-//                else -> {
-//
-//                }
-//            }
-//        })
     }
-
 
     override fun bindData() {
         apiViewModel.getDriverStatus()
@@ -144,7 +101,6 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
         setUpRecyclerView()
         setUpClickListener()
         initObservers()
-
     }
 
     private fun initObservers() {
@@ -153,7 +109,6 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                 when (resource.status) {
                     Status.LOADING -> showLoader()
                     Status.SUCCESS -> {
-
                         hideLoader()
                         it.data?.let { it ->
                             val response =
@@ -180,6 +135,9 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                                 driverStatus.verificationPending?.let {
                                     session.isDriverVerified = it.status ?: false
                                 }
+                                resetDriverDetailsMenu()
+                                resetVehicleDetailsMenu()
+                                setUpMenu()
                             } ?: run {
                                 showSomethingMessage()
                             }
@@ -222,9 +180,6 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
         }
 
         buttonSubmit.setOnClickListener {
-//            session.isDriverVerified = true
-//            session.isLoggedIn = true
-//            navigator.loadActivity(HomeActivity::class.java).byFinishingAll().start()
             navigator.load(DriverVerificationFragment::class.java)
                 .replace(false)
         }
@@ -261,21 +216,15 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                     navigator.load(DriverRequiredDocumentsFragment::class.java)
                         .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = VEHICLE_DOCUMENT))
                         .replace(true)
-//                    navigator.load(DriverVehicleDocumentsFragment::class.java).replace(true)
                 }
 
                 2 -> {
                     navigator.load(DriverRequiredDocumentsFragment::class.java)
                         .setBundle(DriverRequiredDocumentsFragment.createBundle(statusCode = VEHICLE_PHOTO))
                         .replace(true)
-                    //  navigator.load(DriverVehiclePhotosFragment::class.java).replace(true)
                 }
             }
         }
-    }
-
-    private fun setUpData() {
-
     }
 
     override fun setUpToolbar() = with(toolbar) {
@@ -284,6 +233,11 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
 
     override fun onResume() {
         super.onResume()
+        setUpMenu()
+        apiViewModel.getDriverStatus()
+    }
+
+    private fun setUpMenu() {
         if (driverDocumentsList.isNotEmpty()) {
             driverDocumentsAdapter.setItems(driverDocumentsList, 1)
         }
