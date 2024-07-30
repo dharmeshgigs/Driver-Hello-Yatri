@@ -167,7 +167,11 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         val currentFragment = getCurrentFragment<BaseFragment<*>>()
         if (currentFragment == null) super.onBackPressed()
         else if (currentFragment.onBackActionPerform() && shouldGoBack()) {
-            supportFragmentManager.popBackStackImmediate()
+            if(supportFragmentManager.backStackEntryCount > 1) {
+                super.onBackPressed()
+            } else {
+                finish()
+            }
         }
 
         // pending animation
