@@ -38,6 +38,7 @@ import com.helloyatri.utils.Constants.UPLOAD_YOUR_PHOTO_WITH_VEHICLE
 import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
 import com.helloyatri.utils.Constants.VEHICLE_INSURANCE
 import com.helloyatri.utils.Constants.VEHICLE_PERMIT
+import com.helloyatri.utils.Constants.VEHICLE_PHOTO
 import com.helloyatri.utils.Constants.VEHICLE_PUC
 import com.helloyatri.utils.Constants.VEHICLE_REGISTRATION_CERTIFICATE
 import com.helloyatri.utils.Constants.YOUR_PHOTO_WITH_VEHICLE
@@ -82,10 +83,13 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
 
     private fun getAllRequiredDocumentAPI() {
         if (arguments?.getString("statusCode") == DRIVER_REQUIRED_DOCUMENT) {
+            driverRequiredDocumentsAdapter.type = DRIVER_REQUIRED_DOCUMENT
             apiViewModel.getAllRequiredDocument()
         } else if (arguments?.getString("statusCode") == VEHICLE_DOCUMENT) {
+            driverRequiredDocumentsAdapter.type = VEHICLE_DOCUMENT
             apiViewModel.getVehicleDocument()
         } else {
+            driverRequiredDocumentsAdapter.type = VEHICLE_PHOTO
             apiViewModel.getVehiclePhotos()
         }
     }
@@ -167,7 +171,9 @@ class DriverRequiredDocumentsFragment : BaseFragment<AuthDriverRequiredDocuments
                     showErrorMessage(error)
                 }
 
-                Status.LOADING -> showLoader()
+                Status.LOADING -> {
+                    showLoader()
+                }
             }
 
         }

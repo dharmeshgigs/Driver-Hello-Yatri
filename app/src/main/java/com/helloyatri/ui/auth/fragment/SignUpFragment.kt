@@ -81,8 +81,8 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
                                     OTPVerificationFragment.createBundle(
                                         phonenumber = it.mobile,
                                         countrycode = it.mobile_txt
-                                            ?: binding.includedMobileNumber.textViewCountryCode.text.toString()
-                                                .trim().plus(" ").plus(binding.includedMobileNumber.editText.toString().trim()) ,
+                                            ?: binding.includedMobileNumber.textViewCountryCode.trimmedText
+                                                .trim().plus(" ").plus(binding.includedMobileNumber.editText.trimmedText) ,
                                         sourceScreen = SignUpFragment::class.java.simpleName,
                                         name = it.name
                                             ?: binding.includedFullName.editText.text.toString()

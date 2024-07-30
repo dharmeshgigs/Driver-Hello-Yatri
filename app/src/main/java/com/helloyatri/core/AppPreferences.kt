@@ -17,7 +17,6 @@ class AppPreferences @Inject constructor(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
 
-
     @SuppressLint("CommitPrefEdits")
     fun putString(name: String, value: String) {
         val editor = sharedPreferences.edit()
@@ -65,13 +64,4 @@ class AppPreferences @Inject constructor(context: Context) {
         editor!!.putString(key, Gson().toJson(obj))
         editor.apply()
     }
-
-//    inline fun <reified T> getObject(key: String) : T? {
-//        val data = sharedPreferences.getString(key, null)
-//        data?.let {
-//            return Gson().fromJson(it, T::class.java)
-//        } ?: run {
-//
-//        }
-//    }
 }
