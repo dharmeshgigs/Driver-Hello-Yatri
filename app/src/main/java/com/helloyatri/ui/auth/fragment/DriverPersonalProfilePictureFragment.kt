@@ -64,24 +64,24 @@ class DriverPersonalProfilePictureFragment :
     BaseFragment<AuthDriverPersonalProfilePictureFragmentBinding>() {
 
     private val apiViewModel by viewModels<ApiViewModel>()
-
     @Inject
     lateinit var mediaSelectHelper: MediaSelectHelper
-
-
     private val driverProfilePictureDetailsAdapter by lazy {
         DriverProfilePictureDetailsAdapter()
     }
-
     private val driverProfilePictureImagesAdapter by lazy {
         DriverProfilePictureImagesAdapter()
     }
-
     var getuploadedDriverArrayList: ArrayList<String> = arrayListOf()
     var isUploadedVehicleRegistration = false
     var isUploadedBankDetails = false
     var isUploadedVehiclePhoto = false
-
+    private val driverProfilePictureDetailsList = ArrayList<DriverProfilePictureDetails>()
+    var statusCode: String? = null
+    private var document_id: String? = null
+    var id: String? = null
+    private var rejectionReason: String? = null
+    private var reasonLable: Boolean? = false
 
     companion object {
         fun createBundle(
@@ -98,14 +98,22 @@ class DriverPersonalProfilePictureFragment :
         hideLoader()
         statusCode = arguments?.getString("statusCode")
         document_id = arguments?.getString("document_id")
-
-        getProfile()
-        initObservers()
-
     }
 
-    private fun getRequiredDriverDocumentAPI() {
-        apiViewModel.getAllRequiredDocument()
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): AuthDriverPersonalProfilePictureFragmentBinding {
+        return AuthDriverPersonalProfilePictureFragmentBinding.inflate(layoutInflater)
+    }
+
+    override fun bindData() {
+        setUpText()
+        setUpRecyclerView()
+        setUpClickListener()
+        setUpImages()
+        getData()
+        initObservers()
     }
 
     private fun initObservers() {
@@ -187,7 +195,6 @@ class DriverPersonalProfilePictureFragment :
                                 UploadDocumentModel::class.java
                             )
                         showMessage(response.message ?: "")
-                        Log.i("TAG", "initObservers: " + statusCode)
                         if (statusCode == UPLOAD_REGISTRATION_CERTIFICATION || statusCode == UPLOAD_VEHICLE_PERMIT) {
                             isUploadedVehicleRegistration = true
                             if (isUploadedVehicleRegistration) {
@@ -201,29 +208,12 @@ class DriverPersonalProfilePictureFragment :
                         } else if (statusCode == UPLOAD_BANK_DETAILS) {
                             isUploadedBankDetails = true
                             if (isUploadedBankDetails) {
-                                apiViewModel.getAllRequiredDocument()
+                                getData()
                             }
                         }
-//                        else if (statusCode == UPLOAD_VEHICLE_PERMIT){
-//                            isUploadedVehiclePermit = true
-//                            if (isUploadedVehiclePermit){
-//                                apiViewModel.getVehicleDocument()
-//                            }
-//                        }
                         else {
                             navigator.goBack()
                         }
-//                        if (statusCode == Constants.VEHICLE_REGISTRATION_CERTIFICATE || statusCode == Constants.VEHICLE_PERMIT) {
-//
-//                        } else if (statusCode == Constants.CHASSIS_NUMBER_IMAGES || statusCode == Constants.BANK_DETAILS) {
-//                            isUploadedVehiclePhoto = true
-//                            if (isUploadedVehiclePhoto) {
-//                                apiViewModel.getVehiclePhotos()
-//                            }
-//                        } else {
-//                            navigator.goBack()
-//                        }
-
                     } ?: run {
                         showSomethingMessage()
                     }
@@ -477,7 +467,7 @@ class DriverPersonalProfilePictureFragment :
                     hideLoader()
                     when (statusCode) {
                         UPLOAD_DRIVING_LICENCE, UPLOAD_GOVERNMENT_ID -> {
-                            getRequiredDriverDocumentAPI()
+                            getData()
                         }
 
                         UPLOAD_BANK_DETAILS ->{
@@ -493,7 +483,7 @@ class DriverPersonalProfilePictureFragment :
                         }
 
                         UPLOAD_VEHICLE_PUC, UPLOAD_VEHICLE_INSURANCE -> {
-                            apiViewModel.getVehicleDocument()
+                            getData()
                         }
 
                         UPLOAD_CHASIS_NUMBER_IMAGES -> {
@@ -501,11 +491,9 @@ class DriverPersonalProfilePictureFragment :
                         }
 
                         UPLOAD_FRONTBACK_WITH_NUMBER_PLATE, UPLOAD_LEFT_RIGHT_SIDE_EXTERIOR,UPLOAD_YOUR_PHOTO_WITH_VEHICLE -> {
-                            apiViewModel.getVehiclePhotos()
+                            getData()
                         }
                     }
-//                    val response =
-//                        Gson().fromJson(resource.toString(), UploadDocumentModel::class.java)
                 }
 
                 Status.ERROR -> {
@@ -524,7 +512,7 @@ class DriverPersonalProfilePictureFragment :
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
-                    getProfile()
+                    getData()
                 }
 
                 Status.ERROR -> {
@@ -539,40 +527,14 @@ class DriverPersonalProfilePictureFragment :
         }
     }
 
-    private val driverProfilePictureDetailsList = ArrayList<DriverProfilePictureDetails>()
-    var statusCode: String? = null
-    private var document_id: String? = null
-    var id: String? = null
-    private var rejectionReason: String? = null
-    private var reasonLable: Boolean? = false
-
-    override fun createViewBinding(
-        inflater: LayoutInflater, container: ViewGroup?,
-        attachToRoot: Boolean
-    ): AuthDriverPersonalProfilePictureFragmentBinding {
-        return AuthDriverPersonalProfilePictureFragmentBinding.inflate(layoutInflater)
-    }
-
-    override fun bindData() {
-        setUpText()
-        setUpRecyclerView()
-        setUpClickListener()
-        setUpImages()
-        if (reasonLable == true) {
-            binding.textViewLabelReason.visibility = View.VISIBLE
-        } else {
-            binding.textViewLabelReason.visibility = View.GONE
-        }
-    }
-
-    private fun getProfile() {
+    private fun getData() {
         when (statusCode) {
             UPDATE_PROFILE_PICTURE -> {
                 apiViewModel.getDriverProfile()
             }
 
             UPLOAD_DRIVING_LICENCE, UPLOAD_GOVERNMENT_ID, UPLOAD_BANK_DETAILS -> {
-                getRequiredDriverDocumentAPI()
+                apiViewModel.getAllRequiredDocument()
             }
 
             UPLOAD_VEHICLE_PUC, UPLOAD_VEHICLE_INSURANCE, UPLOAD_REGISTRATION_CERTIFICATION, UPLOAD_VEHICLE_PERMIT -> {
@@ -1123,6 +1085,12 @@ class DriverPersonalProfilePictureFragment :
             buttonSave.isEnabled = true
             buttonSave.backgroundTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
+            if (reasonLable == true) {
+                binding.textViewLabelReason.text = rejectionReason ?: ""
+                binding.textViewLabelReason.visibility = View.VISIBLE
+            } else {
+                binding.textViewLabelReason.visibility = View.GONE
+            }
         } else {
             textViewUploadDocuments.text = getString(R.string.label_upload_documents)
             recyclerViewImages.hide()

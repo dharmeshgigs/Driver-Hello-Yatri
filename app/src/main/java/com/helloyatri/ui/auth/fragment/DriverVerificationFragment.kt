@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.helloyatri.network.Status
 import com.helloyatri.R
@@ -14,6 +15,7 @@ import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.auth.adapter.DriverVerificationAdapter
 import com.helloyatri.ui.base.BaseFragment
+import com.helloyatri.utils.extension.enableButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -79,7 +81,6 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
                 if (lastElement != null) {
                     phoneNumber = lastElement
                     makePhoneCall(phoneNumber!!)
-
                 } else {
                     println("The list is empty.")
                 }
@@ -90,17 +91,11 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
                     driverVerificationDataList[position].long.toString()
                 )
             }
-//            buttonYouVerified.isClickable = true
-//            buttonYouVerified.isEnabled = true
-//            buttonYouVerified.text = getString(R.string.btn_you_are_verified_login)
-//            buttonYouVerified.backgroundTintList =
-//                ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
         }
 
         buttonYouVerified.setOnClickListener {
             session.isDriverVerified = true
             apiViewModel.updateDriverVerificationStatus()
-//            navigator.loadActivity(AuthActivity::class.java).byFinishingAll().start()
         }
     }
 
@@ -171,9 +166,11 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
                 ?: if (session.isDriverVerified) getString(R.string.btn_you_are_verified_login) else getString(
                     R.string.btn_your_verification_pending
                 )
+            binding.buttonYouVerified.enableButton(session.isDriverVerified)
+            binding.buttonYouVerified.isClickable = session.isDriverVerified
+            binding.buttonYouVerified.isEnabled = session.isDriverVerified
 
         } else {
-            Log.i("TAG", "setUpData: 11")
             setUpDefaultContactData()
             setUpDefaultLocationData()
         }
@@ -181,7 +178,6 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
     }
 
     private fun setUpDefaultContactData() {
-        Log.i("TAG", "setUpDefaultContactData: ")
         driverVerificationDataList.add(
             DriverVerification(
                 image = R.drawable.image_help_desk,

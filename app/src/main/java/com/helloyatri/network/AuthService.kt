@@ -87,7 +87,7 @@ interface AuthService {
     @POST(APIFactory.AuthApi.UPDATE_ADDRESS)
     suspend fun updateAddress(@Body request: Request) : Response<JsonObject>
 
-    @POST(APIFactory.AuthApi.UPDATE_ADDRESS)
+    @POST(APIFactory.AuthApi.UPDATE_DRIVER_VERIFICATION_STATUS)
     suspend fun updateDriverVerificationStatus() : Response<JsonObject>
 
     @GET(APIFactory.AuthApi.GET_ALL_RIDE)
