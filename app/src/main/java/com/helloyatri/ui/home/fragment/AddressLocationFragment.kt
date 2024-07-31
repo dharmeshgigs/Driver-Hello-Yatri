@@ -51,6 +51,9 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
         lat = savedAddress?.latitude ?: ""
         long = savedAddress?.longitude ?: ""
         address = savedAddress?.location ?: ""
+        if(lat.isEmpty() && long.isEmpty()) {
+            getCurrentLocation()
+        }
     }
 
     override fun createViewBinding(
@@ -92,11 +95,11 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
         // Set a pin at a specific location
 
         if(lat.isEmpty() && long.isEmpty()) {
-            location =
-                LatLng(
-                    20.5937, 78.9629
-                )
-            getAddress(location)
+//            location =
+//                LatLng(
+//                    20.5937, 78.9629
+//                )
+//            getAddress(location)
 //            getCurrentLocation()
         } else {
             location =
