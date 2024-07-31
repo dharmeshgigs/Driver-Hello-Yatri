@@ -105,4 +105,7 @@ interface AuthService {
     @GET(APIFactory.AuthApi.GET_ALL_SCHEDULE_RIDE)
     suspend fun getAllScheduleRide() : Response<JsonObject>
 
+    @GET(APIFactory.AuthApi.GET_CANCLLETION_REASON)
+    suspend fun getCancellationReason() : Response<JsonObject>
+
 }

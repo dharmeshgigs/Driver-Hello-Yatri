@@ -286,4 +286,13 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val getCanclletionReasonLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getCancelletionReasonAPI() {
+        run {
+            getCanclletionReasonLiveData.value = Resource.loading()
+            getCanclletionReasonLiveData.value = authRepo.getCancellationReason()
+        }
+    }
+
 }

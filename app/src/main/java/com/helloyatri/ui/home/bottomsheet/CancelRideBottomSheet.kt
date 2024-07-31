@@ -1,8 +1,10 @@
 package com.helloyatri.ui.home.bottomsheet
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.helloyatri.R
+import com.helloyatri.data.model.CancelRideReasons
 import com.helloyatri.databinding.CancelRideBottomSheetBinding
 import com.helloyatri.ui.base.BaseBottomSheetDialogFragment
 import com.helloyatri.ui.home.adapter.AdapterCancelRideReasons
@@ -10,12 +12,17 @@ import com.helloyatri.utils.getCancelRideReasons
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CancelRideBottomSheet(private val cancelRideCallBack: () -> Unit) :
+class CancelRideBottomSheet(
+    private val cancelRideCallBack: () -> Unit,
+    private val cencellationDataList: ArrayList<String>
+) :
         BaseBottomSheetDialogFragment<CancelRideBottomSheetBinding>() {
+
 
     private val adapterCancelRideReasons by lazy {
         AdapterCancelRideReasons()
     }
+    private val cancelRideList: MutableList<CancelRideReasons> = mutableListOf()
 
     override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
                                    attachToRoot: Boolean): CancelRideBottomSheetBinding {
@@ -51,7 +58,12 @@ class CancelRideBottomSheet(private val cancelRideCallBack: () -> Unit) :
     private fun setAdapter() = with(binding) {
         recyclerViewCancelReasons.apply {
             adapter = adapterCancelRideReasons
-            adapterCancelRideReasons.setItems(requireActivity().getCancelRideReasons(), 1)
+           // adapterCancelRideReasons.setItems(requireActivity().getCancelRideReasons(), 1)
+            cancelRideList.clear()
+            cencellationDataList.forEach {
+                cancelRideList.add(CancelRideReasons(title = it))
+            }
+            adapterCancelRideReasons.setItems(cancelRideList, 1)
         }
     }
 }

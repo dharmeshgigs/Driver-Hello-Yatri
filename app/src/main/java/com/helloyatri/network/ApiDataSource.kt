@@ -136,4 +136,8 @@ class ApiDataSource @Inject constructor(
     override suspend fun getAllScheduleRide(): Resource<JsonObject> {
         return run2 { authService.getAllScheduleRide() }
     }
+
+    override suspend fun getCancellationReason(): Resource<JsonObject> {
+        return run2 { authService.getCancellationReason() }
+    }
 }
