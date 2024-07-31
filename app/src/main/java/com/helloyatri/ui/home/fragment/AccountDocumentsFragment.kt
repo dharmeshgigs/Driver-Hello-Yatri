@@ -75,32 +75,38 @@ class AccountDocumentsFragment : BaseFragment<AccountDocumentsFragmentBinding>()
                         it.data?.let { it ->
                             val response =
                                 Gson().fromJson(it, DriverStatusResponse::class.java)
-                            response?.data?.let { driverStatus ->
-                                driverStatus.addVehicle?.let {
-                                    session.isAddVehicle = it.status ?: false
+                            when(response.code) {
+                                200 -> {
+                                    // nothing goes here
                                 }
-                                driverStatus.profileImage?.let {
-                                    session.isProfilePictureAdded = it.status ?: false
+                                else -> {
+                                    response?.data?.let { driverStatus ->
+                                        driverStatus.addVehicle?.let {
+                                            session.isAddVehicle = it.status ?: false
+                                        }
+                                        driverStatus.profileImage?.let {
+                                            session.isProfilePictureAdded = it.status ?: false
+                                        }
+                                        driverStatus.profileInfo?.let {
+                                            session.isPersonalDetailsAdded = it.status ?: false
+                                        }
+                                        driverStatus.requiredDocuments?.let {
+                                            session.isRequiredDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleDocuments?.let {
+                                            session.isVehicleDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleImages?.let {
+                                            session.isVehiclePhotosAdded = it.status ?: false
+                                        }
+                                        driverStatus.verificationPending?.let {
+                                            session.isDriverVerified = it.status ?: false
+                                        }
+                                    } ?: run {
+                                        showSomethingMessage()
+                                    }
                                 }
-                                driverStatus.profileInfo?.let {
-                                    session.isPersonalDetailsAdded = it.status ?: false
-                                }
-                                driverStatus.requiredDocuments?.let {
-                                    session.isRequiredDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleDocuments?.let {
-                                    session.isVehicleDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleImages?.let {
-                                    session.isVehiclePhotosAdded = it.status ?: false
-                                }
-                                driverStatus.verificationPending?.let {
-                                    session.isDriverVerified = it.status ?: false
-                                }
-                            } ?: run {
-                                showSomethingMessage()
                             }
-
                         } ?: run {
                             showSomethingMessage()
                         }

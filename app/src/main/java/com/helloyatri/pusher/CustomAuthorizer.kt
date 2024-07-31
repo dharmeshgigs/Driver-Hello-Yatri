@@ -6,15 +6,12 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class CustomAuthorizer(private val authEndpoint: String, private val token: String) : Authorizer {
+class CustomAuthorizer(private val authEndpoint: String, private val token: String, private val userId: String) : Authorizer {
 
     override fun authorize(socketId: String, channelName: String): String {
-        val urlString = authEndpoint
+        val urlString = authEndpoint.plus("?socket_id=").plus(channelName).plus("&channel_name=").plus(socketId).plus(userId)
         val url = URL(urlString)
         val connection = url.openConnection() as HttpURLConnection
-//        val map = mutableMapOf<String, String>()
-//        map["Accept"] = "application/json"
-//        map["Authorization"] = "Bearer ".plus(userToken)
         connection.requestMethod = "POST"
         connection.setRequestProperty("Content-Type", "application/json")
         connection.setRequestProperty("Authorization", "Bearer ".plus( token))

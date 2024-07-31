@@ -13,18 +13,25 @@ import java.lang.Exception
 class PusherManager {
     private var pusher: Pusher? = null
     private var channel: Channel? = null
-    val YOUR_APP_KEY = "11288b3d484789c2c83d"
-    val YOUR_APP_CLUSTER = "ap2"
-    val YOUR_CHANNEL_NAME = "private-driver."
-    val YOUR_EVENT_NAME = "NewRideRequest"
+    private val YOUR_APP_KEY = "11288b3d484789c2c83d"
+    private val YOUR_APP_CLUSTER = "ap2"
+    private val YOUR_CHANNEL_NAME = "private-driver."
+    private val YOUR_EVENT_NAME = "NewRideRequest"
     private var event = arrayOf(YOUR_EVENT_NAME)
 
-
     fun initializePusher(userId: String, userToken: String) {
-//        val map = mutableMapOf<String, String>()
-//        map["Accept"] = "application/json"
-//        map["Authorization"] = "Bearer ".plus(userToken)
-        val channelAuthorizer = CustomAuthorizer("http://3.111.159.32/api/pusher/auth", userToken)
+        pusher?.connection?.state?.let {
+            if(it === com.pusher.client.connection.ConnectionState.DISCONNECTED
+                ) {
+                initPusher(userToken, userId)
+            }
+        } ?: run {
+            initPusher(userToken, userId)
+        }
+    }
+
+    private fun initPusher(userToken: String, userId: String) {
+        val channelAuthorizer = CustomAuthorizer("http://3.111.159.32/api/pusher/auth", userToken, userId)
         val options = PusherOptions().setCluster(YOUR_APP_CLUSTER).setUseTLS(true)
             .setAuthorizer(channelAuthorizer)
         pusher = Pusher(YOUR_APP_KEY, options)
@@ -39,12 +46,24 @@ class PusherManager {
                 Log.i("TAG", "onError: "+message)
             }
         })
-    }
-
-    fun subscribeToEvent(eventListener: PrivateChannelEventListener) {
         event.forEach {
             channel?.bind(it, eventListener)
         }
+    }
+
+    private val  eventListener = object : PrivateChannelEventListener {
+        override fun onEvent(event: PusherEvent?) {
+
+        }
+
+        override fun onSubscriptionSucceeded(channelName: String?) {
+
+        }
+
+        override fun onAuthenticationFailure(message: String?, e: Exception?) {
+
+        }
+
     }
 
     fun disconnectPusher() {
