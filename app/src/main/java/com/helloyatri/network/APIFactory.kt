@@ -41,6 +41,9 @@ object APIFactory {
         const val GET_ALL_RIDE = "getallride"
         const val GET_ALL_NOTIFICATION = "getNotification"
         const val GET_ALL_PAYMENT = "getAllPayment"
+        const val GET_ALL_REVIEW = "getAllReview"
+        const val GET_ALL_SCHEDULE_RIDE = "getAllScheduleRide"
+        const val GET_CANCLLETION_REASON = "getCancellationReasons"
 
 
 //        const val RESEND_OTP = "driver/resetPassword"

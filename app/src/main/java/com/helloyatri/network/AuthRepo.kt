@@ -45,6 +45,9 @@ interface AuthRepo {
     suspend fun getAllRide() : Resource<JsonObject>
     suspend fun getAllNotification() : Resource<JsonObject>
     suspend fun getAllPayment() : Resource<JsonObject>
+    suspend fun getAllReview() : Resource<JsonObject>
+    suspend fun getAllScheduleRide() : Resource<JsonObject>
+    suspend fun getCancellationReason() : Resource<JsonObject>
 
 
 }
