@@ -54,7 +54,6 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     }
 
 
-
     private fun initObservers() {
 
         apiViewModel.resetPasswordLiveData.observe(this) { resource ->
@@ -87,48 +86,58 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
                         it.data?.let { it ->
                             val response =
                                 Gson().fromJson(it, DriverStatusResponse::class.java)
-                            response?.data?.let { driverStatus ->
-                                driverStatus.addVehicle?.let {
-                                    session.isAddVehicle = it.status ?: false
-                                }
-                                driverStatus.profileImage?.let {
-                                    session.isProfilePictureAdded = it.status ?: false
-                                }
-                                driverStatus.profileInfo?.let {
-                                    session.isPersonalDetailsAdded = it.status ?: false
-                                }
-                                driverStatus.requiredDocuments?.let {
-                                    session.isRequiredDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleDocuments?.let {
-                                    session.isVehicleDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleImages?.let {
-                                    session.isVehiclePhotosAdded = it.status ?: false
-                                }
-                                driverStatus.verificationPending?.let {
-                                    session.isDriverVerified = it.status ?: false
-                                }
-
-                                if (session.isAllDocumentUploaded()) {
-                                    if (session.isDriverVerified && session.user?.status == 1) {
-                                        navigator.loadActivity(HomeActivity::class.java)
-                                            .byFinishingAll()
-                                            .start()
-                                    } else {
-                                        navigator.load(DriverVerificationFragment::class.java)
-                                            .replace(false)
-                                    }
-                                } else {
-                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
+                            when (response.code) {
+                                200 -> {
+                                    session.isLoggedIn = true
+                                    navigator.loadActivity(HomeActivity::class.java)
                                         .byFinishingAll()
                                         .start()
                                 }
 
-                            } ?: run {
-                                showSomethingMessage()
-                            }
+                                else -> {
+                                    response?.data?.let { driverStatus ->
+                                        driverStatus.addVehicle?.let {
+                                            session.isAddVehicle = it.status ?: false
+                                        }
+                                        driverStatus.profileImage?.let {
+                                            session.isProfilePictureAdded = it.status ?: false
+                                        }
+                                        driverStatus.profileInfo?.let {
+                                            session.isPersonalDetailsAdded = it.status ?: false
+                                        }
+                                        driverStatus.requiredDocuments?.let {
+                                            session.isRequiredDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleDocuments?.let {
+                                            session.isVehicleDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleImages?.let {
+                                            session.isVehiclePhotosAdded = it.status ?: false
+                                        }
+                                        driverStatus.verificationPending?.let {
+                                            session.isDriverVerified = it.status ?: false
+                                        }
 
+                                        if (session.isAllDocumentUploaded()) {
+                                            if (session.isDriverVerified && session.user?.status == 1) {
+                                                navigator.loadActivity(HomeActivity::class.java)
+                                                    .byFinishingAll()
+                                                    .start()
+                                            } else {
+                                                navigator.load(DriverVerificationFragment::class.java)
+                                                    .replace(false)
+                                            }
+                                        } else {
+                                            navigator.loadActivity(DriverDocumentsActivity::class.java)
+                                                .byFinishingAll()
+                                                .start()
+                                        }
+
+                                    } ?: run {
+                                        showSomethingMessage()
+                                    }
+                                }
+                            }
                         } ?: run {
                             showSomethingMessage()
                         }
@@ -155,16 +164,18 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     }
 
     private fun setUpText() = with(binding) {
-        if(isPreviousScreenOTP()) {
+        if (isPreviousScreenOTP()) {
             includedOldPassword.root.visibility = View.GONE
             includedTopContent.textViewHello.text = getString(R.string.label_reset_password)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_create_new_password)
+            includedTopContent.textViewWelcomeBack.text =
+                getString(R.string.label_create_new_password)
             includedTopContent.textViewYouHaveMissed.text =
                 getString(R.string.label_complete_the_reset_password_process)
         } else {
             includedOldPassword.root.visibility = View.VISIBLE
             includedTopContent.textViewHello.text = getString(R.string.label_change_password)
-            includedTopContent.textViewWelcomeBack.text = getString(R.string.label_change_password_subtitle)
+            includedTopContent.textViewWelcomeBack.text =
+                getString(R.string.label_change_password_subtitle)
             includedTopContent.textViewYouHaveMissed.text =
                 getString(R.string.label_change_password_msg)
         }
@@ -193,7 +204,7 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
     }
 
     private fun enableNextButton() = with(binding) {
-        if(isPreviousScreenOTP()) {
+        if (isPreviousScreenOTP()) {
             if (includedNewPassword.editText.trimmedText.length == includedConfirmPassword.editText.trimmedText.length &&
                 includedConfirmPassword.editText.trimmedText.length >= 8
             ) {
@@ -256,7 +267,7 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
         try {
             hideKeyBoard()
 
-            if(!isPreviousScreenOTP()) {
+            if (!isPreviousScreenOTP()) {
                 validator.submit(includedOldPassword.editText).checkEmpty()
                     .errorMessage(getString(R.string.validation_please_enter_old_password))
                     .checkMinDigits(Constants.MIN_PASSWORD)
@@ -292,7 +303,7 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
             if (includedNewPassword.editText.text.toString()
                     .trim() == includedConfirmPassword.editText.text.toString().trim()
             ) {
-                if(isPreviousScreenOTP()) {
+                if (isPreviousScreenOTP()) {
                     apiViewModel.resetPassword(
                         Request(
                             password = includedNewPassword.editText.text.toString().trim()
@@ -368,7 +379,7 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
         showToolbar(false).build()
     }
 
-    private fun isPreviousScreenOTP() : Boolean {
+    private fun isPreviousScreenOTP(): Boolean {
         return getSourceScreen.equals(OTPVerificationFragment::class.java.simpleName)
     }
 }

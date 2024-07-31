@@ -85,64 +85,69 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                     Status.SUCCESS -> {
                         hideLoader()
                         it.data?.let { it ->
+
                             val response =
                                 Gson().fromJson(it, DriverStatusResponse::class.java)
-                            response?.data?.let { driverStatus ->
-                                driverStatus.addVehicle?.let {
-                                    session.isAddVehicle = it.status ?: false
+                            when(response.code) {
+                                200 -> {
+                                    session.isLoggedIn = true
+                                    navigator.loadActivity(HomeActivity::class.java)
+                                        .byFinishingAll()
+                                        .start()
                                 }
-                                driverStatus.profileImage?.let {
-                                    session.isProfilePictureAdded = it.status ?: false
-                                }
-                                driverStatus.profileInfo?.let {
-                                    session.isPersonalDetailsAdded = it.status ?: false
-                                }
-                                driverStatus.requiredDocuments?.let {
-                                    session.isRequiredDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleDocuments?.let {
-                                    session.isVehicleDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleImages?.let {
-                                    session.isVehiclePhotosAdded = it.status ?: false
-                                }
-                                driverStatus.verificationPending?.let {
-                                    session.isDriverVerified = it.status ?: false
-                                }
-                                if (getSourceScreen == SignUpFragment::class.java.simpleName || getSourceScreen == LoginFragment::class.java.simpleName) {
-//                                    session.isLoggedIn = true
-//                                    navigator.loadActivity(HomeActivity::class.java)
-//                                        .byFinishingAll()
-//                                        .start()
-                                    if (session.isAllDocumentUploaded()) {
-                                        if (session.isDriverVerified && session.user?.status == 1) {
-                                            navigator.loadActivity(HomeActivity::class.java)
-                                                .byFinishingAll()
-                                                .start()
-                                        } else {
-                                            navigator.load(DriverVerificationFragment::class.java)
-                                                .replace(false)
-//                                            navigator.loadActivity(DriverDocumentsActivity::class.java)
-//                                                .byFinishingAll()
-//                                                .start()
+                                else -> {
+                                    response?.data?.let { driverStatus ->
+                                        driverStatus.addVehicle?.let {
+                                            session.isAddVehicle = it.status ?: false
                                         }
-                                    } else {
-                                        navigator.loadActivity(DriverDocumentsActivity::class.java)
-                                            .byFinishingAll()
-                                            .start()
+                                        driverStatus.profileImage?.let {
+                                            session.isProfilePictureAdded = it.status ?: false
+                                        }
+                                        driverStatus.profileInfo?.let {
+                                            session.isPersonalDetailsAdded = it.status ?: false
+                                        }
+                                        driverStatus.requiredDocuments?.let {
+                                            session.isRequiredDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleDocuments?.let {
+                                            session.isVehicleDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleImages?.let {
+                                            session.isVehiclePhotosAdded = it.status ?: false
+                                        }
+                                        driverStatus.verificationPending?.let {
+                                            session.isDriverVerified = it.status ?: false
+                                        }
+                                        if (getSourceScreen == SignUpFragment::class.java.simpleName || getSourceScreen == LoginFragment::class.java.simpleName) {
+                                            if (session.isAllDocumentUploaded()) {
+                                                if (session.isDriverVerified && session.user?.status == 1) {
+                                                    session.isLoggedIn = true
+                                                    navigator.loadActivity(HomeActivity::class.java)
+                                                        .byFinishingAll()
+                                                        .start()
+                                                } else {
+                                                    navigator.loadActivity(DriverDocumentsActivity::class.java)
+                                                        .byFinishingAll()
+                                                        .start()
+                                                }
+                                            } else {
+                                                navigator.loadActivity(DriverDocumentsActivity::class.java)
+                                                    .byFinishingAll()
+                                                    .start()
+                                            }
+                                        } else if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
+                                            navigator.load(ResetPasswordFragment::class.java).setBundle(
+                                                createBundle(
+                                                    sourceScreen = OTPVerificationFragment::class.java.simpleName
+                                                )
+                                            )
+                                                .replace(false)
+                                        }
+                                    } ?: run {
+                                        showSomethingMessage()
                                     }
-                                } else if (getSourceScreen == ForgotPasswordFragment::class.java.simpleName) {
-                                    navigator.load(ResetPasswordFragment::class.java).setBundle(
-                                        createBundle(
-                                            sourceScreen = OTPVerificationFragment::class.java.simpleName
-                                        )
-                                    )
-                                        .replace(false)
                                 }
-                            } ?: run {
-                                showSomethingMessage()
                             }
-
                         } ?: run {
                             showSomethingMessage()
                         }

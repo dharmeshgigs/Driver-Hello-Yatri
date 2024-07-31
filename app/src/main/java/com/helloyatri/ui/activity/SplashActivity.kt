@@ -55,33 +55,6 @@ class SplashActivity : BaseActivity() {
             } else {
                 Handler(Looper.getMainLooper()).postDelayed({
                     loadActivity(AuthActivity::class.java).byFinishingCurrent().start()
-//                    when {
-//                        appSession.isDriverVerified && appSession.isLoggedIn == true -> {
-//                            loadActivity(DriverDocumentsActivity::class.java).byFinishingCurrent()
-//                                .start()
-//                        }
-//
-//                        appSession.isDriverVerified && appSession.isLoggedIn == false -> {
-//                            loadActivity(AuthActivity::class.java).byFinishingCurrent().start()
-//                        }
-//
-//                        appSession.isLoggedIn == true -> {
-//                            loadActivity(HomeActivity::class.java).byFinishingAll().start()
-//                        }
-//
-//                        appSession.isLoggedIn == false -> {
-//                            loadActivity(AuthActivity::class.java).byFinishingCurrent().start()
-//                        }
-//
-//                        !appSession.isDriverVerified || !appSession.isPersonalDetailsAdded || !appSession.isProfilePictureAdded || !appSession.isRequiredDocumentsAdded || !appSession.isDrivingLicenseAdded || !appSession.isGovernmentIDAdded || !appSession.isBankAccountDetailsAdded || !appSession.isAddVehicle || !appSession.isVehicleDocumentsAdded || !appSession.isVehiclePUCAdded || !appSession.isVehicleInsuranceAdded || !appSession.isVehicleRegistrationAdded || !appSession.isVehiclePermitAdded || !appSession.isVehiclePhotosAdded || !appSession.isVehicleFrontBackPhotoAdded || !appSession.isVehicleLeftRightPhotoAdded || !appSession.isVehicleChassisAdded || !appSession.isVehicleWithYourPhotoAdded -> {
-//                            loadActivity(DriverDocumentsActivity::class.java).byFinishingCurrent()
-//                                .start()
-//                        }
-//
-//                        else -> {
-//                            loadActivity(AuthActivity::class.java).byFinishingCurrent().start()
-//                        }
-//                    }
                 }, 3000)
             }
         } else {
@@ -103,44 +76,52 @@ class SplashActivity : BaseActivity() {
                     Status.SUCCESS -> {
                         it.data?.let { it ->
                             val response = Gson().fromJson(it, DriverStatusResponse::class.java)
-                            response?.data?.let { driverStatus ->
-                                driverStatus.addVehicle?.let {
-                                    appSession.isAddVehicle = it.status ?: false
-                                }
-                                driverStatus.profileImage?.let {
-                                    appSession.isProfilePictureAdded = it.status ?: false
-                                }
-                                driverStatus.profileInfo?.let {
-                                    appSession.isPersonalDetailsAdded = it.status ?: false
-                                }
-                                driverStatus.requiredDocuments?.let {
-                                    appSession.isRequiredDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleDocuments?.let {
-                                    appSession.isVehicleDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleImages?.let {
-                                    appSession.isVehiclePhotosAdded = it.status ?: false
-                                }
-                                driverStatus.verificationPending?.let {
-                                    appSession.isDriverVerified = it.status ?: false
-                                }
-                                loadActivity(HomeActivity::class.java).byFinishingAll()
-                                    .start()
-                                if (appSession.isAllDocumentUploaded()) {
-                                    if (appSession.isDriverVerified && appSession.user?.status == 1) {
-                                        loadActivity(HomeActivity::class.java).byFinishingAll()
-                                            .start()
-                                    } else {
-                                        loadActivity(DriverDocumentsActivity::class.java).byFinishingAll()
-                                            .start()
-                                    }
-                                } else {
-                                    loadActivity(DriverDocumentsActivity::class.java).byFinishingAll()
+                            when(response.code) {
+                                200 -> {
+                                    appSession.isLoggedIn = true
+                                    loadActivity(HomeActivity::class.java)
+                                        .byFinishingAll()
                                         .start()
                                 }
+                                else -> {
+                                    response?.data?.let { driverStatus ->
+                                        driverStatus.addVehicle?.let {
+                                            appSession.isAddVehicle = it.status ?: false
+                                        }
+                                        driverStatus.profileImage?.let {
+                                            appSession.isProfilePictureAdded = it.status ?: false
+                                        }
+                                        driverStatus.profileInfo?.let {
+                                            appSession.isPersonalDetailsAdded = it.status ?: false
+                                        }
+                                        driverStatus.requiredDocuments?.let {
+                                            appSession.isRequiredDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleDocuments?.let {
+                                            appSession.isVehicleDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleImages?.let {
+                                            appSession.isVehiclePhotosAdded = it.status ?: false
+                                        }
+                                        driverStatus.verificationPending?.let {
+                                            appSession.isDriverVerified = it.status ?: false
+                                        }
+                                        if (appSession.isAllDocumentUploaded()) {
+                                            if (appSession.isDriverVerified && appSession.user?.status == 1) {
+                                                appSession.isLoggedIn = true
+                                                loadActivity(HomeActivity::class.java).byFinishingAll()
+                                                    .start()
+                                            } else {
+                                                loadActivity(DriverDocumentsActivity::class.java).byFinishingAll()
+                                                    .start()
+                                            }
+                                        } else {
+                                            loadActivity(DriverDocumentsActivity::class.java).byFinishingAll()
+                                                .start()
+                                        }
+                                    }
+                                }
                             }
-
                         }
                     }
 

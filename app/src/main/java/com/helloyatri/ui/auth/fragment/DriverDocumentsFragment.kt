@@ -14,8 +14,10 @@ import com.helloyatri.data.model.DriverDocuments
 import com.helloyatri.data.model.DriverStatusResponse
 import com.helloyatri.databinding.AuthDriverDocumentsFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment
+import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.Constants.DRIVER_REQUIRED_DOCUMENT
 import com.helloyatri.utils.Constants.UPDATE_PROFILE_PICTURE
 import com.helloyatri.utils.Constants.VEHICLE_DOCUMENT
@@ -96,7 +98,6 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
     }
 
     override fun bindData() {
-        apiViewModel.getDriverStatus()
         setUpText()
         setUpRecyclerView()
         setUpClickListener()
@@ -113,35 +114,44 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
                         it.data?.let { it ->
                             val response =
                                 Gson().fromJson(it, DriverStatusResponse::class.java)
-                            response?.data?.let { driverStatus ->
-                                driverStatus.addVehicle?.let {
-                                    session.isAddVehicle = it.status ?: false
+                            when(response.code) {
+                                200 -> {
+                                    session.isLoggedIn = true
+                                    navigator.loadActivity(HomeActivity::class.java)
+                                        .byFinishingAll()
+                                        .start()
                                 }
-                                driverStatus.profileImage?.let {
-                                    session.isProfilePictureAdded = it.status ?: false
+                                else -> {
+                                    response?.data?.let { driverStatus ->
+                                        driverStatus.addVehicle?.let {
+                                            session.isAddVehicle = it.status ?: false
+                                        }
+                                        driverStatus.profileImage?.let {
+                                            session.isProfilePictureAdded = it.status ?: false
+                                        }
+                                        driverStatus.profileInfo?.let {
+                                            session.isPersonalDetailsAdded = it.status ?: false
+                                        }
+                                        driverStatus.requiredDocuments?.let {
+                                            session.isRequiredDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleDocuments?.let {
+                                            session.isVehicleDocumentsAdded = it.status ?: false
+                                        }
+                                        driverStatus.vehicleImages?.let {
+                                            session.isVehiclePhotosAdded = it.status ?: false
+                                        }
+                                        driverStatus.verificationPending?.let {
+                                            session.isDriverVerified = it.status ?: false
+                                        }
+                                        resetDriverDetailsMenu()
+                                        resetVehicleDetailsMenu()
+                                        setUpMenu()
+                                    } ?: run {
+                                        showSomethingMessage()
+                                    }
                                 }
-                                driverStatus.profileInfo?.let {
-                                    session.isPersonalDetailsAdded = it.status ?: false
-                                }
-                                driverStatus.requiredDocuments?.let {
-                                    session.isRequiredDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleDocuments?.let {
-                                    session.isVehicleDocumentsAdded = it.status ?: false
-                                }
-                                driverStatus.vehicleImages?.let {
-                                    session.isVehiclePhotosAdded = it.status ?: false
-                                }
-                                driverStatus.verificationPending?.let {
-                                    session.isDriverVerified = it.status ?: false
-                                }
-                                resetDriverDetailsMenu()
-                                resetVehicleDetailsMenu()
-                                setUpMenu()
-                            } ?: run {
-                                showSomethingMessage()
                             }
-
                         } ?: run {
                             showSomethingMessage()
                         }
