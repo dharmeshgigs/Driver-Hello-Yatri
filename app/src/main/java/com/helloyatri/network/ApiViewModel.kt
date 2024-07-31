@@ -268,4 +268,22 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val getAllReviewLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAllReviewAPI() {
+        run {
+            getAllReviewLiveData.value = Resource.loading()
+            getAllReviewLiveData.value = authRepo.getAllReview()
+        }
+    }
+
+    val getAllScheduleRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAllScheduleRideAPI() {
+        run {
+            getAllScheduleRideLiveData.value = Resource.loading()
+            getAllScheduleRideLiveData.value = authRepo.getAllScheduleRide()
+        }
+    }
+
 }

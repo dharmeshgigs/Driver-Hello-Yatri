@@ -2,8 +2,11 @@ package com.helloyatri.ui.home.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.helloyatri.R
 import com.helloyatri.databinding.FragmentNotificationBinding
+import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.ScheduleRideMainAdapter
 import com.helloyatri.utils.extension.hide
@@ -12,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
+    private val apiViewModel by viewModels<ApiViewModel>()
 
     private val scheduleRideMainAdapter by lazy {
         ScheduleRideMainAdapter()
@@ -24,7 +28,25 @@ class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
 
     override fun bindData() {
         binding.textViewMarkAllRead.hide()
-        setAdapter()
+        apiViewModel.getAllScheduleRideAPI()
+        initObservers()
+
+    }
+
+    private fun initObservers() {
+        apiViewModel.getAllScheduleRideLiveData.observe(this){resourse->
+            when(resourse.status){
+                Status.SUCCESS -> {
+                 hideLoader()
+                }
+                Status.ERROR -> {
+                    hideLoader()
+                    setAdapter()
+                }
+                Status.LOADING -> showLoader()
+            }
+
+        }
     }
 
     private fun setAdapter() = with(binding) {

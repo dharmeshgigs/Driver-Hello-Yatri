@@ -128,4 +128,12 @@ class ApiDataSource @Inject constructor(
     override suspend fun getAllPayment(): Resource<JsonObject> {
         return run2 { authService.getAllPayment() }
     }
+
+    override suspend fun getAllReview(): Resource<JsonObject> {
+        return run2 { authService.getAllReview() }
+    }
+
+    override suspend fun getAllScheduleRide(): Resource<JsonObject> {
+        return run2 { authService.getAllScheduleRide() }
+    }
 }

@@ -2,17 +2,21 @@ package com.helloyatri.ui.home.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
 import com.helloyatri.data.model.AccountAllReviews
 import com.helloyatri.databinding.AccountAllReviewsFragmentBinding
+import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AdapterAccountAllReviews
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AccountAllReviewsFragment : BaseFragment<AccountAllReviewsFragmentBinding>() {
+    private val apiViewModel by viewModels<ApiViewModel>()
 
     private val accountAllReviewsAdapter by lazy {
         AdapterAccountAllReviews()
@@ -26,8 +30,26 @@ class AccountAllReviewsFragment : BaseFragment<AccountAllReviewsFragmentBinding>
     }
 
     override fun bindData() {
+        apiViewModel.getAllReviewAPI()
         setUpRecyclerView()
-        setUpData()
+        initObservers()
+
+    }
+
+    private fun initObservers() {
+        apiViewModel.getAllReviewLiveData.observe(this){resource ->
+            when(resource.status){
+                Status.SUCCESS -> {
+                    hideLoader()
+                }
+                Status.ERROR -> {
+                    hideLoader()
+                    setUpData()
+                }
+                Status.LOADING -> showLoader()
+            }
+
+        }
     }
 
     private fun setUpRecyclerView() = with(binding) {
