@@ -1,8 +1,8 @@
-package com.kizitonwose.calendar.compose.yearcalendar
+package com.helloyatri.utils.com.kizitonwose.calendar.compose.yearcalendar
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
-import com.kizitonwose.calendar.core.CalendarYear
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarYear
 
 /**
  * Contains useful information about the currently displayed layout state of the calendar.

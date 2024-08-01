@@ -13,8 +13,8 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarDay
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarMonth
 
 @Suppress("FunctionName")
 internal fun LazyListScope.CalendarMonths(

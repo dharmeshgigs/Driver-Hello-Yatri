@@ -2,7 +2,7 @@ package com.helloyatri.utils.com.kizitonwose.calendar.compose.heatmapcalendar
 
 import androidx.compose.runtime.Immutable
 import com.kizitonwose.calendar.compose.HeatMapCalendar
-import com.kizitonwose.calendar.core.CalendarDay
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarDay
 import java.io.Serializable
 
 /**

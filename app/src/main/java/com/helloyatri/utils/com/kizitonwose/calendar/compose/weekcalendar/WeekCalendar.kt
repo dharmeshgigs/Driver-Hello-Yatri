@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.compose.weekcalendar
+package com.helloyatri.utils.com.kizitonwose.calendar.compose.weekcalendar
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -12,9 +12,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
-import com.kizitonwose.calendar.core.Week
-import com.kizitonwose.calendar.core.WeekDay
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
+import com.helloyatri.utils.com.kizitonwose.calendar.core.Week
+import com.helloyatri.utils.com.kizitonwose.calendar.core.WeekDay
 
 @Composable
 internal fun WeekCalendarImpl(

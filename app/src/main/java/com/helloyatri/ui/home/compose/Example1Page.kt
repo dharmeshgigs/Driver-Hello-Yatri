@@ -31,11 +31,11 @@ import com.helloyatri.utils.extension.displayText
 import com.kizitonwose.calendar.compose.ContentHeightMode
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarDay
+import com.helloyatri.utils.com.kizitonwose.calendar.core.DayPosition
+import com.helloyatri.utils.com.kizitonwose.calendar.core.daysOfWeek
+import com.helloyatri.utils.com.kizitonwose.calendar.core.nextMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -47,7 +47,8 @@ fun Example1Page(callBack: (action: CalendarDay) -> Unit) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(20) }
     val endMonth = remember { currentMonth.plusMonths(60) }
-    val selections = remember { mutableStateOf<CalendarDay>(CalendarDay(LocalDate.now(),DayPosition.MonthDate)) }
+    val selections = remember { mutableStateOf<CalendarDay>(CalendarDay(LocalDate.now(),
+        DayPosition.MonthDate)) }
     val daysOfWeek = remember { daysOfWeek() }
     Column(
         modifier = Modifier

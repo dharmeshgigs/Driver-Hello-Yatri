@@ -1,8 +1,8 @@
-package com.kizitonwose.calendar.compose.weekcalendar
+package com.helloyatri.utils.com.kizitonwose.calendar.compose.weekcalendar
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
-import com.kizitonwose.calendar.core.Week
+import com.helloyatri.utils.com.kizitonwose.calendar.core.Week
 
 /**
  * Contains useful information about the currently displayed layout state of the calendar.

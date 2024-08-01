@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeek
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeekHeaderPosition
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.daysOfWeek
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarDay
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
 
 @Composable

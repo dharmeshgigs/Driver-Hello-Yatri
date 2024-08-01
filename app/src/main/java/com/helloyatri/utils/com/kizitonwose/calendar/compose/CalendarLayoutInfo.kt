@@ -2,7 +2,7 @@ package com.kizitonwose.calendar.compose
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
-import com.kizitonwose.calendar.core.CalendarMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarMonth
 
 /**
  * Contains useful information about the currently displayed layout state of the calendar.

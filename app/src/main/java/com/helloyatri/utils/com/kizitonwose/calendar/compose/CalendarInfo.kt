@@ -1,7 +1,7 @@
 package com.kizitonwose.calendar.compose
 
 import androidx.compose.runtime.Immutable
-import com.kizitonwose.calendar.core.OutDateStyle
+import com.helloyatri.utils.com.kizitonwose.calendar.core.OutDateStyle
 import java.time.DayOfWeek
 
 @Immutable

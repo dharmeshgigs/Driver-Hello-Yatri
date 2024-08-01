@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.compose.yearcalendar
+package com.helloyatri.utils.com.kizitonwose.calendar.compose.yearcalendar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.Dp
 import com.kizitonwose.calendar.compose.or
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.CalendarYear
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarDay
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarYear
 
 @Suppress("FunctionName")
 internal fun LazyListScope.YearCalendarMonths(

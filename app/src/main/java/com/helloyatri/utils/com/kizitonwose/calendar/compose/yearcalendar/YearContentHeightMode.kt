@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.compose.yearcalendar
+package com.helloyatri.utils.com.kizitonwose.calendar.compose.yearcalendar
 
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight

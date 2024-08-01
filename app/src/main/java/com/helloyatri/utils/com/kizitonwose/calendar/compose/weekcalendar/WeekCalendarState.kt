@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.compose.weekcalendar
+package com.helloyatri.utils.com.kizitonwose.calendar.compose.weekcalendar
 
 import android.util.Log
 import androidx.compose.foundation.MutatePriority
@@ -17,16 +17,16 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.VisibleItemState
-import com.kizitonwose.calendar.core.Week
-import com.kizitonwose.calendar.core.WeekDayPosition
-import com.kizitonwose.calendar.core.atStartOfMonth
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.helloyatri.utils.com.kizitonwose.calendar.core.Week
+import com.helloyatri.utils.com.kizitonwose.calendar.core.WeekDayPosition
+import com.helloyatri.utils.com.kizitonwose.calendar.core.atStartOfMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.checkRange
-import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
-import com.kizitonwose.calendar.data.getWeekCalendarData
-import com.kizitonwose.calendar.data.getWeekIndex
-import com.kizitonwose.calendar.data.getWeekIndicesCount
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.getWeekCalendarAdjustedRange
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.getWeekCalendarData
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.getWeekIndex
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.getWeekIndicesCount
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth

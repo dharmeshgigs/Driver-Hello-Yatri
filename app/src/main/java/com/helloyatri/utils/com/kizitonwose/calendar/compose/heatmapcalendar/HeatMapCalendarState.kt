@@ -1,6 +1,8 @@
 package com.helloyatri.utils.com.kizitonwose.calendar.compose.heatmapcalendar
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
@@ -18,8 +20,9 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.VisibleItemState
-import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarMonth
+import com.helloyatri.utils.com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getHeatMapCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
@@ -35,6 +38,7 @@ import java.time.YearMonth
  * @param firstDayOfWeek the initial value for [HeatMapCalendarState.firstDayOfWeek]
  * @param firstVisibleMonth the initial value for [HeatMapCalendarState.firstVisibleMonth]
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 public fun rememberHeatMapCalendarState(
     startMonth: YearMonth = YearMonth.now(),

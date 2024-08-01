@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.compose.yearcalendar
+package com.helloyatri.utils.com.kizitonwose.calendar.compose.yearcalendar
 
 import android.util.Log
 import androidx.compose.foundation.MutatePriority
@@ -19,15 +19,15 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.VisibleItemState
-import com.kizitonwose.calendar.core.CalendarYear
-import com.kizitonwose.calendar.core.ExperimentalCalendarApi
-import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.helloyatri.utils.com.kizitonwose.calendar.core.CalendarYear
+import com.helloyatri.utils.com.kizitonwose.calendar.core.ExperimentalCalendarApi
+import com.helloyatri.utils.com.kizitonwose.calendar.core.OutDateStyle
+import com.helloyatri.utils.com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.checkRange
-import com.kizitonwose.calendar.data.getCalendarYearData
-import com.kizitonwose.calendar.data.getYearIndex
-import com.kizitonwose.calendar.data.getYearIndicesCount
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.getCalendarYearData
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.getYearIndex
+import com.helloyatri.utils.com.kizitonwose.calendar.compose.getYearIndicesCount
 import java.time.DayOfWeek
 import java.time.Year
 
