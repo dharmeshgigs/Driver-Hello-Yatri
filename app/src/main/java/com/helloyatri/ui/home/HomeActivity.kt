@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.network.Status
@@ -14,7 +13,6 @@ import com.helloyatri.R
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.HomeAcitivtyBinding
-import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.HomeViewModel
 import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.home.dialog.LogoutDialogFragment
@@ -31,8 +29,6 @@ import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
 import com.helloyatri.ui.home.sidemenu.SideMenuTag
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
-import com.pusher.client.channel.PrivateChannelEventListener
-import com.pusher.client.channel.PusherEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -62,19 +58,8 @@ class HomeActivity : BaseActivity() {
         setUpToolbar()
         setUpSideMenu()
         setUpSideMenuClickListener()
-        load(HomeFragment::class.java).replace(false)
-//        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-//        transaction.replace(
-//            com.helloyatri.R.id.placeHolder,
-//            HomeFragment::class.java,
-//            null
-//        )
-//        transaction.commit()
         initObservers()
-        //setUpPushUp()
-
-//        homeAcitivtyBinding.navigationDrawerContent.imageViewUserProfile.loadImageFromServerWithPlaceHolder(
-//                "https://plus.unsplash.com/premium_photo-1669047668540-9e1712e29f1f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+        load(HomeFragment::class.java).replace(false)
     }
 
     private fun initObservers() {
@@ -84,7 +69,6 @@ class HomeActivity : BaseActivity() {
                     val response =
                         Gson().fromJson(resource.data.toString(), DriverResponse::class.java)
                     setUserData(response.data)
-                    Log.i("TAG", "initObservers: " + response.data.toString())
                 }
 
                 Status.ERROR -> {
@@ -171,14 +155,6 @@ class HomeActivity : BaseActivity() {
 
                 SideMenuTag.SAVED_ADDRESS -> {
                     load(AccountSavedAddressFragment::class.java).replace(true)
-//                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-//                    transaction.replace(
-//                        R.id.placeHolder,
-//                        AccountSavedAddressFragment(),
-//                        AccountSavedAddressFragment::class.java.simpleName
-//                    )
-//                    transaction.addToBackStack(AccountSavedAddressFragment::class.java.simpleName)
-//                    transaction.commit()
                 }
 
                 SideMenuTag.PREFERENCES -> {
@@ -214,29 +190,5 @@ class HomeActivity : BaseActivity() {
 
     private fun getProfileAPI() {
         apiViewModel.getDriverProfile()
-    }
-
-    val pushEvent = object : PrivateChannelEventListener {
-        override fun onEvent(event: PusherEvent?) {
-            event?.let {
-                Log.e("TAG", "onEvent ${Gson().toJson(event)}")
-            } ?: run {
-                Log.e("TAG", "onEvent null")
-            }
-        }
-
-        override fun onSubscriptionSucceeded(channelName: String?) {
-            Log.e("TAG", "Channel Name $channelName")
-        }
-
-        override fun onAuthenticationFailure(
-            message: String?,
-            e: java.lang.Exception?
-        ) {
-            e?.let {
-                it.printStackTrace()
-            }
-
-        }
     }
 }

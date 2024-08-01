@@ -123,7 +123,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                     val response =
                         Gson().fromJson(resource.data.toString(), DriverResponse::class.java)
                     setUserData(response.data)
-                    Log.i("TAG", "initObservers: " + response.data.toString())
                 }
 
                 Status.ERROR -> {
