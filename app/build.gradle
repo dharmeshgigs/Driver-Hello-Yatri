@@ -63,6 +63,7 @@ dependencies {
 
     // Hilt
     implementation "com.google.dagger:hilt-android:2.44"
+    implementation 'androidx.activity:activity:1.9.1'
     kapt "com.google.dagger:hilt-compiler:2.44"
 
     // Lifecycle components

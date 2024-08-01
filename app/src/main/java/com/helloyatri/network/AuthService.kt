@@ -108,4 +108,16 @@ interface AuthService {
     @GET(APIFactory.AuthApi.GET_CANCLLETION_REASON)
     suspend fun getCancellationReason() : Response<JsonObject>
 
+    @POST(APIFactory.AuthApi.ACCEPT_REQUEST_TEST)
+    suspend fun acceptRequest(@Body request: Request) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.DECLINE_REQUEST_TEST)
+    suspend fun declineRequest(@Body request: Request) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.VERIFY_TRIP)
+    suspend fun verifyTrip(@Body request: Request) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.UPDATE_ARRIVE_STATUS)
+    suspend fun updateArriveStatus(@Body request: Request) : Response<JsonObject>
+
 }

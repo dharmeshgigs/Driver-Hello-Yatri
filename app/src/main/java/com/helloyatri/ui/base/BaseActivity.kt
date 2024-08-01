@@ -43,7 +43,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
-abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
+abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
 
     @Inject
     lateinit var navigationFactory: FragmentNavigationFactory
@@ -54,13 +54,9 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
     @Inject
     lateinit var mediaSelectHelper: MediaSelectHelper
 
-    @Inject
-    lateinit var appSession: Session
-
     private var toolbar: CustomToolbar? = null
     internal var progressDialog: ProgressDialog? = null
     internal var alertDialog: AlertDialog? = null
-    private lateinit var myApp: App
 
 
     private val view by lazy {
@@ -78,7 +74,6 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         super.onCreate(savedInstanceState)
 
         setContentView(createViewBinding())
-        myApp = application as App
         createFirebaseToken()/*if (toolbar != null)
             setSupportActionBar(toolbar)*/
 
@@ -88,24 +83,8 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         progressDialog!!.setMessage("Please wait...")
         progressDialog!!.setCancelable(false)
         progressDialog!!.setCanceledOnTouchOutside(false)
-        pusherConnection()
-
         setContentView(view)
-
-
     }
-
-    private fun pusherConnection() {
-        if (appSession.isLoggedIn == true) {
-            myApp.pusherManager.initializePusher(
-                appSession.userId,
-                appSession.userSession
-            )
-        }else{
-            Log.i("TAG", "pusherConnection: "+appSession.isLoggedIn)
-        }
-    }
-
 
     private fun setUpAlertDialog() {
         alertDialog =
@@ -152,7 +131,7 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         val currentFragment = getCurrentFragment<BaseFragment<*>>()
         if (currentFragment == null) super.onBackPressed()
         else if (currentFragment.onBackActionPerform() && shouldGoBack()) {
-            if(supportFragmentManager.backStackEntryCount > 1) {
+            if (supportFragmentManager.backStackEntryCount > 1) {
                 super.onBackPressed()
             } else {
                 finish()

@@ -140,4 +140,20 @@ class ApiDataSource @Inject constructor(
     override suspend fun getCancellationReason(): Resource<JsonObject> {
         return run2 { authService.getCancellationReason() }
     }
+
+    override suspend fun acceptRequest(request: Request): Resource<JsonObject> {
+        return run2 { authService.acceptRequest(request) }
+    }
+
+    override suspend fun declineRequest(request: Request): Resource<JsonObject> {
+        return run2 { authService.declineRequest(request) }
+    }
+
+    override suspend fun verifyTrip(request: Request): Resource<JsonObject> {
+        return run2 { authService.verifyTrip(request) }
+    }
+
+    override suspend fun updateArriveStatus(request: Request): Resource<JsonObject> {
+        return run2 { authService.updateArriveStatus(request) }
+    }
 }

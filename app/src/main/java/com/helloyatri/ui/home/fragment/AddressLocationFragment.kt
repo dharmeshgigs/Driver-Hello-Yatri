@@ -1,11 +1,14 @@
 package com.helloyatri.ui.home.fragment
 
 import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -26,7 +29,7 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
-    OnMapReadyCallback {
+    OnMapReadyCallback, LocationListener {
     private var googleMap: GoogleMap? = null
     private val apiViewModel: ApiViewModel by activityViewModels()
     private var address = ""
@@ -163,5 +166,11 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
                 binding.editTextLocation.setText(address)
             }
         }
+    }
+
+    override fun onLocationChanged(location: Location) {
+        Log.i("TAG", "onLocationChanged: "+location.latitude)
+        Log.i("TAG", "onLocationChanged: "+location.longitude)
+        Toast.makeText(context,"Lat:"+location.latitude+"Long:"+location.longitude,Toast.LENGTH_LONG)
     }
 }

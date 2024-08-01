@@ -404,7 +404,7 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                 else singlePhotoPickerLauncher?.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
             } else {
-                galleryVideoResult.launch(videoIntent)
+                videoIntent?.let { galleryVideoResult.launch(it) }
             }
         }
     }
@@ -596,7 +596,7 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                 else singlePhotoPickerLauncher?.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             } else {
-                galleryResult.launch(galleryIntent)
+                galleryIntent?.let { galleryResult.launch(it) }
             }
         }
     }
