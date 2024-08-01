@@ -295,4 +295,36 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val acceptRequestLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun acceptRequestAPI(request: Request) {
+        run {
+            acceptRequestLiveData.value = Resource.loading()
+            acceptRequestLiveData.value = authRepo.acceptRequest(request)
+        }
+    }
+
+    val declineRequestLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun declineRequestAPI(request: Request) {
+        run {
+            declineRequestLiveData.value = Resource.loading()
+            declineRequestLiveData.value = authRepo.declineRequest(request)
+        }
+    }
+
+    val verifyTripLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun verifyTripAPI(request: Request) {
+        run {
+            verifyTripLiveData.value = Resource.loading()
+            verifyTripLiveData.value = authRepo.verifyTrip(request)
+        }
+    }
+
+    val updateArriveStatusLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun updateArriveStatusAPI(request: Request) {
+        run {
+            updateArriveStatusLiveData.value = Resource.loading()
+            updateArriveStatusLiveData.value = authRepo.updateArriveStatus(request)
+        }
+    }
+
 }

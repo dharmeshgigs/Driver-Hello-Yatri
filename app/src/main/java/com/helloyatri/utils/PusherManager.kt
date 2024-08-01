@@ -1,6 +1,8 @@
 package com.helloyatri.utils
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonObject
 import com.helloyatri.pusher.CustomAuthorizer
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
@@ -18,6 +20,7 @@ class PusherManager {
     private val YOUR_CHANNEL_NAME = "private-driver."
     private val YOUR_EVENT_NAME = "NewRideRequest"
     private var event = arrayOf(YOUR_EVENT_NAME)
+    var data = MutableLiveData<JsonObject>()
 
     fun initializePusher(userId: String, userToken: String) {
         pusher?.connection?.state?.let {
@@ -53,7 +56,7 @@ class PusherManager {
 
     private val  eventListener = object : PrivateChannelEventListener {
         override fun onEvent(event: PusherEvent?) {
-
+            Log.e("event", getJsonString(event))
         }
 
         override fun onSubscriptionSucceeded(channelName: String?) {

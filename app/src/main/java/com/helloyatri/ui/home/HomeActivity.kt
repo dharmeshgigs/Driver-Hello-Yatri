@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.network.Status
@@ -13,7 +14,7 @@ import com.helloyatri.R
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.HomeAcitivtyBinding
-import com.helloyatri.network.HomeViewModel
+import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.home.dialog.LogoutDialogFragment
 import com.helloyatri.ui.home.fragment.AccountAllReviewsFragment
@@ -36,7 +37,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
-    private val apiViewModel by viewModels<HomeViewModel>()
+   // private val apiViewModel by viewModels<HomeViewModel>()
+   private val apiViewModel by viewModels<ApiViewModel>()
+
 
     private val sideMenuAdapter by lazy {
         SideMenuAdapter()

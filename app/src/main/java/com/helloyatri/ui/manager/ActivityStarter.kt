@@ -39,7 +39,7 @@ class ActivityStarter @Inject internal constructor(val baseActivity: BaseActivit
 
             if (startForResult != null) {
                 //startForResult flow with launcher
-                startForResult?.launch(intent)
+                intent?.let { startForResult?.launch(it) }
             } else if (requestCode != 0) {
                 //startForResult flow with request code
                 val currentFragment = baseActivity.getCurrentFragment<BaseFragment<*>>()
