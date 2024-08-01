@@ -100,8 +100,9 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 
     private fun getCurrentLocation() {
         locationProvider = LocationProvider((activity as BaseActivity),this)
-        locationProvider?.getCurrentLocation {
+        locationProvider?.getCurrentLocation(updated = true) {
             it?.let {
+                showMessage("Location is ${it.latitude.toString()}")
                 lat = it.latitude.toString()
                 long = it.longitude.toString()
                 location =

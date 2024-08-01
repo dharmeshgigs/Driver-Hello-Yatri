@@ -3,10 +3,14 @@ package com.helloyatri.utils.location
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Looper
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
@@ -23,13 +27,35 @@ class LocationProvider(private val activity: ComponentActivity, fragment: Fragme
     }
 
     @SuppressLint("MissingPermission")
-    fun getCurrentLocation(priority: Int = Priority.PRIORITY_HIGH_ACCURACY, onLocationFound: (latLng: LatLng) -> Unit) {
+    fun getCurrentLocation(priority: Int = Priority.PRIORITY_HIGH_ACCURACY, updated : Boolean = false, onLocationFound: (latLng: LatLng) -> Unit) {
         requestLocationPermission {
-            fusedLocationProviderClient.getCurrentLocation(priority, null).addOnSuccessListener { location ->
-                        location?.let {
-                            onLocationFound(LatLng(it.latitude, it.longitude))
+            if(updated) {
+                val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
+                    .setWaitForAccurateLocation(false)
+                    .setMinUpdateIntervalMillis(100)
+                    .setMaxUpdateDelayMillis(10000)
+                    .build()
+                val locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult) {
+                        locationResult ?: return
+                        if(locationResult.locations.isNotEmpty()) {
+                            onLocationFound(LatLng(locationResult.locations[0].latitude, locationResult.locations[0].longitude))
                         }
+//                    for (location in locationResult.locations){
+//                        // Update UI with location data
+//                        // ...
+//                    }
                     }
+                }
+                fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback,
+                    Looper.getMainLooper())
+            } else {
+                fusedLocationProviderClient.getCurrentLocation(priority, null).addOnSuccessListener { location ->
+                    location?.let {
+                        onLocationFound(LatLng(it.latitude, it.longitude))
+                    }
+                }
+            }
         }
     }
 
