@@ -37,7 +37,7 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
     private var long = ""
     private var countDownTimer : CountDownTimer? = null
     private var savedAddress: SavedAddress? = null
-    private var locationProvider : LocationProvider? = null
+
     var location : LatLng ? = null
     companion object {
         fun createBundle(
@@ -55,7 +55,18 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
         long = savedAddress?.longitude ?: ""
         address = savedAddress?.location ?: ""
         if(lat.isEmpty() && long.isEmpty()) {
-            getCurrentLocation()
+            getUserCurrentLocation {
+                it?.let {
+                    lat = it.latitude.toString()
+                    long = it.longitude.toString()
+                    location =
+                        LatLng(
+                            lat.toDouble(), long.toDouble()
+                        )
+                    setUpMapCamera()
+                    getAddress(it)
+                }
+            }
         }
     }
 
@@ -137,22 +148,6 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
     private fun setUpMapCamera() {
         location?.let { CameraUpdateFactory.newLatLngZoom(it, 10f) }
             ?.let { googleMap?.moveCamera(it) }
-    }
-
-    private fun getCurrentLocation() {
-        locationProvider = LocationProvider((activity as BaseActivity),this)
-        locationProvider?.getCurrentLocation {
-            it?.let {
-                lat = it.latitude.toString()
-                long = it.longitude.toString()
-                location =
-                    LatLng(
-                        lat.toDouble(), long.toDouble()
-                    )
-                setUpMapCamera()
-                getAddress(it)
-            }
-        }
     }
 
     fun getAddress(center : LatLng?) {

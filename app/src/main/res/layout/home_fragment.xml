@@ -242,7 +242,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:text="@string/label_dummy_101_national_dr_nsan_bruno_ca_94580"
+                tools:text="@string/label_dummy_101_national_dr_nsan_bruno_ca_94580"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constrainedWidth="true"

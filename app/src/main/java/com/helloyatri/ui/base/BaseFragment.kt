@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import com.helloyatri.R
 import com.helloyatri.core.Session
@@ -22,6 +23,7 @@ import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.base.loader.Loader
 import com.helloyatri.ui.manager.Navigator
 import com.helloyatri.utils.Validator
+import com.helloyatri.utils.location.LocationProvider
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
@@ -44,7 +46,7 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         get() = _binding!!
 
     private lateinit var loader: Loader
-
+    private var locationProvider : LocationProvider? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -285,5 +287,19 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         _binding = null
     }
 
+    fun getUserCurrentLocation(onLocation: (LatLng) -> Unit) {
+        locationProvider = LocationProvider((activity as BaseActivity),this)
+        locationProvider?.getCurrentLocation {
+            it?.let {
+                val lat = it.latitude.toString()
+                val long = it.longitude.toString()
+                val location =
+                    LatLng(
+                        lat.toDouble(), long.toDouble()
+                    )
+                onLocation(location)
+            }
+        }
+    }
 }
 

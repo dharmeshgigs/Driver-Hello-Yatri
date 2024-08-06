@@ -1,6 +1,5 @@
 package com.helloyatri.ui.home.fragment
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,6 +11,7 @@ import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
+import com.helloyatri.data.model.UpdateLocationResponse
 import com.helloyatri.databinding.HomeFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.activity.IsolatedActivity
@@ -53,21 +53,18 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         requireActivity().changeStatusBarColor(
             ContextCompat.getColor(requireContext(), R.color.backgroundColor), true
         )
+        initObservers()
         setTextDecorator()
         getHomeDataAPI()
         setUpUi()
-        initObservers()
         setClickListener()
         setAdapter()
-        Log.i("TAG", "bindData: " + session.deviceToken)
     }
 
     private fun initObservers() {
         apiViewModel.getHomeLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    hideLoader()
-                    Log.i("TAG", "initObservers:22 " + resource.status)
                 }
 
                 Status.ERROR -> {
@@ -76,25 +73,37 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                     showErrorMessage(error)
                 }
 
-                Status.LOADING -> hideLoader()
+                Status.LOADING -> {}
             }
         }
 
         apiViewModel.updateCurrentLocationLiveData.observe(this) { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    hideLoader()
-                    Log.i("TAG", "initObservers:33 " + resource.status)
-                }
+            resource?.let {
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        it.data?.let { it ->
+                            val response =
+                                Gson().fromJson(it, UpdateLocationResponse::class.java)
+                            response?.data?.address?.let {
+                                binding.apply {
+                                    textViewCurrentLocation.text = it
+                                }
+                            }
+                        }
+                    }
 
-                Status.ERROR -> {
-                    val error =
-                        resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
-                    showErrorMessage(error)
-                }
+                    Status.ERROR -> {
+                        val error =
+                            resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                        showErrorMessage(error)
+                    }
 
-                Status.LOADING -> hideLoader()
+                    Status.LOADING -> {
+
+                    }
+                }
             }
+
         }
 
         apiViewModel.updateDriverAvalabilityLiveData.observe(this) { resource ->
@@ -102,7 +111,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 Status.SUCCESS -> {
                     hideLoader()
                     changeStatus()
-                    Log.i("TAG", "initObservers:44 " + resource.status)
                 }
 
                 Status.ERROR -> {
@@ -119,19 +127,14 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         apiViewModel.getDriverProfileLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    hideLoader()
                     val response =
                         Gson().fromJson(resource.data.toString(), DriverResponse::class.java)
                     setUserData(response.data)
                 }
 
-                Status.ERROR -> {
-                    hideLoader()
-                }
+                Status.ERROR -> {}
 
-                Status.LOADING -> {
-                    hideLoader()
-                }
+                Status.LOADING -> {}
             }
 
         }
@@ -142,7 +145,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             data?.profileImage ?: ""
         )
         textViewUserName.text = buildString {
-            append("Hello \n ")
+            append("Hello \n")
             append(data?.name)
         }
     }
@@ -173,7 +176,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
         textViewOnlineOfflineStatus.setOnClickListener {
             isOnline = !isOnline
-            apiViewModel.updateDriverAvalability(Request(availability = (if (isOnline) "1" else "0")))
+            apiViewModel.updateDriverAvalability(Request(availability = (if (isOnline) "0" else "1")))
 
         }
 
@@ -217,7 +220,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
     private fun changeStatus() = with(binding) {
         if (isOnline) {
-            showRequestDialog()
+//            showRequestDialog()
             textViewOnlineOfflineStatus.backgroundTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.grey)
             textViewOnlineOfflineStatus.text = getString(R.string.label_go_offline)
@@ -271,7 +274,20 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
     private fun getHomeDataAPI() {
         apiViewModel.getHomeData()
-        apiViewModel.updateCurrentLocation(Request(latitude = "41.40338", longitude = "2.17403"))
         apiViewModel.getDriverProfile()
+        getUserCurrentLocation {
+            if (it != null) {
+                apiViewModel.updateCurrentLocation(
+                    Request(
+                        latitude = "21.740520",
+                        longitude = "72.148827"
+                    )
+//                            Request(
+//                        latitude = it.latitude.toString(),
+//                        longitude = it.longitude.toString()
+//                    )
+                )
+            }
+        }
     }
 }
