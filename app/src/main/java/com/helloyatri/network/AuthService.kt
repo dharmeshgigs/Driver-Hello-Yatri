@@ -120,4 +120,7 @@ interface AuthService {
     @POST(APIFactory.AuthApi.UPDATE_ARRIVE_STATUS)
     suspend fun updateArriveStatus(@Body request: Request) : Response<JsonObject>
 
+    @POST(APIFactory.AuthApi.CANCLE_RIDE)
+    suspend fun cancleRide(@Body request: Request) : Response<JsonObject>
+
 }

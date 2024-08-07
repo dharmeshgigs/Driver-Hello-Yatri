@@ -48,6 +48,7 @@ object APIFactory {
         const val DECLINE_REQUEST_TEST = "driver/declineRequest"
         const val VERIFY_TRIP = "driver/verifyTrip"
         const val UPDATE_ARRIVE_STATUS = "driver/updateArriveStatus"
+        const val CANCLE_RIDE = "cancelRide"
 
 
 //        const val RESEND_OTP = "driver/resetPassword"

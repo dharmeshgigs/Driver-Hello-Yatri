@@ -156,4 +156,8 @@ class ApiDataSource @Inject constructor(
     override suspend fun updateArriveStatus(request: Request): Resource<JsonObject> {
         return run2 { authService.updateArriveStatus(request) }
     }
+
+    override suspend fun cancleRide(request: Request): Resource<JsonObject> {
+        return run2 { authService.cancleRide(request) }
+    }
 }

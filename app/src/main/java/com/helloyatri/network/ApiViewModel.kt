@@ -327,4 +327,12 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val cancleRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun cancleRideAPI(request: Request) {
+        run {
+            cancleRideLiveData.value = Resource.loading()
+            cancleRideLiveData.value = authRepo.cancleRide(request)
+        }
+    }
+
 }
