@@ -26,4 +26,5 @@
     <color name="colorRed">#FF4848</color>
     <color name="colorLightRed">#FF9292</color>
     <color name="colorDarkGrey">#6B6B6B</color>
+    <color name="polyline_color">#FF0000FF</color>
 </resources>

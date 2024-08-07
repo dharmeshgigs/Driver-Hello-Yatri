@@ -12,7 +12,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.GetCencellation
@@ -270,44 +275,82 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         googleMap?.uiSettings?.isZoomControlsEnabled = true
+
+        googleMap = map
+
+        // Define the locations
+        val startLocation = LatLng(-34.0, 151.0)
+        val endLocation = LatLng(-35.0, 150.0)
+
+        // Add custom markers for start and end locations
+        val startMarker = googleMap!!.addMarker(
+            MarkerOptions()
+                .position(startLocation)
+                .title("Start Location")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_marker)) // Custom marker icon
+        )
+        val endMarker = googleMap!!.addMarker(
+            MarkerOptions()
+                .position(endLocation)
+                .title("End Location")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_marker)) // Custom marker icon
+        )
+
+        // Add a polyline between the locations
+        val polylineOptions = PolylineOptions()
+            .add(startLocation)
+            .add(endLocation)
+            .color(R.color.polyline_color) // Set the color of the polyline
+            .width(5f) // Set the width of the polyline
+
+        val polyline: Polyline = googleMap!!.addPolyline(polylineOptions)
+        val bounds = LatLngBounds.Builder()
+            .include(startLocation)
+            .include(endLocation)
+            .build()
+        // Move the camera to the first location
+        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100)
+        googleMap!!.animateCamera(cameraUpdate)
 //
         // Set a pin at a specific location
 
-        if(lat.isEmpty() && long.isEmpty()) {
+//        if(lat.isEmpty() && long.isEmpty()) {
+////            location =
+////                LatLng(
+////                    20.5937, 78.9629
+////                )
+////            getAddress(location)
+////            getCurrentLocation()
+//        } else {
 //            location =
 //                LatLng(
-//                    20.5937, 78.9629
+//                    lat.toDouble(), long
+//                        .toDouble()
 //                )
-//            getAddress(location)
-//            getCurrentLocation()
-        } else {
-            location =
-                LatLng(
-                    lat.toDouble(), long
-                        .toDouble()
-                )
-        }
+//        }
+
        // binding.editTextLocation.setText(address)
-        setUpMapCamera()
-        googleMap?.setOnCameraIdleListener {
-            countDownTimer?.cancel()
-            countDownTimer = object : CountDownTimer(2000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                }
-                override fun onFinish() {
-                    Log.e("TAG", "onFinish")
-                    try {
-                        val center = googleMap?.cameraPosition?.target
-                        center?.let {
-                            getAddress(it)
-                        }
-                    } catch (e : Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-            countDownTimer?.start()
-        }
+
+//        setUpMapCamera()
+//        googleMap?.setOnCameraIdleListener {
+//            countDownTimer?.cancel()
+//            countDownTimer = object : CountDownTimer(2000, 1000) {
+//                override fun onTick(millisUntilFinished: Long) {
+//                }
+//                override fun onFinish() {
+//                    Log.e("TAG", "onFinish")
+//                    try {
+//                        val center = googleMap?.cameraPosition?.target
+//                        center?.let {
+//                            getAddress(it)
+//                        }
+//                    } catch (e : Exception) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//            }
+//            countDownTimer?.start()
+//        }
     }
 
 }
