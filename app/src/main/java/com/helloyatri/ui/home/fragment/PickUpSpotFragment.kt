@@ -96,6 +96,36 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                 Status.LOADING -> showLoader()
             }
         }
+
+        apiViewModel.cancleRideLiveData.observe(this){resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+
+                }
+                Status.ERROR -> {}
+                Status.LOADING -> {}
+            }
+        }
+
+        apiViewModel.updateArriveStatusLiveData.observe(this){resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+
+                }
+                Status.ERROR -> {}
+                Status.LOADING -> {}
+            }
+        }
+
+        apiViewModel.verifyTripLiveData.observe(this){resource->
+            when(resource.status){
+                Status.SUCCESS -> {
+
+                }
+                Status.ERROR -> {}
+                Status.LOADING -> {}
+            }
+        }
     }
 
     private fun getCurrentLocation() {
