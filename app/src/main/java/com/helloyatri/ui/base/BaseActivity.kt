@@ -1,8 +1,13 @@
 package com.helloyatri.ui.base
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -17,6 +22,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 
 import com.helloyatri.R
@@ -24,6 +31,7 @@ import com.helloyatri.core.Session
 import com.helloyatri.di.App
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.ui.activity.AuthActivity
+import com.helloyatri.ui.activity.SplashActivity
 import com.helloyatri.ui.base.loader.LoadingDialog
 import com.helloyatri.ui.manager.ActivityBuilder
 import com.helloyatri.ui.manager.ActivityStarter
@@ -462,5 +470,36 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
             e.printStackTrace()
         }*/
     }
+
+
+     fun sendNotification(title: String?, messageBody: String?) {
+        val intent = Intent(this, SplashActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
+
+        val notificationBuilder = NotificationCompat.Builder(this, "Driver_hello_yatri")
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(title)
+            .setContentText(messageBody)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // For Android 8.0 and above, create a NotificationChannel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "Driver_hello_yatri",
+                "Driver_hello_yatri",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(0, notificationBuilder.build())
+    }
+
 
 }

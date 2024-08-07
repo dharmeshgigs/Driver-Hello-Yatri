@@ -1,8 +1,17 @@
 package com.helloyatri.ui.home.fragment
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.helloyatri.network.Status
@@ -11,10 +20,13 @@ import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
+import com.helloyatri.data.model.GetHomeDataModel
+import com.helloyatri.data.model.HomeDataModel
 import com.helloyatri.data.model.UpdateLocationResponse
 import com.helloyatri.databinding.HomeFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.activity.IsolatedActivity
+import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterRidesForPickups
@@ -65,22 +77,30 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         apiViewModel.getHomeLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
+                    hideLoader()
+                    resource.data?.let {
+                        val response =
+                            Gson().fromJson(it, GetHomeDataModel::class.java)
+                        setData(response.data)
+                    }
                 }
 
                 Status.ERROR -> {
+                    hideLoader()
                     val error =
                         resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                     showErrorMessage(error)
                 }
 
-                Status.LOADING -> {}
+                Status.LOADING -> showLoader()
             }
         }
 
         apiViewModel.updateCurrentLocationLiveData.observe(this) { resource ->
-            resource?.let {
+            resource?.let { it ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        hideLoader()
                         it.data?.let { it ->
                             val response =
                                 Gson().fromJson(it, UpdateLocationResponse::class.java)
@@ -93,14 +113,13 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                     }
 
                     Status.ERROR -> {
+                        hideLoader()
                         val error =
                             resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                         showErrorMessage(error)
                     }
 
-                    Status.LOADING -> {
-
-                    }
+                    Status.LOADING -> showLoader()
                 }
             }
 
@@ -121,7 +140,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
                 Status.LOADING -> hideLoader()
             }
-
         }
 
         apiViewModel.getDriverProfileLiveData.observe(this) { resource ->
@@ -138,6 +156,10 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             }
 
         }
+    }
+
+    private fun setData(data: HomeDataModel?) = with(binding){
+        textViewOnlineOfflineStatus.text = data?.driverAvailabilityStatusBtnLbl
     }
 
     private fun setUserData(data: Driver?) = with(binding) {
@@ -177,7 +199,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         textViewOnlineOfflineStatus.setOnClickListener {
             isOnline = !isOnline
             apiViewModel.updateDriverAvalability(Request(availability = (if (isOnline) "0" else "1")))
-
         }
 
         textViewLabelViewAll.setOnClickListener {
@@ -186,9 +207,9 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
 
         imageViewNotification.setOnClickListener {
+            (activity as BaseActivity).sendNotification("Test Test","test body")
             navigator.load(NotificationFragment::class.java).replace(true)
-//            navigator.loadActivity(IsolatedActivity::class.java, NotificationFragment::class.java)
-//                .start()
+
         }
 
         textViewRideRequestOnlineOfflineStatus.setOnClickListener {
@@ -217,6 +238,8 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 .start()
         }
     }
+
+
 
     private fun changeStatus() = with(binding) {
         if (isOnline) {

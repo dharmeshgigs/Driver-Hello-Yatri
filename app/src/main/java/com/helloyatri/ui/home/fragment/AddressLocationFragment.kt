@@ -164,8 +164,6 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
     }
 
     override fun onLocationChanged(location: Location) {
-        Log.i("TAG", "onLocationChanged: "+location.latitude)
-        Log.i("TAG", "onLocationChanged: "+location.longitude)
         Toast.makeText(context,"Lat:"+location.latitude+"Long:"+location.longitude,Toast.LENGTH_LONG)
     }
 }

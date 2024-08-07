@@ -1,5 +1,7 @@
 package com.helloyatri.ui.home.fragment
 
+import android.app.DatePickerDialog
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,6 +14,9 @@ import com.helloyatri.ui.home.dialog.CalenderDialog
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.getScheduleRideList
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @AndroidEntryPoint
 class IntercityRideFragment : BaseFragment<IntercityRideRequestFragmentBinding>() {
@@ -43,9 +48,36 @@ class IntercityRideFragment : BaseFragment<IntercityRideRequestFragmentBinding>(
         }
 
         imageViewCalendar.setOnClickListener {
-            CalenderDialog {}.show(childFragmentManager, "")
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                CalenderDialog {}.show(childFragmentManager, "")
+            } else {
+                showDatePickerDialog()
+            }
+            //CalenderDialog {}.show(childFragmentManager, "")
         }
     }
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = context?.let {
+            DatePickerDialog(it, { _, selectedYear, selectedMonth, selectedDay ->
+                // Format the selected date
+                val selectedDate = Calendar.getInstance().apply {
+                    set(selectedYear, selectedMonth, selectedDay)
+                }.time
+
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                //         dateTextView.text = dateFormat.format(selectedDate)
+            }, year, month, day)
+        }
+
+        datePickerDialog?.show()
+    }
+
 
     private fun setAdapter() = with(binding) {
         recyclerView.apply {
