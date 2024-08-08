@@ -9,6 +9,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -92,6 +94,14 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         progressDialog!!.setCancelable(false)
         progressDialog!!.setCanceledOnTouchOutside(false)
         setContentView(view)
+
+//        myApp.pusherManager.data.observe(this) { resource ->
+//            val handler = Handler(Looper.getMainLooper())
+//
+//            handler.post(Runnable {
+//                Log.i("TAG", "initObservers:11 " + resource.toString())
+//            })
+//        }
     }
 
     private fun setUpAlertDialog() {

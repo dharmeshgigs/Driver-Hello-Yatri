@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.helloyatri.R
+import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.RequestRideDialogFragmentBinding
 import com.helloyatri.ui.base.BaseDialogFragment
 import com.helloyatri.utils.extension.trimmedText
@@ -12,7 +13,11 @@ import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RequestRideDialogFragment(private val acceptCallBack: () -> Unit) :
+class RequestRideDialogFragment(
+    private val acceptCallBack: () -> Unit,
+    private val declineCallBack: () -> Unit,
+    tripRiderModel: TripRiderModel
+) :
         BaseDialogFragment<RequestRideDialogFragmentBinding>() {
 
     private lateinit var countdownTimer: CountDownTimer
@@ -57,6 +62,7 @@ class RequestRideDialogFragment(private val acceptCallBack: () -> Unit) :
 
         textViewDecline.setOnClickListener {
             countdownTimer.cancel()
+            declineCallBack.invoke()
             dismiss()
         }
     }

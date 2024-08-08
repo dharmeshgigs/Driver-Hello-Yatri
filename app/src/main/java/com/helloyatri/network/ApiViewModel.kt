@@ -14,6 +14,8 @@ import javax.inject.Inject
 class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentViewModel() {
 
     val removeSpecificDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    var data = MutableLiveData<JsonObject>()
+
 
     fun removeSpecificDocument(request: Request) {
         run {

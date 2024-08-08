@@ -5,14 +5,15 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.network.Status
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.helloyatri.R
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
+import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.HomeAcitivtyBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseActivity
@@ -29,16 +30,19 @@ import com.helloyatri.ui.home.fragment.RideActivityFragment
 import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
 import com.helloyatri.ui.home.sidemenu.SideMenuTag
+import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class HomeActivity : BaseActivity() {
+class HomeActivity : BaseActivity(),PushEventListener {
 
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
-   // private val apiViewModel by viewModels<HomeViewModel>()
-   private val apiViewModel by viewModels<ApiViewModel>()
+
+    // private val apiViewModel by viewModels<HomeViewModel>()
+    private val apiViewModel by viewModels<ApiViewModel>()
+    //private lateinit var myApp: App
 
 
     private val sideMenuAdapter by lazy {
@@ -63,6 +67,7 @@ class HomeActivity : BaseActivity() {
         setUpSideMenuClickListener()
         initObservers()
         load(HomeFragment::class.java).replace(false)
+        myApp.pusherManager.setPushEventListener(this)
     }
 
     private fun initObservers() {
@@ -193,5 +198,12 @@ class HomeActivity : BaseActivity() {
 
     private fun getProfileAPI() {
         apiViewModel.getDriverProfile()
+    }
+
+    override fun onEvent(data: JsonObject) {
+        val response =
+            Gson().fromJson(data.toString(), TripRiderModel::class.java)
+        openTripRequestDialog(response)
+        Log.i("TAG", "onEvent: "+data)
     }
 }

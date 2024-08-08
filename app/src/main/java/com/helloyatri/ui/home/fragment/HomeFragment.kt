@@ -1,17 +1,8 @@
 package com.helloyatri.ui.home.fragment
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.helloyatri.network.Status
@@ -315,8 +306,8 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             if (it != null) {
                 apiViewModel.updateCurrentLocation(
                     Request(
-                        latitude = "21.740520",
-                        longitude = "72.148827"
+                        latitude = "23.033863",
+                        longitude = "72.585022"
                     )
 //                            Request(
 //                        latitude = it.latitude.toString(),
