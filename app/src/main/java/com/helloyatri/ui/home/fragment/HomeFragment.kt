@@ -159,6 +159,19 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
     }
 
     private fun setData(data: HomeDataModel?) = with(binding){
+        data?.let {
+            it.driverAvailabilityStatus?.let {
+                isOnline = it == 1
+            }
+        }
+        textViewOnlineOfflineStatus.backgroundTintList =
+            ContextCompat.getColorStateList(
+                requireContext(), if (isOnline) {
+                    R.color.grey
+                } else {
+                    R.color.homeBgBlueColor
+                }
+            )
         textViewOnlineOfflineStatus.text = data?.driverAvailabilityStatusBtnLbl
     }
 

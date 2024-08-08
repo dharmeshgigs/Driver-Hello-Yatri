@@ -9,7 +9,7 @@ import java.net.URL
 class CustomAuthorizer(private val authEndpoint: String, private val token: String, private val userId: String) : Authorizer {
 
     override fun authorize(socketId: String, channelName: String): String {
-        val urlString = authEndpoint.plus("?socket_id=").plus(channelName).plus("&channel_name=").plus(socketId).plus(userId)
+        val urlString = authEndpoint.plus("?socket_id=").plus(channelName).plus("&channel_name=").plus(socketId)
         val url = URL(urlString)
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
