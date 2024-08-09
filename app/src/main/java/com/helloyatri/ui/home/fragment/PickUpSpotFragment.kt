@@ -44,10 +44,14 @@ import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.location.LocationProvider
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
+
 
 @AndroidEntryPoint
 class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReadyCallback {
@@ -74,9 +78,9 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     }
 
     override fun bindData() {
-        if(lat.isEmpty() && long.isEmpty()) {
-            getCurrentLocation()
-        }
+//        if(lat.isEmpty() && long.isEmpty()) {
+//            getCurrentLocation()
+//        }
         setTextDecorator()
         apiViewModel.getCancelletionReasonAPI()
         initObservers()
@@ -279,8 +283,8 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         googleMap = map
 
         // Define the locations
-        val startLocation = LatLng(-34.0, 151.0)
-        val endLocation = LatLng(-35.0, 150.0)
+        val startLocation = LatLng(23.033863, 72.585022)
+        val endLocation = LatLng(21.740521, 72.148827)
 
         // Add custom markers for start and end locations
         val startMarker = googleMap!!.addMarker(
@@ -352,5 +356,43 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 //            countDownTimer?.start()
 //        }
     }
+
+
+//    private fun drawRoute(origin: LatLng, destination: LatLng) {
+//        GlobalScope.launch(Dispatchers.IO) {
+//            val apiKey = "YOUR_API_KEY_HERE"
+//            val geoApiContext = GeoApiContext.Builder()
+//                .apiKey(apiKey)
+//                .build()
+//
+//            try {
+//                val result: DirectionsResult = DirectionsApi.newRequest(geoApiContext)
+//                    .origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
+//                    .destination(com.google.maps.model.LatLng(destination.latitude, destination.longitude))
+//                    .await()
+//
+//                val route: DirectionsRoute = result.routes[0]
+//                val polylineOptions = PolylineOptions().color(R.color.purple_200).width(5f)
+//
+//                for (step in route.legs[0].steps) {
+//                    val decodedPath = PolyUtil.decode(step.polyline.encodePath)
+//                    polylineOptions.addAll(decodedPath)
+//                }
+//
+//                runOnUiThread {
+//                    mMap.addPolyline(polylineOptions)
+//                    val bounds = LatLngBounds.builder()
+//                        .include(origin)
+//                        .include(destination)
+//                        .build()
+//                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+//                }
+//
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
+
 
 }
