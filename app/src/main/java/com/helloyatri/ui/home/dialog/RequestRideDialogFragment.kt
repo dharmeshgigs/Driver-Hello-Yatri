@@ -8,6 +8,7 @@ import com.helloyatri.R
 import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.RequestRideDialogFragmentBinding
 import com.helloyatri.ui.base.BaseDialogFragment
+import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class RequestRideDialogFragment(
     private val acceptCallBack: () -> Unit,
     private val declineCallBack: () -> Unit,
-    tripRiderModel: TripRiderModel
+    private val tripRiderModel: TripRiderModel
 ) :
         BaseDialogFragment<RequestRideDialogFragmentBinding>() {
 
@@ -51,6 +52,24 @@ class RequestRideDialogFragment(
         TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
                 .setTypeface(R.font.lufga_medium, "45 min")
                 .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "45 min").build()
+
+        textViewPaymentType.text = tripRiderModel.riderDetails?.paymentType.toString()
+        textViewStartLocation.text = tripRiderModel.tripDetails?.startLocation?.address.toString()
+        textViewDestinationLocation.text = tripRiderModel.tripDetails?.endLocation?.address.toString()
+        textViewUserName.text = tripRiderModel.riderDetails?.name.toString()
+        textViewDuration.text = buildString {
+            append("Duration\n")
+            append(tripRiderModel.tripDetails?.durationTxt.toString())
+        }
+        textViewDistance.text = buildString {
+            append("Distance\n")
+            append(tripRiderModel.tripDetails?.distanceTxt.toString())
+        }
+        textViewFairPrice.text = buildString {
+            append("Fair Price\n")
+            append(tripRiderModel.tripDetails?.estimatedFare.toString())
+        }
+        imageViewUserProfile.loadImageFromServerWithPlaceHolder(tripRiderModel.riderDetails?.profile)
     }
 
     private fun setClickListener() = with(binding) {

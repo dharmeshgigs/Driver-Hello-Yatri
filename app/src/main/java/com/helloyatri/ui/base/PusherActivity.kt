@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.helloyatri.core.Session
+import com.helloyatri.data.Request
 import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.di.App
 import com.helloyatri.network.ApiViewModel
@@ -40,9 +41,11 @@ open class PusherActivity : AppCompatActivity() {
         apiViewModel.acceptRequestLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-
+                    Log.i("TAG", "initObservers:accept ")
                 }
-                Status.ERROR -> {}
+                Status.ERROR -> {
+                    Log.i("TAG", "initObservers: "+resource.message)
+                }
                 Status.LOADING -> {}
             }
         }
@@ -50,10 +53,12 @@ open class PusherActivity : AppCompatActivity() {
         apiViewModel.declineRequestLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-
+                    Log.i("TAG", "initObservers:decline ")
                 }
 
-                Status.ERROR -> {}
+                Status.ERROR -> {
+                    Log.i("TAG", "initObservers: "+resource.message)
+                }
                 Status.LOADING -> {}
             }
         }
@@ -78,12 +83,15 @@ open class PusherActivity : AppCompatActivity() {
     }
 
     private fun showRequestDialog(tripRiderModel: TripRiderModel) {
+        Log.i("TAG", "showRequestDialog: "+tripRiderModel.toString())
         CoroutineScope(Dispatchers.IO).launch {
             delay(3000)
             RequestRideDialogFragment(acceptCallBack = {
-
+                apiViewModel.acceptRequestAPI(Request(trip_id = tripRiderModel.tripDetails?.id.toString()))
+                Log.i("TAG", "showRequestDialog:accept ")
             }, declineCallBack ={
-
+                apiViewModel.declineRequestAPI(Request(trip_id = tripRiderModel.tripDetails?.id.toString()))
+                Log.i("TAG", "showRequestDialog:decline ")
             },tripRiderModel).show(supportFragmentManager, PusherActivity::class.java.simpleName)
 //            RequestRideDialogFragment {
 ////                navigator.loadActivity(IsolatedActivity::class.java, PickUpSpotFragment::class.java)

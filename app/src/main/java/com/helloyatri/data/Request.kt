@@ -22,5 +22,6 @@ data class Request(
     @SerializedName("latitude") var latitude: String? = null,
     @SerializedName("longitude") var longitude: String? = null,
     @SerializedName("availability") var availability: String? = null,
-    @SerializedName("location") var location: String? = null
+    @SerializedName("location") var location: String? = null,
+    @SerializedName("trip_id") var trip_id: String? = null
 )

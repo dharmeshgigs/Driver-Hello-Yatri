@@ -256,6 +256,7 @@
                 android:lineSpacingExtra="@dimen/_2sdp"
                 android:text="@string/dummy_distance_n105_5_km"
                 android:textSize="@dimen/_10ssp"
+                android:maxLines="2"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"

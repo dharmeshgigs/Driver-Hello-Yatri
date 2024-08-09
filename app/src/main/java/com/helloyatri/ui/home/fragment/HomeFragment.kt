@@ -176,15 +176,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
     }
 
-    private fun showRequestDialog() {
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(3000)
-            RequestRideDialogFragment {
-                navigator.loadActivity(IsolatedActivity::class.java, PickUpSpotFragment::class.java)
-                    .start()
-            }.show(childFragmentManager, HomeFragment::class.java.simpleName)
-        }
-    }
+//    private fun showRequestDialog() {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            delay(3000)
+//            RequestRideDialogFragment {
+//                navigator.loadActivity(IsolatedActivity::class.java, PickUpSpotFragment::class.java)
+//                    .start()
+//            }.show(childFragmentManager, HomeFragment::class.java.simpleName)
+//        }
+//    }
 
     private fun setAdapter() = with(binding) {
         recyclerViewPickUps.apply {
