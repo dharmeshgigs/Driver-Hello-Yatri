@@ -11,6 +11,7 @@ import com.helloyatri.di.App
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
 import com.helloyatri.ui.home.dialog.RequestRideDialogFragment
+import com.helloyatri.ui.home.fragment.PickUpSpotFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,11 +20,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-open class PusherActivity : AppCompatActivity() {
+abstract class PusherActivity : AppCompatActivity() {
     lateinit var myApp: App
     @Inject
     lateinit var appSession: Session
     private val apiViewModel by viewModels<ApiViewModel>()
+
+    abstract fun navigateToTrip()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +39,7 @@ open class PusherActivity : AppCompatActivity() {
         apiViewModel.acceptRequestLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
+                    navigateToTrip()
                     Log.i("TAG", "initObservers:accept ")
                 }
                 Status.ERROR -> {

@@ -28,7 +28,7 @@ import com.helloyatri.utils.extension.changeStatusBarColor
 import com.helloyatri.utils.extension.clear
 
 @SuppressLint("CustomSplashScreen")
-class SplashActivity : BaseActivity() {
+abstract class SplashActivity : BaseActivity() {
 
     private lateinit var splashActivityBinding: SplashActivityBinding
     private val apiViewModel by viewModels<ApiViewModel>()

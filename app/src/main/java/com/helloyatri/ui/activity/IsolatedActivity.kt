@@ -12,7 +12,7 @@ import com.helloyatri.utils.extension.changeStatusBarColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class IsolatedActivity : BaseActivity() {
+abstract class IsolatedActivity : BaseActivity() {
 
     private lateinit var isolatedFullActivityBinding: IsolatedAcitivtyFullBinding
 

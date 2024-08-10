@@ -27,19 +27,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 
 import com.helloyatri.R
 import com.helloyatri.core.Session
+import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.di.App
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.activity.SplashActivity
 import com.helloyatri.ui.base.loader.LoadingDialog
+import com.helloyatri.ui.home.fragment.PickUpSpotFragment
 import com.helloyatri.ui.manager.ActivityBuilder
 import com.helloyatri.ui.manager.ActivityStarter
 import com.helloyatri.ui.manager.FragmentActionPerformer
 import com.helloyatri.ui.manager.FragmentNavigationFactory
 import com.helloyatri.ui.manager.Navigator
+import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.fileselector.MediaSelectHelper
 import com.helloyatri.utils.hideView
 import com.helloyatri.utils.showView
@@ -94,6 +99,7 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         progressDialog!!.setCancelable(false)
         progressDialog!!.setCanceledOnTouchOutside(false)
         setContentView(view)
+     //   myApp.pusherManager.setPushEventListener(this)
 
 //        myApp.pusherManager.data.observe(this) { resource ->
 //            val handler = Handler(Looper.getMainLooper())
@@ -511,5 +517,13 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         notificationManager.notify(0, notificationBuilder.build())
     }
 
+//    override fun onEvent(data: JsonObject) {
+//        val response =
+//            Gson().fromJson(data.toString(), TripRiderModel::class.java)
+//        openTripRequestDialog(response)
+//        Log.i("TAG", "onEvent: "+data)
+//    }
+
+    abstract override fun navigateToTrip()
 
 }

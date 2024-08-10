@@ -26,6 +26,7 @@ import com.helloyatri.ui.home.fragment.AccountPaymentFragment
 import com.helloyatri.ui.home.fragment.AccountPreferencesFragment
 import com.helloyatri.ui.home.fragment.AccountSavedAddressFragment
 import com.helloyatri.ui.home.fragment.HomeFragment
+import com.helloyatri.ui.home.fragment.PickUpSpotFragment
 import com.helloyatri.ui.home.fragment.RideActivityFragment
 import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
@@ -205,5 +206,9 @@ class HomeActivity : BaseActivity(),PushEventListener {
             Gson().fromJson(data.toString(), TripRiderModel::class.java)
         openTripRequestDialog(response)
         Log.i("TAG", "onEvent: "+data)
+    }
+
+    override fun navigateToTrip(){
+        loadActivity(BaseActivity::class.java, PickUpSpotFragment::class.java).start()
     }
 }
