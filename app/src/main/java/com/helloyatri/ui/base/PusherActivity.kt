@@ -21,23 +21,18 @@ import javax.inject.Inject
 @AndroidEntryPoint
 open class PusherActivity : AppCompatActivity() {
     lateinit var myApp: App
-
     @Inject
     lateinit var appSession: Session
-
     private val apiViewModel by viewModels<ApiViewModel>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         myApp = application as App
         pusherConnection()
         initObservers()
-
     }
 
     private fun initObservers() {
-
         apiViewModel.acceptRequestLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -49,13 +44,11 @@ open class PusherActivity : AppCompatActivity() {
                 Status.LOADING -> {}
             }
         }
-
         apiViewModel.declineRequestLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     Log.i("TAG", "initObservers:decline ")
                 }
-
                 Status.ERROR -> {
                     Log.i("TAG", "initObservers: "+resource.message)
                 }
@@ -71,11 +64,9 @@ open class PusherActivity : AppCompatActivity() {
                     .user?.id.toString() ?: "",
                 appSession.userSession
             )
-
         } else {
-            Log.i("TAG", "pusherConnection: " + appSession.isLoggedIn)
+//            Log.i("TAG", "pusherConnection: " + appSession.isLoggedIn)
         }
-
     }
 
     fun openTripRequestDialog(tripRiderModel: TripRiderModel) {
@@ -83,25 +74,13 @@ open class PusherActivity : AppCompatActivity() {
     }
 
     private fun showRequestDialog(tripRiderModel: TripRiderModel) {
-        Log.i("TAG", "showRequestDialog: "+tripRiderModel.toString())
         CoroutineScope(Dispatchers.IO).launch {
             delay(3000)
             RequestRideDialogFragment(acceptCallBack = {
                 apiViewModel.acceptRequestAPI(Request(trip_id = tripRiderModel.tripDetails?.id.toString()))
-                Log.i("TAG", "showRequestDialog:accept ")
             }, declineCallBack ={
                 apiViewModel.declineRequestAPI(Request(trip_id = tripRiderModel.tripDetails?.id.toString()))
-                Log.i("TAG", "showRequestDialog:decline ")
             },tripRiderModel).show(supportFragmentManager, PusherActivity::class.java.simpleName)
-//            RequestRideDialogFragment {
-////                navigator.loadActivity(IsolatedActivity::class.java, PickUpSpotFragment::class.java)
-////                    .start()
-//                ,
-//
-//            }.show(supportFragmentManager, PusherActivity::class.java.simpleName)
         }
     }
-
-
-
 }

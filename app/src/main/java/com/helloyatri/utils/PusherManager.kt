@@ -42,7 +42,8 @@ class PusherManager(private val context: Context) {
     private fun initPusher(userToken: String, userId: String) {
         val channelAuthorizer =
             CustomAuthorizer("http://3.111.159.32/api/pusher/auth", userToken, userId)
-        val options = PusherOptions().setCluster(YOUR_APP_CLUSTER).setUseTLS(true)
+        val options = PusherOptions().setCluster(YOUR_APP_CLUSTER)
+            .setUseTLS(true)
             .setEncrypted(true)
             .setAuthorizer(channelAuthorizer)
         pusher = Pusher(YOUR_APP_KEY, options)
