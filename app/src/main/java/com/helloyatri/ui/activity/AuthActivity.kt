@@ -12,7 +12,7 @@ import com.helloyatri.ui.tutorial.fragment.AuthTutorialFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AuthActivity : BaseActivity() {
+abstract class AuthActivity : BaseActivity() {
 
     private lateinit var authAcitivtyBinding: AuthAcitivtyBinding
 

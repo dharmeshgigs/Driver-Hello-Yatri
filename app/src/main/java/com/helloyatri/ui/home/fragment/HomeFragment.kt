@@ -149,7 +149,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
     }
 
-    private fun setData(data: HomeDataModel?) = with(binding){
+    private fun setData(data: HomeDataModel?) = with(binding) {
         data?.let {
             it.driverAvailabilityStatus?.let {
                 isOnline = it == 1
@@ -211,7 +211,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
 
         imageViewNotification.setOnClickListener {
-            (activity as BaseActivity).sendNotification("Test Test","test body")
+            (activity as BaseActivity).sendNotification("Test Test", "test body")
             navigator.load(NotificationFragment::class.java).replace(true)
 
         }
@@ -242,7 +242,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 .start()
         }
     }
-
 
 
     private fun changeStatus() = with(binding) {

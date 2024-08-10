@@ -10,7 +10,7 @@ import com.helloyatri.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DriverDocumentsActivity : BaseActivity() {
+abstract class DriverDocumentsActivity : BaseActivity() {
 
     private lateinit var driverDocumentsActivityBinding: DriverDocumentsAcitivtyBinding
 

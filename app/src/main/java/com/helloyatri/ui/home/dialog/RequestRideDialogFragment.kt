@@ -87,7 +87,7 @@ class RequestRideDialogFragment(
     }
 
     private fun setUpTimer() = with(binding) {
-        roundSeekBar.maxProgress = 60
+        roundSeekBar.maxProgress = tripRiderModel.popupDetails?.TIMERDURATION?.toLong()!!
         countdownTimer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 if (millisUntilFinished / 1000 == 45L) {
@@ -110,6 +110,7 @@ class RequestRideDialogFragment(
             }
 
             override fun onFinish() {
+                declineCallBack.invoke()
                 dismiss()
             }
         }.start()
