@@ -140,7 +140,6 @@ class DriverPersonalProfilePictureFragment :
 
                     Status.ERROR -> {
                         hideLoader()
-                        Log.i("TAG", "initObservers: "+resource.message)
                         val error =
                             resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                         showErrorMessage(error)
@@ -159,7 +158,6 @@ class DriverPersonalProfilePictureFragment :
                             Gson().fromJson(it.data.toString(), DriverResponse::class.java)
                         response.data.let {
                             driverProfilePictureImagesAdapter.clearAllItem()
-                            Log.i("TAG", "initObservers:Profile "+ it?.profileImage)
                             if (it?.profileImage !=null) {
                                 driverProfilePictureImagesAdapter.addItem(
                                     DriverProfilePictureImages(

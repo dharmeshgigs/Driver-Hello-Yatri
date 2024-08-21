@@ -16,7 +16,8 @@ data class RiderDetails(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("name") var name: String? = null,
     @SerializedName("profile") var profile: String? = null,
-    @SerializedName("payment_type") var paymentType: String? = null
+    @SerializedName("payment_type") var paymentType: String? = null,
+    @SerializedName("note") var note: String? = null
 
 )
 
@@ -48,7 +49,7 @@ data class TripDetails(
     @SerializedName("duration") var duration: String? = null,
     @SerializedName("duration_txt") var durationTxt: String? = null,
     @SerializedName("estimated_fare") var estimatedFare: String? = null,
-    @SerializedName("arriving_duration") var arrivingDuration: Int? = null
+    @SerializedName("arriving_duration") var arrivingDuration: Double? = null
 
 )
 

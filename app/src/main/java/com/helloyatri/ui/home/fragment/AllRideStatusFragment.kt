@@ -1,74 +1,106 @@
 package com.helloyatri.ui.home.fragment
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import com.helloyatri.data.model.Status
+import androidx.fragment.app.activityViewModels
 import com.helloyatri.databinding.AllRideStatusFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AllRidesStatusAdapter
-import com.helloyatri.utils.getActiveRideList
-import com.helloyatri.utils.getCancelledRideList
-import com.helloyatri.utils.getCompletedRideList
+import com.helloyatri.utils.Constants
+import com.helloyatri.utils.extension.gone
+import com.helloyatri.utils.extension.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @Suppress("DEPRECATION")
 @AndroidEntryPoint
 class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
-    private val apiViewModel by viewModels<ApiViewModel>()
-    private var rideStatus: Status? = null
+    private val apiViewModel by activityViewModels<ApiViewModel>()
+    private var rideStatus: String? = null
 
     private val allRidesStatusAdapter by lazy {
-        AllRidesStatusAdapter()
+        AllRidesStatusAdapter(onEmergencyClick = {
+
+        }, onEndHereClick = {
+
+        })
     }
 
-    override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                   attachToRoot: Boolean): AllRideStatusFragmentBinding {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): AllRideStatusFragmentBinding {
         return AllRideStatusFragmentBinding.inflate(layoutInflater)
     }
 
     override fun bindData() {
-        rideStatus = arguments?.getParcelable("status")
-        apiViewModel.getAllRideData()
+        rideStatus = arguments?.getString("status")
         initObservers()
+        setUpRecyclerView()
+    }
+
+    private fun setUpRecyclerView() = with(binding) {
+        recyclerView.adapter = allRidesStatusAdapter
     }
 
     private fun initObservers() {
-        apiViewModel.getAllRideLiveData.observe(this){resource->
-            when(resource.status){
-                com.helloyatri.network.Status.SUCCESS -> {
-                    hideLoader()
+        apiViewModel.getActiveRideLiveData.observe(viewLifecycleOwner) { resource ->
+            resource?.let {
+                when (resource.status) {
+                    com.helloyatri.network.Status.SUCCESS -> {
+                        hideProgressBar()
+                        allRidesStatusAdapter.setItems(apiViewModel.activeTrips.toList(), 1)
+                        showPlaceHolder()
+                    }
+
+                    com.helloyatri.network.Status.ERROR -> {
+                        hideProgressBar()
+                        allRidesStatusAdapter.setItems(emptyList(), 1)
+                        showPlaceHolder()
+                    }
+
+                    com.helloyatri.network.Status.LOADING -> {
+                        showProgressBar()
+                    }
                 }
-                com.helloyatri.network.Status.ERROR -> {
-                    hideLoader()
-                    setAdapter()
-                }
-                com.helloyatri.network.Status.LOADING -> showLoader()
             }
         }
     }
 
-    private fun setAdapter() = with(binding) {
-        recyclerView.apply {
-            adapter = allRidesStatusAdapter
-            when (rideStatus) {
-                Status.ACTIVE -> {
-                    allRidesStatusAdapter.setItems(requireActivity().getActiveRideList(), 1)
-                }
-
-                Status.COMPLETED -> {
-                    allRidesStatusAdapter.setItems(requireActivity().getCompletedRideList(), 1)
-                }
-
-                else -> {
-                    allRidesStatusAdapter.setItems(requireActivity().getCancelledRideList(), 1)
-                }
-            }
+    private fun showPlaceHolder() = with(binding) {
+        allRidesStatusAdapter.items?.takeIf { it.isNotEmpty() }?.let {
+            textViewPlaceholder.gone()
+        } ?: run {
+            textViewPlaceholder.visible()
         }
+        recyclerView.invalidate()
     }
 
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(false).build()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.textViewPlaceholder.gone()
+        rideStatus?.let {
+            apiViewModel.getActiveRideData(mutableMapOf<String, String>().apply {
+                put(Constants.PARAM_FILTER_PARAMETER, "ACTIVE")
+            })
+        }
+    }
+
+    private fun showProgressBar() = with(binding) {
+        progressBar.visible()
+    }
+
+    private fun hideProgressBar() = with(binding) {
+        progressBar.gone()
     }
 }

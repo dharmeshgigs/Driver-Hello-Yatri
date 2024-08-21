@@ -41,7 +41,8 @@
         app:layout_constraintEnd_toStartOf="@id/textViewDateAndTime"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/guideLineStart"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewDateAndTime"
@@ -57,7 +58,8 @@
         app:layout_constraintBottom_toBottomOf="@id/textViewCancelByRider"
         app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
         app:layout_constraintStart_toEndOf="@id/textViewCancelByRider"
-        app:layout_constraintTop_toTopOf="@id/textViewCancelByRider" />
+        app:layout_constraintTop_toTopOf="@id/textViewCancelByRider"
+        tools:visibility="visible" />
 
 
     <com.makeramen.roundedimageview.RoundedImageView
@@ -96,10 +98,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/label_online_payment"
-        android:layout_marginTop="@dimen/_5sdp"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
@@ -119,9 +121,11 @@
         android:gravity="center_vertical"
         android:text="@string/dummy_4_0"
         android:textColor="@color/colorAccent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
         app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
-        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile" />
+        app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+        tools:visibility="visible" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -136,15 +140,17 @@
         android:textSize="@dimen/_8ssp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/guideLineStart"
-        app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile" />
+        app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewReason"
         style="@style/TextViewLufgaRegularGrey13"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
-        android:gravity="center_vertical"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:text="@string/dummy_excellent_good_driver_and_car_too_overall_i_reach_my_destination_on_time"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/_8ssp"

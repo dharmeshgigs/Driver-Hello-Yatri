@@ -54,15 +54,15 @@ class RideCompleteFragment : BaseFragment<RideCompleteFragmentBinding>() {
 
         TextDecorator.decorate(textViewFairPrice, textViewFairPrice.trimmedText)
                 .setTypeface(R.font.lufga_medium, "₹780")
-                .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "₹780").build()
+                .setAbsoluteSize(resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "₹780").build()
 
         TextDecorator.decorate(textViewDistance, textViewDistance.trimmedText)
                 .setTypeface(R.font.lufga_medium, "25.5 Km")
-                .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "25.5 Km").build()
+                .setAbsoluteSize(resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "25.5 Km").build()
 
         TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
                 .setTypeface(R.font.lufga_medium, "45 min")
-                .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "45 min").build()
+                .setAbsoluteSize(resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "45 min").build()
     }
 
     override fun setUpToolbar() = with(toolbar) {

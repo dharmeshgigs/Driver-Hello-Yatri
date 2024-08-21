@@ -28,7 +28,7 @@ import com.helloyatri.utils.extension.changeStatusBarColor
 import com.helloyatri.utils.extension.clear
 
 @SuppressLint("CustomSplashScreen")
-abstract class SplashActivity : BaseActivity() {
+class SplashActivity : BaseActivity() {
 
     private lateinit var splashActivityBinding: SplashActivityBinding
     private val apiViewModel by viewModels<ApiViewModel>()
@@ -48,6 +48,7 @@ abstract class SplashActivity : BaseActivity() {
             ContextCompat.getColor(applicationContext, R.color.colorPrimary), false
         )
         initObservers()
+
         if (appSession.isInitial) {
             appSession.isLoggedIn = appSession.user?.token?.trim()?.isNotEmpty() ?: false
             if (appSession.isLoggedIn == true) {

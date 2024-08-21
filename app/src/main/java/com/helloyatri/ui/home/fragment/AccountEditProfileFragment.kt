@@ -86,7 +86,6 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
                         Gson().fromJson(resource.data.toString(), DriverResponse::class.java)
                     data = response.data
                     setUserData(response.data)
-                    Log.i("TAG", "initObservers: " + response.data.toString())
                 }
 
                 Status.ERROR -> {

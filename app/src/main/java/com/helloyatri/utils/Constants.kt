@@ -49,4 +49,8 @@ object Constants {
     const val PROFILE_IMAGE = "profile_image"
     const val PLACE_CATEGORY = 1
 
+
+    // API Params
+    const val PARAM_FILTER_PARAMETER = "filter_parameter"
+
 }

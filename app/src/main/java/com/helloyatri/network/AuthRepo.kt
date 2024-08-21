@@ -52,8 +52,6 @@ interface AuthRepo {
     suspend fun declineRequest(request: Request) : Resource<JsonObject>
     suspend fun verifyTrip(request: Request) : Resource<JsonObject>
     suspend fun updateArriveStatus(request: Request) : Resource<JsonObject>
-    suspend fun cancleRide(request: Request) : Resource<JsonObject>
-
-
-
+    suspend fun cancelRide(request: Request) : Resource<JsonObject>
+    suspend fun getAllTrips(request: Map<String, String>) : Resource<JsonObject>
 }

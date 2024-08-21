@@ -94,7 +94,7 @@
     <string name="label_ride_details">Ride Details</string>
     <string name="label_arrived_at_point">Arrived at Point</string>
     <string name="label_have_to_reach_in">Have to reach in</string>
-    <string name="label_meet_rahul_patel_at_their_pick_up_spot">Meet rahul patel at their pick-up spot</string>
+    <string name="label_meet_rahul_patel_at_their_pick_up_spot">Meet %s at their pick-up spot</string>
     <string name="label__5_min">5 min</string>
     <string name="dummy_note_note_message_show_here">Note: note message show here.</string>
     <string name="label_have_you_arrived_to_pooja_s_pickup_point">Have you arrived to pooja’s pickup point?</string>
@@ -342,5 +342,29 @@ will be accepted.</string>
     <string name="option_school">School</string>
     <string name="option_other">Other</string>
     <string name="validation_please_select_category">Please select category</string>
+    <string name="label_mins_away">%s mins Away</string>
+    <string name="label_show_rider_details">Show Rider Details</string>
+    <string name="label_min">%s min</string>
+    <string name="label_dynamic_note_note_message_show_here">Note: %s</string>
+    <string name="label_dynamic_have_you_arrived_to_pooja_s_pickup_point">Have you arrived to %s pickup point?</string>
+    <string name="label_dynamic_fare_price_n_780">Fare Price\n₹%s</string>
+    <string name="label_dynamic_distance_n105_5_km">Distance\n%s</string>
+    <string name="label_dynamic_duration_n02_40_hr">Duration\n%s</string>
+    <string name="label_rupees">₹</string>
+    <string name="label_currency">₹</string>
 
+
+    <string name="crop_image_activity_title"></string>
+    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
+    <string name="crop_image_menu_rotate_right">Rotate</string>
+    <string name="crop_image_menu_crop">Crop</string>
+    <string name="crop_image_menu_flip">Flip</string>
+    <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
+    <string name="crop_image_menu_flip_vertically">Flip vertically</string>
+
+    <string name="pick_image_intent_chooser_title">Select source</string>
+
+    <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
+    <string name="label_dynamic_you_have_to_reach_in_45_20min">You have to reach in %s</string>
+    <string name="label_dynamic_cancel_by_rider">Cancel by %s</string>
 </resources>

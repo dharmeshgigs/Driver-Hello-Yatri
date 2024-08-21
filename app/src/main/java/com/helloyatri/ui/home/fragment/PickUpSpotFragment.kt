@@ -1,10 +1,12 @@
 package com.helloyatri.ui.home.fragment
 
+import android.content.Intent
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
@@ -14,14 +16,12 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.Polyline
-import com.google.android.gms.maps.model.PolylineOptions
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.GetCencellation
-import com.helloyatri.data.model.SavedAddress
+import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.FragmentPickUpSpotBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
@@ -38,15 +38,15 @@ import com.helloyatri.ui.home.dialog.CommonYesNoDialogFragment.Companion.YES
 import com.helloyatri.ui.home.dialog.RideVerificationDialogFragment
 import com.helloyatri.ui.home.dialog.RideVerificationResultDialogFragment
 import com.helloyatri.ui.home.dialog.RideVerificationResultDialogFragment.Companion.SUCCESS
+import com.helloyatri.ui.manager.Navigator
+import com.helloyatri.utils.AppUtils
+import com.helloyatri.utils.AppUtils.openCallDialer
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.location.LocationProvider
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -60,37 +60,107 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     private var address = ""
     private var lat = ""
     private var long = ""
-    private var countDownTimer : CountDownTimer? = null
-    private var savedAddress: SavedAddress? = null
-    private var locationProvider : LocationProvider? = null
-    var location : LatLng? = null
+    private var tripRiderModel: TripRiderModel? = null
+    private var locationProvider: LocationProvider? = null
+    var location: LatLng? = null
+    var endLocation: LatLng? = null
+    var pickupLocation: LatLng? = null
     var cencellationDataList: ArrayList<String> = arrayListOf()
+    var startMarker: Marker? = null
+    var endMarker: Marker? = null
 
+    companion object {
+        fun createBundle(
+            data: String? = null
+        ) = bundleOf(
+            "data" to data
+        )
+    }
 
-    override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                   attachToRoot: Boolean): FragmentPickUpSpotBinding {
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): FragmentPickUpSpotBinding {
         return FragmentPickUpSpotBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(this)
+//        tripRiderModel = apiViewModel.tripRequest.value
+//        pickupLocation = LatLng(
+//            tripRiderModel?.tripDetails?.startLocation?.latitude?.toDouble() ?: 0.0,
+//            tripRiderModel?.tripDetails?.startLocation?.longitude?.toDouble() ?: 0.0
+//        )
+//        endLocation = LatLng(
+//            tripRiderModel?.tripDetails?.endLocation?.latitude?.toDouble() ?: 0.0,
+//            tripRiderModel?.tripDetails?.endLocation?.longitude?.toDouble() ?: 0.0
+//        )
+//        EventBus.getDefault().register(this)
+//        getCurrentLocation()
     }
 
     override fun bindData() {
 //        if(lat.isEmpty() && long.isEmpty()) {
 //            getCurrentLocation()
 //        }
-        setTextDecorator()
-        apiViewModel.getCancelletionReasonAPI()
-        initObservers()
-        setUpView()
-        setClickListener()
+//        initViews()
+//        initObservers()
+//        apiViewModel.getCancelletionReasonAPI()
+//        setUpView()
+//        setUpClickListener()
+//        NavigationApi.getNavigator(
+//            this, // Activity
+//            object : NavigationApi.NavigatorListener() {
+//                override fun onNavigatorReady(navigator: Navigator) {
+//                    // Keep a reference to the Navigator (used to configure and start nav)
+//                    this@myActivity.navigator = navigator
+//                }
+//            },
+//        )
+    }
+
+    private fun initViews() = with(binding) {
+//        tripRiderModel?.let {
+//            it.riderDetails?.let {
+//                it.name?.let {
+//                    textViewMeetDriverAt.text = String.format(
+//                        getString(R.string.label_meet_rahul_patel_at_their_pick_up_spot),
+//                        it
+//                    )
+//                    textViewUserName.text = it
+//                }
+//                it.paymentType?.let {
+//                    textViewPaymentType.text = it
+//                }
+//                it.note?.let {
+//                    textViewNote.text = String.format(
+//                        getString(R.string.label_dynamic_note_note_message_show_here),
+//                        it
+//                    )
+//                }
+//
+//            }
+//            it.tripDetails?.let {
+//                it.arrivingDuration?.let {
+//                    textViewEstimatedTime.text = String.format(
+//                        getString(R.string.label_min),
+//                        AppUtils.updateTimerUIMin(it)
+//                    )
+//                }
+//                it.startLocation?.address?.let {
+//                    textViewStartLocation.text = it
+//                }
+//                it.endLocation?.address?.let {
+//                    textViewDestinationLocation.text = it
+//                }
+//            }
+//
+//        }
     }
 
     private fun initObservers() {
-        apiViewModel.getCanclletionReasonLiveData.observe(this){resource->
-            when(resource.status){
+        apiViewModel.getCanclletionReasonLiveData.observe(this) { resource ->
+            when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
                     val response =
@@ -98,6 +168,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     cencellationDataList.clear()
                     cencellationDataList.addAll(response.data)
                 }
+
                 Status.ERROR -> {
                     hideLoader()
                 }
@@ -106,31 +177,34 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             }
         }
 
-        apiViewModel.cancleRideLiveData.observe(this){resource->
-            when(resource.status){
+        apiViewModel.cancleRideLiveData.observe(this) { resource ->
+            when (resource.status) {
                 Status.SUCCESS -> {
 
                 }
+
                 Status.ERROR -> {}
                 Status.LOADING -> {}
             }
         }
 
-        apiViewModel.updateArriveStatusLiveData.observe(this){resource->
-            when(resource.status){
+        apiViewModel.updateArriveStatusLiveData.observe(this) { resource ->
+            when (resource.status) {
                 Status.SUCCESS -> {
 
                 }
+
                 Status.ERROR -> {}
                 Status.LOADING -> {}
             }
         }
 
-        apiViewModel.verifyTripLiveData.observe(this){resource->
-            when(resource.status){
+        apiViewModel.verifyTripLiveData.observe(this) { resource ->
+            when (resource.status) {
                 Status.SUCCESS -> {
 
                 }
+
                 Status.ERROR -> {}
                 Status.LOADING -> {}
             }
@@ -138,19 +212,45 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     }
 
     private fun getCurrentLocation() {
-        locationProvider = LocationProvider((activity as BaseActivity),this)
+        locationProvider = LocationProvider((activity as BaseActivity), this)
         locationProvider?.getCurrentLocation(updated = true) {
             it?.let {
-                showMessage("Location is ${it.latitude.toString()}")
+                hideLoader()
+                showMessage("Location is ${it.latitude.toString()}:${it.longitude.toString()}")
                 lat = it.latitude.toString()
                 long = it.longitude.toString()
                 location =
                     LatLng(
                         lat.toDouble(), long.toDouble()
                     )
-                setUpMapCamera()
-                getAddress(it)
+//                googleMap?.let {
+//                    setUpMapCamera()
+//                    addStartMarker()
+//                    addPickUpMarker()
+//                }
+//                getAddress(it)
             }
+        }
+    }
+
+    private fun addStartMarker() {
+        location?.let {
+            startMarker = googleMap!!.addMarker(
+                MarkerOptions()
+                    .position(it)
+                    .title("You")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_marker)) // Custom marker icon
+            )
+        }
+    }
+    private fun addPickUpMarker() {
+        pickupLocation?.let {
+            endMarker = googleMap!!.addMarker(
+                MarkerOptions()
+                    .position(it)
+                    .title(tripRiderModel?.riderDetails?.name ?: "")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_marker)) // Custom marker icon
+            )
         }
     }
 
@@ -160,11 +260,11 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     }
 
     private fun setUpMapCamera() {
-        location?.let { CameraUpdateFactory.newLatLngZoom(it, 10f) }
+        location?.let { CameraUpdateFactory.newLatLngZoom(it, 15f) }
             ?.let { googleMap?.moveCamera(it) }
     }
 
-    fun getAddress(center : LatLng?) {
+    fun getAddress(center: LatLng?) {
         center?.let {
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
             val addresses = geocoder.getFromLocation(center.latitude, center.longitude, 1)
@@ -176,53 +276,67 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         }
     }
 
-
-    private fun setClickListener() = with(binding) {
+    private fun setUpClickListener() = with(binding) {
         textViewArrivedAtPoint.setOnClickListener {
             val commonYesNoDialogFragment = CommonYesNoDialogFragment { action ->
                 if (action == YES) {
                     RideVerificationDialogFragment {
                         val rideVerificationResultDialogFragment =
-                                RideVerificationResultDialogFragment()
+                            RideVerificationResultDialogFragment()
                         if (it == SUCCESS) {
                             rideVerificationResultDialogFragment.arguments = bundleOf(
-                                    RideVerificationResultDialogFragment.STATUS to SUCCESS,
+                                RideVerificationResultDialogFragment.STATUS to SUCCESS,
                             )
 
-                            rideVerificationResultDialogFragment.show(childFragmentManager,
-                                    PickUpSpotFragment::class.java.simpleName)
+                            rideVerificationResultDialogFragment.show(
+                                childFragmentManager,
+                                PickUpSpotFragment::class.java.simpleName
+                            )
                         } else {
                             rideVerificationResultDialogFragment.arguments = bundleOf(
-                                    RideVerificationResultDialogFragment.STATUS to RideVerificationResultDialogFragment.FAILED,
+                                RideVerificationResultDialogFragment.STATUS to RideVerificationResultDialogFragment.FAILED,
                             )
-                            rideVerificationResultDialogFragment.show(childFragmentManager,
-                                    PickUpSpotFragment::class.java.simpleName)
+                            rideVerificationResultDialogFragment.show(
+                                childFragmentManager,
+                                PickUpSpotFragment::class.java.simpleName
+                            )
                         }
                     }.show(childFragmentManager, PickUpSpotFragment::class.java.simpleName)
                 }
             }
 
             commonYesNoDialogFragment.arguments = bundleOf(
-                    TITLE to getString(R.string.label_have_you_arrived_to_pooja_s_pickup_point),
-                    CANCEL_TEXT to getString(R.string.btn_no_still_not),
-                    OK_TEXT to getString(R.string.btn_yes_i_reached),
-                    ICON to R.drawable.ic_car_location)
+                TITLE to String.format(
+                    getString(R.string.label_dynamic_have_you_arrived_to_pooja_s_pickup_point),
+                    tripRiderModel?.riderDetails?.name ?: ""
+                ),
+                CANCEL_TEXT to getString(R.string.btn_no_still_not),
+                OK_TEXT to getString(R.string.btn_yes_i_reached),
+                ICON to R.drawable.ic_car_location
+            )
 
-            commonYesNoDialogFragment.show(childFragmentManager,
-                    PickUpSpotFragment::class.java.simpleName)
+            commonYesNoDialogFragment.show(
+                childFragmentManager,
+                PickUpSpotFragment::class.java.simpleName
+            )
         }
 
         textViewCancelRide.setOnClickListener {
             CancelRideBottomSheet({
                 activity?.apply {
-                    finish()
+                    navigator.goBack()
                 }
-            }, cencellationDataList).show(childFragmentManager, PickUpSpotFragment::class.java.simpleName)
+            }, cencellationDataList).show(
+                childFragmentManager,
+                PickUpSpotFragment::class.java.simpleName
+            )
         }
 
         textViewEmergency.setOnClickListener {
-            EmergencyAssistanceBottomSheet().show(childFragmentManager,
-                    PickUpSpotFragment::class.java.simpleName)
+            EmergencyAssistanceBottomSheet().show(
+                childFragmentManager,
+                PickUpSpotFragment::class.java.simpleName
+            )
         }
 
         textViewEndTrip.setOnClickListener {
@@ -232,19 +346,42 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                 }
             }
             commonYesNoDialogFragment.arguments = bundleOf(
-                    TITLE to getString(R.string.label_have_you_arrived_to_pooja_s_pickup_point),
-                    CANCEL_TEXT to getString(R.string.btn_no_still_not),
-                    OK_TEXT to getString(R.string.btn_yes_i_reached),
-                    ICON to R.drawable.ic_car_location)
+                TITLE to getString(R.string.label_have_you_arrived_to_pooja_s_pickup_point),
+                CANCEL_TEXT to getString(R.string.btn_no_still_not),
+                OK_TEXT to getString(R.string.btn_yes_i_reached),
+                ICON to R.drawable.ic_car_location
+            )
 
-            commonYesNoDialogFragment.show(childFragmentManager,
-                    PickUpSpotFragment::class.java.simpleName)
+            commonYesNoDialogFragment.show(
+                childFragmentManager,
+                PickUpSpotFragment::class.java.simpleName
+            )
+        }
+
+        imageViewCurrentLocation.setOnClickListener {
+
+        }
+        textViewNavigateToFullScreen.setOnClickListener {
+            if (textViewNavigateToFullScreen.text.toString()
+                    .equals(getString(R.string.label_navigate_in_full_screen), false)
+            ) {
+                textViewNavigateToFullScreen.text = getString(R.string.label_show_rider_details)
+                layoutRideDetails.visibility = View.GONE
+            } else {
+                textViewNavigateToFullScreen.text =
+                    getString(R.string.label_navigate_in_full_screen)
+                layoutRideDetails.visibility = View.VISIBLE
+            }
+        }
+        imageViewCall.setOnClickListener {
+            // TODO: Set Phone Number Dynamic
+            activity?.openCallDialer("")
         }
     }
 
     private fun setTextDecorator() = with(binding) {
         TextDecorator.decorate(textViewNote, textViewNote.trimmedText)
-                .setTextColor(R.color.homeBgBlueColor, "Note:").build()
+            .setTextColor(R.color.homeBgBlueColor, "Note:").build()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -277,44 +414,42 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     }
 
     override fun onMapReady(map: GoogleMap) {
+        showLoader()
         googleMap = map
         googleMap?.uiSettings?.isZoomControlsEnabled = true
-
         googleMap = map
+        setUpMapCamera()
 
-        // Define the locations
-        val startLocation = LatLng(23.033863, 72.585022)
-        val endLocation = LatLng(21.740521, 72.148827)
+//        getCurrentLocation()
+//        // Define the locations
+//        val startLocation = LatLng(23.033863, 72.585022)
+//        val endLocation = LatLng(21.740521, 72.148827)
+//
+//        // Add custom markers for start and end locations
+//        val startMarker = googleMap!!.addMarker(
+//            MarkerOptions()
+//                .position(startLocation)
+//                .title("Start Location")
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_marker)) // Custom marker icon
+//        )
 
-        // Add custom markers for start and end locations
-        val startMarker = googleMap!!.addMarker(
-            MarkerOptions()
-                .position(startLocation)
-                .title("Start Location")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_marker)) // Custom marker icon
-        )
-        val endMarker = googleMap!!.addMarker(
-            MarkerOptions()
-                .position(endLocation)
-                .title("End Location")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_marker)) // Custom marker icon
-        )
 
-        // Add a polyline between the locations
-        val polylineOptions = PolylineOptions()
-            .add(startLocation)
-            .add(endLocation)
-            .color(R.color.polyline_color) // Set the color of the polyline
-            .width(5f) // Set the width of the polyline
-
-        val polyline: Polyline = googleMap!!.addPolyline(polylineOptions)
-        val bounds = LatLngBounds.Builder()
-            .include(startLocation)
-            .include(endLocation)
-            .build()
-        // Move the camera to the first location
-        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100)
-        googleMap!!.animateCamera(cameraUpdate)
+//
+//        // Add a polyline between the locations
+//        val polylineOptions = PolylineOptions()
+//            .add(startLocation)
+//            .add(endLocation)
+//            .color(R.color.polyline_color) // Set the color of the polyline
+//            .width(5f) // Set the width of the polyline
+//
+//        val polyline: Polyline = googleMap!!.addPolyline(polylineOptions)
+//        val bounds = LatLngBounds.Builder()
+//            .include(startLocation)
+//            .include(endLocation)
+//            .build()
+//        // Move the camera to the first location
+//        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100)
+//        googleMap!!.animateCamera(cameraUpdate)
 //
         // Set a pin at a specific location
 
@@ -333,7 +468,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 //                )
 //        }
 
-       // binding.editTextLocation.setText(address)
+        // binding.editTextLocation.setText(address)
 
 //        setUpMapCamera()
 //        googleMap?.setOnCameraIdleListener {
@@ -393,6 +528,4 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 //            }
 //        }
 //    }
-
-
 }

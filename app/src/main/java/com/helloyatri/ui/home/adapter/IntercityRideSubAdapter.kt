@@ -54,17 +54,17 @@ class IntercityRideSubAdapter :
 
             TextDecorator.decorate(textViewFairPrice, textViewFairPrice.trimmedText)
                     .setTypeface(R.font.lufga_medium, "₹780")
-                    .setAbsoluteSize(context.resources.getDimensionPixelSize(R.dimen._14ssp),
+                    .setAbsoluteSize(context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
                             "₹780").build()
 
             TextDecorator.decorate(textViewDistance, textViewDistance.trimmedText)
                     .setTypeface(R.font.lufga_medium, "25.5 Km")
-                    .setAbsoluteSize(context.resources.getDimensionPixelSize(R.dimen._14ssp),
+                    .setAbsoluteSize(context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
                             "25.5 Km").build()
 
             TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
                     .setTypeface(R.font.lufga_medium, "45 min")
-                    .setAbsoluteSize(context.resources.getDimensionPixelSize(R.dimen._14ssp),
+                    .setAbsoluteSize(context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
                             "45 min").build()
         }
     }

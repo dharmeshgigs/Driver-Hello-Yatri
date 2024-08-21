@@ -9,9 +9,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -25,20 +22,14 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-
 import com.helloyatri.R
 import com.helloyatri.core.Session
-import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.di.App
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.activity.SplashActivity
 import com.helloyatri.ui.base.loader.LoadingDialog
-import com.helloyatri.ui.home.fragment.PickUpSpotFragment
 import com.helloyatri.ui.manager.ActivityBuilder
 import com.helloyatri.ui.manager.ActivityStarter
 import com.helloyatri.ui.manager.FragmentActionPerformer
@@ -51,14 +42,11 @@ import com.helloyatri.utils.showView
 import com.helloyatri.utils.textdecorator.TextDecorator
 import com.helloyatri.utils.toolbar.CustomToolbar
 import com.helloyatri.utils.toolbar.MenuItem
-import com.pusher.client.channel.PrivateChannelEventListener
-import com.pusher.client.channel.PusherEvent
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
-abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
+abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
 
     @Inject
     lateinit var navigationFactory: FragmentNavigationFactory
@@ -69,10 +57,13 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
     @Inject
     lateinit var mediaSelectHelper: MediaSelectHelper
 
-    private var toolbar: CustomToolbar? = null
-    internal var progressDialog: ProgressDialog? = null
-    internal var alertDialog: AlertDialog? = null
+    @Inject
+    lateinit var appSession: Session
 
+    private var toolbar: CustomToolbar? = null
+    private var progressDialog: ProgressDialog? = null
+    private var alertDialog: AlertDialog? = null
+    lateinit var myApp: App
 
     private val view by lazy {
         createViewBinding()
@@ -84,30 +75,17 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(createViewBinding())
-        createFirebaseToken()/*if (toolbar != null)
-            setSupportActionBar(toolbar)*/
-
+        myApp = application as App
+        createFirebaseToken()
         setUpAlertDialog()
-
         progressDialog = ProgressDialog(this)
         progressDialog!!.setMessage("Please wait...")
         progressDialog!!.setCancelable(false)
         progressDialog!!.setCanceledOnTouchOutside(false)
-        setContentView(view)
-     //   myApp.pusherManager.setPushEventListener(this)
-
-//        myApp.pusherManager.data.observe(this) { resource ->
-//            val handler = Handler(Looper.getMainLooper())
-//
-//            handler.post(Runnable {
-//                Log.i("TAG", "initObservers:11 " + resource.toString())
-//            })
-//        }
+        pusherConnection()
     }
 
     private fun setUpAlertDialog() {
@@ -126,11 +104,10 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
 
     abstract fun createViewBinding(): View
 
-
-    fun showErrorMessage(message: String?) {/*val f = getCurrentFragment<BaseFragment<*, *>>()
-        if (f != null)
-            Snackbar.make(f.getView()!!, message!!, BaseTransientBottomBar.LENGTH_SHORT).show()*/
-
+    fun showErrorMessage(message: String?) {
+        message?.let {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun showToast(message: String) {
@@ -138,7 +115,6 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
     }
 
     override fun toggleLoader(show: Boolean) {
-
         if (show) {
             if (!progressDialog!!.isShowing) progressDialog!!.show()
         } else {
@@ -146,7 +122,7 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         }
     }
 
-    protected fun shouldGoBack(): Boolean {
+    private fun shouldGoBack(): Boolean {
         return true
     }
 
@@ -161,15 +137,10 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
                 finish()
             }
         }
-
-        // pending animation
-        // overridePendingTransition(R.anim.pop_enter, R.anim.pop_exit);
-
     }
 
     fun hideKeyboard() {
         // Check if no view has focus:
-
         val view = this.currentFocus
         if (view != null) {
             val inputManager =
@@ -179,16 +150,13 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
-
     }
 
     override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
-
         if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -200,29 +168,24 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         toolbar?.let { toolbar ->
             if (isVisible) showView(toolbar)
             else hideView(toolbar)
-
             toolbar.reset()
         }
-
         return this
     }
 
     override fun setToolbarTitle(title: String): HasToolbar {
         toolbar?.setToolbarTitle(title)
-
         return this
     }
 
 
     override fun setToolbarTitle(@StringRes title: Int): HasToolbar {
         toolbar?.setToolbarTitle(title)
-
         return this
     }
 
     override fun setShortNameTitle(title: String): HasToolbar {
         toolbar?.setShortNameTitle(title)
-
         return this
     }
 
@@ -233,13 +196,11 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
                 goBack()
             }
         }
-
         return this
     }
 
     override fun setBackButtonIcon(@DrawableRes backButtonIcon: Int): HasToolbar {
         toolbar?.setBackButtonIcon(backButtonIcon)
-
         return this
     }
 
@@ -252,14 +213,12 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         toolbar?.setOnHamburgerIconClickListener(onMenuIconClick)
     }
 
-
     override fun setOnShortNameClickListener(onShortNameClick: () -> Unit) {
         toolbar?.setOnShortNameClickListener(onShortNameClick)
     }
 
     override fun setHamburgerIcon(@DrawableRes hamburgerIcon: Int): HasToolbar {
         toolbar?.setHamburgerIcon(hamburgerIcon)
-
         return this
     }
 
@@ -288,19 +247,16 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         decorateToolbarTitle: (textDecorator: TextDecorator) -> TextDecorator
     ): HasToolbar {
         toolbar?.setAndDecorateToolbarTitle(title, decorateToolbarTitle)
-
         return this
     }
 
     override fun addMenuItems(vararg menuItems: MenuItem): HasToolbar {
         toolbar?.addMenuItems(*menuItems)
-
         return this
     }
 
     override fun updateMenuItem(menuItem: MenuItem, predicate: (MenuItem) -> Boolean): HasToolbar {
         toolbar?.updateMenuItem(menuItem = menuItem, predicate = predicate)
-
         return this
     }
 
@@ -309,7 +265,6 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         menuItemToUpdate: (MenuItem) -> Unit
     ): HasToolbar {
         toolbar?.updateMenuItem(predicate = predicate, menuItemToUpdate = menuItemToUpdate)
-
         return this
     }
 
@@ -319,37 +274,31 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
 
     override fun setMoreOptionIcon(moreOptionIcon: Int): HasToolbar {
         toolbar?.setMoreOptionIcon(moreOptionIcon)
-
         return this
     }
 
     override fun setMaxItemAllowed(maxItemAllowed: Int): HasToolbar {
         toolbar?.setMaxItemAllowed(maxItemAllowed)
-
         return this
     }
 
     override fun setPopupMenuElevation(@DimenRes popupMenuElevation: Int): HasToolbar {
         toolbar?.setPopupMenuElevation(popupMenuElevation)
-
         return this
     }
 
     override fun setPopupMenuCornerRadius(@DimenRes popupMenuCornerRadius: Int): HasToolbar {
         toolbar?.setPopupMenuCornerRadius(popupMenuCornerRadius)
-
         return this
     }
 
     override fun setPopupMenuBackgroundColor(popupMenuBackgroundColor: Int): HasToolbar {
         toolbar?.setPopupMenuBackgroundColor(popupMenuBackgroundColor)
-
         return this
     }
 
     override fun setToolbarElevation(elevation: Int): HasToolbar {
         toolbar?.setToolbarElevation(elevation)
-
         return this
     }
 
@@ -382,19 +331,16 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         return activityStarter.make(aClass).setPage(pageTClass)
     }
 
-
     override fun goBack() {
         onBackPressed()
     }
 
     fun showMessage(message: String) {
         showSnackBar(message)
-
     }
 
     fun showSuccessMessage(message: String) {
         showSuccessSnackBar(message)
-
     }
 
     fun showMessage(@StringRes stringId: Int) {
@@ -402,54 +348,40 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
     }
 
     fun showMessage(applicationException: ApplicationException) {
-
         showSnackBar(applicationException.message)
     }
 
     private fun showSnackBar(message: String) {
         hideKeyboard()
-        if (view != null) {
-            val snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-            snackbar.duration = 2000
-
-            snackbar.setActionTextColor(Color.WHITE)
-            //snackbar.setAction("OK") { snackbar.dismiss() }
-            val snackView = snackbar.view
-            val textView: TextView =
-                snackView.findViewById(com.google.android.material.R.id.snackbar_text)
-            textView.maxLines = 4
-
-            val params = snackView.layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.TOP
-            snackView.layoutParams = params
-
-            snackView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-            snackbar.show()
-        }
+        val snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+        snackbar.duration = 2000
+        snackbar.setActionTextColor(Color.WHITE)
+        val snackView = snackbar.view
+        val textView: TextView =
+            snackView.findViewById(com.google.android.material.R.id.snackbar_text)
+        textView.maxLines = 4
+        val params = snackView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        snackView.layoutParams = params
+        snackView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+        snackbar.show()
     }
 
     private fun showSuccessSnackBar(message: String) {
         hideKeyboard()
-        if (view != null) {
-            val snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-            snackbar.duration = 2000
-
-            snackbar.setActionTextColor(Color.WHITE)
-            //snackbar.setAction("OK") { snackbar.dismiss() }
-            val snackView = snackbar.view
-            val textView: TextView =
-                snackView.findViewById(com.google.android.material.R.id.snackbar_text)
-            textView.maxLines = 4
-
-            val params = snackView.layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.TOP
-            snackView.layoutParams = params
-
-            snackView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-            snackbar.show()
-        }
+        val snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+        snackbar.duration = 2000
+        snackbar.setActionTextColor(Color.WHITE)
+        val snackView = snackbar.view
+        val textView: TextView =
+            snackView.findViewById(com.google.android.material.R.id.snackbar_text)
+        textView.maxLines = 4
+        val params = snackView.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        snackView.layoutParams = params
+        snackView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+        snackbar.show()
     }
-
 
     // logout
     fun logout() {
@@ -459,7 +391,6 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         appSession.clearSession()
         loadActivity(AuthActivity::class.java).byFinishingAll().start()
     }
-
 
     private fun createFirebaseToken() {
         /*try {
@@ -487,23 +418,22 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
         }*/
     }
 
-
-     fun sendNotification(title: String?, messageBody: String?) {
+    fun sendNotification(title: String?, messageBody: String?) {
         val intent = Intent(this, SplashActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
-
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
         val notificationBuilder = NotificationCompat.Builder(this, "Driver_hello_yatri")
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
-
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         // For Android 8.0 and above, create a NotificationChannel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -513,17 +443,16 @@ abstract class BaseActivity : PusherActivity(), HasToolbar, Navigator {
             )
             notificationManager.createNotificationChannel(channel)
         }
-
         notificationManager.notify(0, notificationBuilder.build())
     }
 
-//    override fun onEvent(data: JsonObject) {
-//        val response =
-//            Gson().fromJson(data.toString(), TripRiderModel::class.java)
-//        openTripRequestDialog(response)
-//        Log.i("TAG", "onEvent: "+data)
-//    }
-
-    abstract override fun navigateToTrip()
-
+    private fun pusherConnection() {
+        if (appSession.isLoggedIn == true) {
+            myApp.pusherManager.initializePusher(
+                appSession
+                    .user?.id.toString() ?: "",
+                appSession.userSession
+            )
+        }
+    }
 }

@@ -31,7 +31,8 @@ import com.helloyatri.utils.textdecorator.TextDecorator
 
 class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
-    private val binding: CustomToolbarBinding = CustomToolbarBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: CustomToolbarBinding =
+        CustomToolbarBinding.inflate(LayoutInflater.from(context), this, true)
 
     // For popup menu
     private var popupWindow: PopupWindow? = null
@@ -56,24 +57,43 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
     private var title = typedArray.getString(R.styleable.CustomToolbar_title)
     private var shortNameTitle = typedArray.getString(R.styleable.CustomToolbar_showShortTitle)
 
-    private var showBackButton = typedArray.getBoolean(R.styleable.CustomToolbar_showBackButton, false)
-    private var backButtonIcon = typedArray.getResourceId(R.styleable.CustomToolbar_backButtonIcon, DEFAULT_BACK_BUTTON_ICON)
+    private var showBackButton =
+        typedArray.getBoolean(R.styleable.CustomToolbar_showBackButton, false)
+    private var backButtonIcon =
+        typedArray.getResourceId(R.styleable.CustomToolbar_backButtonIcon, DEFAULT_BACK_BUTTON_ICON)
 
-    private var showHamburgerIcon = typedArray.getBoolean(R.styleable.CustomToolbar_showHamburgerIcon, false)
-    private var hamburgerIcon = typedArray.getResourceId(R.styleable.CustomToolbar_hamburgerIcon, DEFAULT_HAMBURGER_ICON)
+    private var showHamburgerIcon =
+        typedArray.getBoolean(R.styleable.CustomToolbar_showHamburgerIcon, false)
+    private var hamburgerIcon =
+        typedArray.getResourceId(R.styleable.CustomToolbar_hamburgerIcon, DEFAULT_HAMBURGER_ICON)
 
     private var showAppName = typedArray.getBoolean(R.styleable.CustomToolbar_showAppName, false)
 
-    private var toolbarColor = typedArray.getResourceId(R.styleable.CustomToolbar_toolbarColor, DEFAULT_TOOLBAR_COLOR)
+    private var toolbarColor =
+        typedArray.getResourceId(R.styleable.CustomToolbar_toolbarColor, DEFAULT_TOOLBAR_COLOR)
 
-    private var toolbarTitleColor = typedArray.getResourceId(R.styleable.CustomToolbar_toolbarTitleColor, DEFAULT_TOOLBAR_TITLE_COLOR)
+    private var toolbarTitleColor = typedArray.getResourceId(
+        R.styleable.CustomToolbar_toolbarTitleColor,
+        DEFAULT_TOOLBAR_TITLE_COLOR
+    )
 
-    private var moreOptionIcon = typedArray.getResourceId(R.styleable.CustomToolbar_moreOptionIcon, DEFAULT_MORE_OPTION_ICON)
-    private var maxItemAllowed = typedArray.getInteger(R.styleable.CustomToolbar_maxItemAllowed, DEFAULT_MAX_ITEM_ALLOWED)
+    private var moreOptionIcon =
+        typedArray.getResourceId(R.styleable.CustomToolbar_moreOptionIcon, DEFAULT_MORE_OPTION_ICON)
+    private var maxItemAllowed =
+        typedArray.getInteger(R.styleable.CustomToolbar_maxItemAllowed, DEFAULT_MAX_ITEM_ALLOWED)
 
-    private var popupMenuElevation = typedArray.getDimension(R.styleable.CustomToolbar_popupMenuElevation, resources.getDimension(DEFAULT_POPUP_MENU_ELEVATION))
-    private var popupMenuCornerRadius = typedArray.getDimension(R.styleable.CustomToolbar_popupMenuCornerRadius, resources.getDimension(DEFAULT_POPUP_MENU_CORNER_RADIUS))
-    private var popupMenuBackgroundColor = typedArray.getResourceId(R.styleable.CustomToolbar_popupMenuBackgroundColor, DEFAULT_POPUP_MENU_BACKGROUND_COLOR)
+    private var popupMenuElevation = typedArray.getDimension(
+        R.styleable.CustomToolbar_popupMenuElevation,
+        resources.getDimension(DEFAULT_POPUP_MENU_ELEVATION)
+    )
+    private var popupMenuCornerRadius = typedArray.getDimension(
+        R.styleable.CustomToolbar_popupMenuCornerRadius,
+        resources.getDimension(DEFAULT_POPUP_MENU_CORNER_RADIUS)
+    )
+    private var popupMenuBackgroundColor = typedArray.getResourceId(
+        R.styleable.CustomToolbar_popupMenuBackgroundColor,
+        DEFAULT_POPUP_MENU_BACKGROUND_COLOR
+    )
 
     private var textDecorator: TextDecorator? = null
 
@@ -202,7 +222,13 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
 
     // Toolbar title color
     private fun handleToolbarTitleColor() = with(binding) {
-        textViewToolbarTitle.setTextColor(ResourcesCompat.getColor(resources, toolbarTitleColor, null))
+        textViewToolbarTitle.setTextColor(
+            ResourcesCompat.getColor(
+                resources,
+                toolbarTitleColor,
+                null
+            )
+        )
     }
 
     fun setToolbarTitleColor(@ColorRes toolbarTitleColor: Int): CustomToolbar {
@@ -222,14 +248,22 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
      *
      * @see TextDecorator
      * */
-    fun setAndDecorateToolbarTitle(title: String, decorateToolbarTitle: (textDecorator: TextDecorator) -> TextDecorator): CustomToolbar {
-        this.textDecorator = decorateToolbarTitle(TextDecorator.decorate(binding.textViewToolbarTitle, title))
+    fun setAndDecorateToolbarTitle(
+        title: String,
+        decorateToolbarTitle: (textDecorator: TextDecorator) -> TextDecorator
+    ): CustomToolbar {
+        this.textDecorator =
+            decorateToolbarTitle(TextDecorator.decorate(binding.textViewToolbarTitle, title))
 
         return this
     }
 
-    fun setAndDecorateAppTitle(title: String, decorateToolbarTitle: (textDecorator: TextDecorator) -> TextDecorator): CustomToolbar {
-        this.textDecorator = decorateToolbarTitle(TextDecorator.decorate(binding.textViewHomeAppName, title))
+    fun setAndDecorateAppTitle(
+        title: String,
+        decorateToolbarTitle: (textDecorator: TextDecorator) -> TextDecorator
+    ): CustomToolbar {
+        this.textDecorator =
+            decorateToolbarTitle(TextDecorator.decorate(binding.textViewHomeAppName, title))
 
         return this
     }
@@ -269,7 +303,10 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
         return this
     }
 
-    fun updateMenuItem(predicate: (MenuItem) -> Boolean, menuItemToUpdate: (MenuItem) -> Unit): CustomToolbar {
+    fun updateMenuItem(
+        predicate: (MenuItem) -> Boolean,
+        menuItemToUpdate: (MenuItem) -> Unit
+    ): CustomToolbar {
         menuItemAdapter.updateItem(predicate = predicate, itemToUpdate = menuItemToUpdate)
         popupMenuAdapter.updateItem(predicate = predicate, itemToUpdate = menuItemToUpdate)
 
@@ -294,7 +331,12 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
 
     private fun setUpPopupMenu() {
         val popupMenuBinding = CustomToolbarPopupMenuBinding.inflate(LayoutInflater.from(context))
-        popupWindow = PopupWindow(popupMenuBinding.root, ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT, true)
+        popupWindow = PopupWindow(
+            popupMenuBinding.root,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
 
         popupWindow?.elevation = popupMenuElevation
 
@@ -317,7 +359,12 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
 
     private fun showPopupMenu() {
         // Placing popup menu below MenuIconMore
-        popupWindow?.showAsDropDown(binding.recyclerViewOptionsMenu, -(resources.getDimensionPixelOffset(R.dimen._180sdp)), resources.getDimensionPixelSize(R.dimen._1sdp), Gravity.END)
+        popupWindow?.showAsDropDown(
+            binding.recyclerViewOptionsMenu,
+            -(resources.getDimensionPixelOffset(com.intuit.sdp.R.dimen._180sdp)),
+            resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._1sdp),
+            Gravity.END
+        )
     }
 
     /**
@@ -330,9 +377,15 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
     }
 
     private fun setMenuItems() {
-        val menuItemsToShowOnPopupMenu = menuItemList.filter { it.showAsAction == ShowAsAction.NEVER }.toMutableList() as ArrayList<MenuItem>
-        val menuItemsToShowOnToolbar = menuItemList.filter { it.showAsAction == ShowAsAction.ALWAYS }.toMutableList() as ArrayList<MenuItem>
-        val menuItemsToShowOnToolbarIfRoom = menuItemList.filter { it.showAsAction == ShowAsAction.IF_ROOM }.toMutableList() as ArrayList<MenuItem>
+        val menuItemsToShowOnPopupMenu =
+            menuItemList.filter { it.showAsAction == ShowAsAction.NEVER }
+                .toMutableList() as ArrayList<MenuItem>
+        val menuItemsToShowOnToolbar =
+            menuItemList.filter { it.showAsAction == ShowAsAction.ALWAYS }
+                .toMutableList() as ArrayList<MenuItem>
+        val menuItemsToShowOnToolbarIfRoom =
+            menuItemList.filter { it.showAsAction == ShowAsAction.IF_ROOM }
+                .toMutableList() as ArrayList<MenuItem>
 
         /** Checks if items which can be shown on toolbar are more than [maxItemAllowed] */
         if (menuItemList.size - menuItemsToShowOnPopupMenu.size > maxItemAllowed) {
@@ -342,7 +395,8 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
             // 4 - Never, 5 - IfRoom and 1 - Always
             // And maxItemAllowed value is 3
             // Then this variable will evaluates to: 10 - 4 - 3 + 1 = 4
-            val itemsToFind = menuItemList.size - menuItemsToShowOnPopupMenu.size - maxItemAllowed + 1
+            val itemsToFind =
+                menuItemList.size - menuItemsToShowOnPopupMenu.size - maxItemAllowed + 1
 
             // So it will add last 4 items(if any) from the list in which the showAsAction value is IF_ROOM.
             menuItemsToShowOnPopupMenu.addAll(menuItemsToShowOnToolbarIfRoom.takeLast(itemsToFind))
@@ -352,7 +406,12 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
                 // Now it will take a sublist starting from 0th position to (5 - 4 = 1) position
                 // (i.e. 0th to 1st position)
                 // And then add it to the menuItemsToShowOnToolbar list.
-                menuItemsToShowOnToolbar.addAll(menuItemsToShowOnToolbarIfRoom.subList(0, menuItemsToShowOnToolbarIfRoom.size - itemsToFind))
+                menuItemsToShowOnToolbar.addAll(
+                    menuItemsToShowOnToolbarIfRoom.subList(
+                        0,
+                        menuItemsToShowOnToolbarIfRoom.size - itemsToFind
+                    )
+                )
             }
         } else {
             // if items which can be shown on toolbar are less than maxItemAllowed
@@ -373,7 +432,13 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
             popupMenuAdapter.setItems(menuItemsToShowOnPopupMenu, 1)
 
             // And add more option icon to menuItemAdapter
-            menuItemAdapter.addItem(MenuItem(title = context.getString(R.string.title_more), icon = moreOptionIcon, tag = DefaultMenuItemTag.MORE_VERT))
+            menuItemAdapter.addItem(
+                MenuItem(
+                    title = context.getString(R.string.title_more),
+                    icon = moreOptionIcon,
+                    tag = DefaultMenuItemTag.MORE_VERT
+                )
+            )
         }
     }
 
@@ -404,7 +469,8 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
     // It set the padding horizontal on the toolbar title based on available space.
     private fun setPaddingOnToolbarTitle() = with(binding) {
         post {
-            val padding = recyclerViewOptionsMenu.measuredWidth + resources.dpToPx(R.dimen._10sdp)
+            val padding =
+                recyclerViewOptionsMenu.measuredWidth + resources.dpToPx(com.intuit.sdp.R.dimen._10sdp)
             textViewToolbarTitle.updatePadding(left = padding, right = padding)
         }
     }
@@ -456,14 +522,14 @@ class CustomToolbar(context: Context, attrs: AttributeSet?) : FrameLayout(contex
     }
 
     companion object {
-        const val DEFAULT_MAX_ITEM_ALLOWED = 3
-        const val DEFAULT_POPUP_MENU_ELEVATION = R.dimen._6sdp
-        const val DEFAULT_POPUP_MENU_CORNER_RADIUS = R.dimen._6sdp
-        const val DEFAULT_POPUP_MENU_BACKGROUND_COLOR = R.color.white
-        const val DEFAULT_TOOLBAR_COLOR = R.color.white
-        const val DEFAULT_TOOLBAR_TITLE_COLOR = R.color.black
-        const val DEFAULT_BACK_BUTTON_ICON = R.drawable.ic_back
-        const val DEFAULT_HAMBURGER_ICON = R.drawable.ic_side_menu
-        const val DEFAULT_MORE_OPTION_ICON = R.drawable.ic_more_vert
+        val DEFAULT_MAX_ITEM_ALLOWED = 3
+        val DEFAULT_POPUP_MENU_ELEVATION = com.intuit.sdp.R.dimen._6sdp
+        val DEFAULT_POPUP_MENU_CORNER_RADIUS = com.intuit.sdp.R.dimen._6sdp
+        val DEFAULT_POPUP_MENU_BACKGROUND_COLOR = R.color.white
+        val DEFAULT_TOOLBAR_COLOR = R.color.white
+        val DEFAULT_TOOLBAR_TITLE_COLOR = R.color.black
+        val DEFAULT_BACK_BUTTON_ICON = R.drawable.ic_back
+        val DEFAULT_HAMBURGER_ICON = R.drawable.ic_side_menu
+        val DEFAULT_MORE_OPTION_ICON = R.drawable.ic_more_vert
     }
 }

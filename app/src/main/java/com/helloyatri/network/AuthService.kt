@@ -1,6 +1,7 @@
 package com.helloyatri.network
 
 import com.google.gson.JsonObject
+import com.helloyatri.data.GetRequest
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
 import okhttp3.RequestBody
@@ -9,6 +10,8 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface AuthService {
 
@@ -121,6 +124,9 @@ interface AuthService {
     suspend fun updateArriveStatus(@Body request: Request) : Response<JsonObject>
 
     @POST(APIFactory.AuthApi.CANCLE_RIDE)
-    suspend fun cancleRide(@Body request: Request) : Response<JsonObject>
+    suspend fun cancelRide(@Body request: Request) : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_TRIPS)
+    suspend fun getAllTrips(@QueryMap request: Map<String, String>) : Response<JsonObject>
 
 }

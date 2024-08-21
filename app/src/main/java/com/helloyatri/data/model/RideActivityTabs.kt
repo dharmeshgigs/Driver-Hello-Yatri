@@ -12,6 +12,7 @@ enum class Status : Parcelable {
 
 @Parcelize
 data class RideActivityTabs(
-    val title: String,
-    val status: Status
+    var title: String? = null,
+    var strResTitle: Int? = null,
+    var paramType: String,
 ) : Parcelable

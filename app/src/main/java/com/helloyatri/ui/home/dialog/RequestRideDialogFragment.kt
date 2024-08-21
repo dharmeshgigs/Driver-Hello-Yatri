@@ -18,13 +18,13 @@ class RequestRideDialogFragment(
     private val acceptCallBack: () -> Unit,
     private val declineCallBack: () -> Unit,
     private val tripRiderModel: TripRiderModel
-) :
-        BaseDialogFragment<RequestRideDialogFragmentBinding>() {
+) : BaseDialogFragment<RequestRideDialogFragmentBinding>() {
 
     private lateinit var countdownTimer: CountDownTimer
 
-    override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                   attachToRoot: Boolean): RequestRideDialogFragmentBinding {
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean
+    ): RequestRideDialogFragmentBinding {
         return RequestRideDialogFragmentBinding.inflate(layoutInflater)
     }
 
@@ -36,40 +36,65 @@ class RequestRideDialogFragment(
     }
 
     private fun setTextDecorator() = with(binding) {
-        TextDecorator.decorate(textViewUserName, textViewUserName.trimmedText)
-                .setTypeface(R.font.lufga_medium, getString(R.string.dummy_username_value))
-                .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp),
-                        getString(R.string.dummy_username_value)).build()
+        TextDecorator.decorate(
+            textViewDistance,
+            String.format(
+                getString(R.string.label_dynamic_distance_n105_5_km),
+                tripRiderModel.tripDetails?.distanceTxt.toString()
+            )
+        )
+            .setTypeface(R.font.lufga_semi_bold, tripRiderModel.tripDetails?.distanceTxt.toString())
+            .setAbsoluteSize(
+                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                tripRiderModel.tripDetails?.distanceTxt.toString()
+            ).build()
 
-        TextDecorator.decorate(textViewFairPrice, textViewFairPrice.trimmedText)
-                .setTypeface(R.font.lufga_medium, "₹780")
-                .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "₹780").build()
+        TextDecorator.decorate(
+            textViewDuration,
+            String.format(
+                getString(R.string.label_dynamic_duration_n02_40_hr),
+                tripRiderModel.tripDetails?.durationTxt.toString()
+            )
+        )
+            .setTypeface(R.font.lufga_semi_bold, tripRiderModel.tripDetails?.durationTxt.toString())
+            .setAbsoluteSize(
+                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                tripRiderModel.tripDetails?.durationTxt.toString()
+            ).build()
 
-        TextDecorator.decorate(textViewDistance, textViewDistance.trimmedText)
-                .setTypeface(R.font.lufga_medium, "25.5 Km")
-                .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "25.5 Km").build()
-
-        TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
-                .setTypeface(R.font.lufga_medium, "45 min")
-                .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "45 min").build()
+        TextDecorator.decorate(
+            textViewFairPrice,
+            String.format(
+                getString(R.string.label_dynamic_fare_price_n_780),
+                tripRiderModel.tripDetails?.estimatedFare.toString()
+            )
+        )
+            .setTypeface(R.font.lufga_semi_bold, getString(R.string.label_rupees))
+            .setAbsoluteSize(
+                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                getString(R.string.label_rupees)
+            )
+            .setTypeface(
+                R.font.lufga_semi_bold,
+                tripRiderModel.tripDetails?.estimatedFare.toString()
+            )
+            .setAbsoluteSize(
+                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                tripRiderModel.tripDetails?.estimatedFare.toString()
+            ).build()
 
         textViewPaymentType.text = tripRiderModel.riderDetails?.paymentType.toString()
         textViewStartLocation.text = tripRiderModel.tripDetails?.startLocation?.address.toString()
-        textViewDestinationLocation.text = tripRiderModel.tripDetails?.endLocation?.address.toString()
+        textViewDestinationLocation.text =
+            tripRiderModel.tripDetails?.endLocation?.address.toString()
         textViewUserName.text = tripRiderModel.riderDetails?.name.toString()
-        textViewDuration.text = buildString {
-            append("Duration\n")
-            append(tripRiderModel.tripDetails?.durationTxt.toString())
-        }
-        textViewDistance.text = buildString {
-            append("Distance\n")
-            append(tripRiderModel.tripDetails?.distanceTxt.toString())
-        }
-        textViewFairPrice.text = buildString {
-            append("Fair Price\n")
-            append(tripRiderModel.tripDetails?.estimatedFare.toString())
-        }
         imageViewUserProfile.loadImageFromServerWithPlaceHolder(tripRiderModel.riderDetails?.profile)
+        textViewLabelAway.text = String.format(
+            getString(R.string.label_mins_away),
+            updateTimerUIMin(tripRiderModel.tripDetails?.arrivingDuration?.toDouble() ?: 0.0),
+        )
+        textViewDecline.text = tripRiderModel.popupDetails?.DECLINEBTNLBL.toString()
+        textViewAccept.text = tripRiderModel.popupDetails?.ACCEPTBTNLBL.toString()
     }
 
     private fun setClickListener() = with(binding) {
@@ -88,20 +113,22 @@ class RequestRideDialogFragment(
 
     private fun setUpTimer() = with(binding) {
         roundSeekBar.maxProgress = tripRiderModel.popupDetails?.TIMERDURATION?.toLong()!!
-        countdownTimer = object : CountDownTimer(60000, 1000) {
+        countdownTimer = object : CountDownTimer(
+            ((tripRiderModel.popupDetails?.TIMERDURATION?.toLong() ?: 60) + 1) * 1000, 1000
+        ) {
             override fun onTick(millisUntilFinished: Long) {
                 if (millisUntilFinished / 1000 == 45L) {
                     roundSeekBar.setPrimaryColor(
-                            ContextCompat.getColor(requireContext(), R.color.seekbarYellowColor),
-                            false)
+                        ContextCompat.getColor(requireContext(), R.color.seekbarYellowColor), false
+                    )
                 } else if (millisUntilFinished / 1000 == 30L) {
                     roundSeekBar.setPrimaryColor(
-                            ContextCompat.getColor(requireContext(), R.color.seekbarPrimaryColor),
-                            false)
+                        ContextCompat.getColor(requireContext(), R.color.seekbarPrimaryColor), false
+                    )
                 } else if (millisUntilFinished / 1000 == 15L) {
                     roundSeekBar.setPrimaryColor(
-                            ContextCompat.getColor(requireContext(), R.color.seekbarRedColor),
-                            false)
+                        ContextCompat.getColor(requireContext(), R.color.seekbarRedColor), false
+                    )
                 }
                 roundSeekBar.progress = millisUntilFinished / 1000
                 roundSeekBar.secondaryProgress = millisUntilFinished / 1000
@@ -121,6 +148,13 @@ class RequestRideDialogFragment(
         val minutes = seconds / 60
         val remainingSeconds = seconds % 60
         return String.format("%02d:%02d", minutes, remainingSeconds)
+    }
+
+    private fun updateTimerUIMin(millisUntilFinished: Double): String {
+        val seconds = millisUntilFinished / 1000
+        val minutes = seconds / 60
+        val remainingSeconds = seconds % 60
+        return minutes.toInt().toString()
     }
 
 }

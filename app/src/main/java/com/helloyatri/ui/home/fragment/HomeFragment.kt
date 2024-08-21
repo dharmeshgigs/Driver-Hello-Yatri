@@ -1,6 +1,8 @@
 package com.helloyatri.ui.home.fragment
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -23,10 +25,13 @@ import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterRidesForPickups
 import com.helloyatri.ui.home.dialog.RequestRideDialogFragment
 import com.helloyatri.utils.extension.changeStatusBarColor
+import com.helloyatri.utils.extension.enableTextView
+import com.helloyatri.utils.extension.gone
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.extension.trimmedText
+import com.helloyatri.utils.extension.visible
 import com.helloyatri.utils.getRidePickUpList
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
@@ -155,14 +160,14 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 isOnline = it == 1
             }
         }
-        textViewOnlineOfflineStatus.backgroundTintList =
-            ContextCompat.getColorStateList(
-                requireContext(), if (isOnline) {
-                    R.color.grey
-                } else {
-                    R.color.homeBgBlueColor
-                }
-            )
+        if(isOnline) {
+            textViewRideRequest.gone()
+            constraintLayoutRideRequest.gone()
+        } else {
+            textViewRideRequest.visible()
+            constraintLayoutRideRequest.visible()
+        }
+        textViewOnlineOfflineStatus.enableTextView(!isOnline)
         textViewOnlineOfflineStatus.text = data?.driverAvailabilityStatusBtnLbl
     }
 
@@ -173,16 +178,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         textViewUserName.text = buildString {
             append("Hello \n")
             append(data?.name)
-        }
-    }
-
-    private fun showRequestDialog() {
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(3000)
-            RequestRideDialogFragment {
-                navigator.loadActivity(IsolatedActivity::class.java, PickUpSpotFragment::class.java)
-                    .start()
-            }.show(childFragmentManager, HomeFragment::class.java.simpleName)
         }
     }
 
@@ -211,19 +206,18 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
 
         imageViewNotification.setOnClickListener {
-            (activity as BaseActivity).sendNotification("Test Test", "test body")
+//            (activity as BaseActivity).sendNotification("Test Test", "test body")
             navigator.load(NotificationFragment::class.java).replace(true)
 
         }
 
         textViewRideRequestOnlineOfflineStatus.setOnClickListener {
-            isOnline = !isOnline
-            changeStatus()
-            textViewOnlineOfflineStatus.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.grey)
-            textViewOnlineOfflineStatus.text = getString(R.string.label_go_offline)
-            textViewRideRequest.hide()
-            constraintLayoutRideRequest.hide()
+//            changeStatus()
+//            textViewOnlineOfflineStatus.backgroundTintList =
+//                ContextCompat.getColorStateList(requireContext(), R.color.grey)
+//            textViewOnlineOfflineStatus.text = getString(R.string.label_go_offline)
+//            textViewRideRequest.hide()
+//            constraintLayoutRideRequest.hide()
         }
 
         adapterPickUp.setOnViewItemClickListener { _, view ->
@@ -271,22 +265,22 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         TextDecorator.decorate(textViewUserName, textViewUserName.trimmedText)
             .setTypeface(R.font.lufga_medium, getString(R.string.dummy_username_value))
             .setAbsoluteSize(
-                resources.getDimensionPixelSize(R.dimen._14ssp),
+                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
                 getString(R.string.dummy_username_value)
             ).build()
 
         TextDecorator.decorate(textViewRide, textViewRide.trimmedText)
             .setTypeface(R.font.lufga_medium, "3")
-            .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "3").build()
+            .setAbsoluteSize(resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "3").build()
 
         TextDecorator.decorate(textViewDistance, textViewDistance.trimmedText)
             .setTypeface(R.font.lufga_medium, "105.5 Km")
-            .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "105.5 Km")
+            .setAbsoluteSize(resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "105.5 Km")
             .build()
 
         TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
             .setTypeface(R.font.lufga_medium, "02:40 Hr")
-            .setAbsoluteSize(resources.getDimensionPixelSize(R.dimen._14ssp), "02:40 Hr")
+            .setAbsoluteSize(resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "02:40 Hr")
             .build()
     }
 
@@ -302,16 +296,18 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         apiViewModel.getHomeData()
         apiViewModel.getDriverProfile()
         getUserCurrentLocation {
-            if (it != null) {
+            it?.let {
+                Log.e("TAG", "onResume: ${Gson().toJson(it)}")
                 apiViewModel.updateCurrentLocation(
-                    Request(
-                        latitude = "23.033863",
-                        longitude = "72.585022"
-                    )
-//                            Request(
-//                        latitude = it.latitude.toString(),
-//                        longitude = it.longitude.toString()
+//                    Request(
+//                        latitude = "23.033863",
+//                        longitude = "72.585022"
 //                    )
+                    Request(
+                        latitude = it.latitude.toString(),
+                        longitude = it.longitude.toString()
+                    )
+
                 )
             }
         }

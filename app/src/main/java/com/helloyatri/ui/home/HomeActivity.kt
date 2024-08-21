@@ -11,6 +11,7 @@ import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.R
+import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.data.model.TripRiderModel
@@ -18,6 +19,7 @@ import com.helloyatri.databinding.HomeAcitivtyBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.home.dialog.LogoutDialogFragment
+import com.helloyatri.ui.home.dialog.RequestRideDialogFragment
 import com.helloyatri.ui.home.fragment.AccountAllReviewsFragment
 import com.helloyatri.ui.home.fragment.AccountDocumentsFragment
 import com.helloyatri.ui.home.fragment.AccountEditProfileFragment
@@ -34,16 +36,16 @@ import com.helloyatri.ui.home.sidemenu.SideMenuTag
 import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity(),PushEventListener {
 
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
-
-    // private val apiViewModel by viewModels<HomeViewModel>()
     private val apiViewModel by viewModels<ApiViewModel>()
-    //private lateinit var myApp: App
 
 
     private val sideMenuAdapter by lazy {
@@ -88,7 +90,29 @@ class HomeActivity : BaseActivity(),PushEventListener {
 
                 }
             }
+        }
+        apiViewModel.acceptRequestLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    load(PickUpSpotFragment::class.java).replace(true)
+                }
 
+                Status.ERROR -> {
+                }
+
+                Status.LOADING -> {}
+            }
+        }
+        apiViewModel.declineRequestLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                }
+
+                Status.ERROR -> {
+                }
+
+                Status.LOADING -> {}
+            }
         }
     }
 
@@ -155,7 +179,7 @@ class HomeActivity : BaseActivity(),PushEventListener {
                 }
 
                 SideMenuTag.RIDE_ACTIVITY -> {
-                    load(RideActivityFragment::class.java).replace(true)
+                    load(RideActivityFragment::class.java).add(true)
                 }
 
                 SideMenuTag.PAYMENT -> {
@@ -202,13 +226,25 @@ class HomeActivity : BaseActivity(),PushEventListener {
     }
 
     override fun onEvent(data: JsonObject) {
-        val response =
-            Gson().fromJson(data.toString(), TripRiderModel::class.java)
-        openTripRequestDialog(response)
-        Log.i("TAG", "onEvent: "+data)
+        try {
+            val response =
+                Gson().fromJson(data.toString(), TripRiderModel::class.java)
+            response?.let {
+                showRequestDialog(it)
+                apiViewModel.tripRequest.postValue(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    override fun navigateToTrip(){
-        loadActivity(BaseActivity::class.java, PickUpSpotFragment::class.java).start()
+    private fun showRequestDialog(tripRiderModel: TripRiderModel) {
+        CoroutineScope(Dispatchers.IO).launch {
+            RequestRideDialogFragment(acceptCallBack = {
+                apiViewModel.acceptRequestAPI(Request(trip_id = tripRiderModel.tripDetails?.id.toString()))
+            }, declineCallBack = {
+                apiViewModel.declineRequestAPI(Request(trip_id = tripRiderModel.tripDetails?.id.toString()))
+            }, tripRiderModel).show(supportFragmentManager, BaseActivity::class.java.simpleName)
+        }
     }
 }

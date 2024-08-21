@@ -37,17 +37,17 @@ class AdapterAccountPayment :
         private fun setUpTextDecoration(item: AccountPaymentData) = with(binding) {
             TextDecorator.decorate(textViewFairPrice, textViewFairPrice.trimmedText)
                     .setTypeface(R.font.lufga_medium, item.farePrice.toString())
-                    .setAbsoluteSize(context.resources.getDimensionPixelSize(R.dimen._14ssp),
+                    .setAbsoluteSize(context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
                             item.farePrice.toString()).build()
 
             TextDecorator.decorate(textViewDistance, textViewDistance.trimmedText)
                     .setTypeface(R.font.lufga_medium, item.distance.toString())
-                    .setAbsoluteSize(context.resources.getDimensionPixelSize(R.dimen._14ssp),
+                    .setAbsoluteSize(context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
                             item.distance.toString()).build()
 
             TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
                     .setTypeface(R.font.lufga_medium, item.duration.toString())
-                    .setAbsoluteSize(context.resources.getDimensionPixelSize(R.dimen._14ssp),
+                    .setAbsoluteSize(context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
                             item.duration.toString()).build()
         }
     }

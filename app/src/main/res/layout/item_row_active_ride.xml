@@ -26,13 +26,14 @@
         android:id="@+id/imageViewMap"
         android:layout_width="0dp"
         android:layout_height="@dimen/_160sdp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@drawable/image_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewEstimatedReachTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/TextViewLufgaLightWhite15"
@@ -40,7 +41,7 @@
         android:background="@drawable/bg_top_bottom_round_rect"
         android:paddingVertical="@dimen/_5sdp"
         android:paddingHorizontal="@dimen/_4sdp"
-        android:text="@string/label_you_have_to_reach_in_45_20min"
+        tools:text="@string/label_you_have_to_reach_in_45_20min"
         android:layout_marginEnd="@dimen/_15sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -191,7 +192,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/_2sdp"
-        android:text="@string/dummy_distance_n25_5_km"
+        tools:text="@string/dummy_distance_n25_5_km"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
@@ -219,7 +220,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/_2sdp"
-        android:text="@string/dummy_duration_n45_min"
+        tools:text="@string/dummy_duration_n45_min"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
@@ -239,6 +240,7 @@
         app:layout_constraintStart_toEndOf="@id/textViewDuration"
         app:layout_constraintTop_toBottomOf="@id/viewDividerRideDetails" />
 
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewFairPrice"
         style="@style/TextViewLufgaRegularBlack15"
@@ -246,7 +248,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/_2sdp"
-        android:text="@string/dummy_fare_price_n_780"
+        tools:text="@string/dummy_fare_price_n_780"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
@@ -254,7 +256,6 @@
         app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
         app:layout_constraintStart_toEndOf="@id/viewVerticalSecondDivider"
         app:layout_constraintTop_toTopOf="@id/viewVerticalSecondDivider" />
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewEmergency"

@@ -72,7 +72,6 @@ class ForgotPasswordFragment : BaseFragment<AuthForgotPasswordFragmentBinding>()
                 }
 
                 Status.ERROR -> {
-                    Log.i("TAG", "initObservers: "+resource.message)
                     hideLoader()
                     val error =
                         resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)

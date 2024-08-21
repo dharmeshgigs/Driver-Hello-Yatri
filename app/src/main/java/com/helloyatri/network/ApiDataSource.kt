@@ -29,8 +29,8 @@ class ApiDataSource @Inject constructor(
         return run2 { authService.updateProfile(request) }
     }
 
-    override suspend fun updateProfileImage(request: RequestBody): Resource<JsonObject> {
-        return run2 { authService.updateProfileImage(request) }
+    override suspend fun updateProfileImage(body: RequestBody): Resource<JsonObject> {
+        return run2 { authService.updateProfileImage(body) }
     }
 
     override suspend fun uploadDocument(body: RequestBody): Resource<JsonObject> {
@@ -157,7 +157,10 @@ class ApiDataSource @Inject constructor(
         return run2 { authService.updateArriveStatus(request) }
     }
 
-    override suspend fun cancleRide(request: Request): Resource<JsonObject> {
-        return run2 { authService.cancleRide(request) }
+    override suspend fun cancelRide(request: Request): Resource<JsonObject> {
+        return run2 { authService.cancelRide(request) }
+    }
+    override suspend fun getAllTrips(request: Map<String, String>): Resource<JsonObject> {
+        return run2 { authService.getAllTrips(request) }
     }
 }

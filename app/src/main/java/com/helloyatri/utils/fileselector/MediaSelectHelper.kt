@@ -30,11 +30,10 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.helloyatri.BuildConfig
 import com.helloyatri.R
 import com.helloyatri.ui.base.BaseActivity
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.helloyatri.view.com.theartofdev.edmodo.cropper.CropImage
+import com.helloyatri.view.com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
 import java.io.*
@@ -325,7 +324,7 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                     openGallery()
                 }
 
-                R.id.layoutTakeVideo -> {
+                    R.id.layoutTakeVideo -> {
                     isSelectingVideo = true
                     dispatchTakeVideoIntent()
                 }
@@ -492,7 +491,7 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
             // Continue only if the File was successfully created
             photoFile?.also {
                 val photoURI: Uri = FileProvider.getUriForFile(mActivity,
-                        "${BuildConfig.APPLICATION_ID}.provider", it)
+                        "com.helloyatri.provider", it)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 cameraResult.launch(takePictureIntent)
 
@@ -829,8 +828,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
     private fun openCropViewOrNot(file: Uri) {
         if (isCrop) {
             val intent: Intent = when (this.cropType) {
-                Constant.CropSquare -> CropImage.activity(file).setAspectRatio(4, 4)
+                Constant.CropSquare -> {
+                    CropImage.activity(file).setAspectRatio(4, 4)
                         .getIntent(mActivity)
+                }
 
                 Constant.CropRectangle -> CropImage.activity(file).setAspectRatio(6, 4)
                         .getIntent(mActivity)

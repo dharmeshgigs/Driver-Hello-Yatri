@@ -11,6 +11,7 @@ import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.dialog.CalenderDialog
 import com.helloyatri.utils.extension.changeStatusBarColor
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.RuntimeException
 
 @AndroidEntryPoint
 class AuthTutorialFragment : BaseFragment<AuthTutorialFragmentBinding>() {

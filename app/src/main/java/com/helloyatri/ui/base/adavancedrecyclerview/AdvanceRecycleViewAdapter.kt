@@ -265,8 +265,8 @@ abstract class AdvanceRecycleViewAdapter<H : BaseHolder<E>, E> : RecyclerView.Ad
     fun createNoDataHolder(parent: ViewGroup): NoDataHolder<E> {
         val textView = TextView(parent.context)
         textView.gravity = Gravity.CENTER
-        val dimensionPixelSizeHorizontal = parent.resources.getDimensionPixelSize(R.dimen._15sdp)
-        val dimensionPixelSizeVertical = parent.resources.getDimensionPixelSize(R.dimen._38sdp)
+        val dimensionPixelSizeHorizontal = parent.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._15sdp)
+        val dimensionPixelSizeVertical = parent.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._38sdp)
         textView.setPaddingRelative(dimensionPixelSizeHorizontal, dimensionPixelSizeVertical, dimensionPixelSizeHorizontal, dimensionPixelSizeVertical)
         val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 

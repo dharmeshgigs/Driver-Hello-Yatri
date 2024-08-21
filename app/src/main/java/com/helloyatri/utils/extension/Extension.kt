@@ -16,6 +16,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
@@ -48,6 +49,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import org.apache.commons.lang3.StringEscapeUtils
+import java.lang.Exception
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -370,7 +372,11 @@ fun TextView.setColorOnText(@ColorRes color: Int) {
 
 fun ImageView?.loadImageFromServerWithPlaceHolder(path: String?) {
     this?.context?.let {
-        Glide.with(it).load(path).into(this)
+        if (!path.isNullOrEmpty()) {
+            Glide.with(it).load(path).into(this)
+        } else {
+            Glide.with(it).load(R.drawable.icon_placeholder)
+        }
     }
 }
 
@@ -516,3 +522,33 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observ
         }
     })
 }
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.invisible() {
+    this.visibility = View.INVISIBLE
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+fun TextView.enableTextView(isEnable: Boolean) {
+    backgroundTintList = ContextCompat.getColorStateList(
+        this.context, if (isEnable)
+            R.color.colorPrimary
+        else
+            R.color.grey
+
+    )
+}
+
+fun String?.nullify() = this?.let {
+    it
+} ?: ""
+
+fun String?.nullify(default: String) = this?.let {
+    it
+} ?: default

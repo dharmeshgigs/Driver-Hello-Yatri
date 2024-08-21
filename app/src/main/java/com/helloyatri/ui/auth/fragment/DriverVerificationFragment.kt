@@ -100,22 +100,34 @@ class DriverVerificationFragment : BaseFragment<AuthDriverVerificationFragmentBi
     }
 
     private fun makePhoneCall(phoneNumber: String) {
-        val intent = Intent(Intent.ACTION_DIAL)
-        // Set the data to the phone number
-        intent.data = Uri.parse("tel:$phoneNumber")
-        // Start the activity with the intent
-        startActivity(intent)
+        try {
+            val intent = Intent(Intent.ACTION_DIAL)
+            // Set the data to the phone number
+            intent.data = Uri.parse("tel:$phoneNumber")
+            // Start the activity with the intent
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.message?.let {
+                showErrorMessage(e.message.toString())
+            }
+        }
     }
 
     private fun openGoogleMaps(latitude: String, longitude: String) {
         val gmmIntentUri = Uri.parse("geo:$latitude,$longitude")
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         mapIntent.setPackage("com.google.android.apps.maps")
-        if (activity?.packageManager?.let { mapIntent.resolveActivity(it) } != null) {
-            startActivity(mapIntent)
-        } else {
-            // Handle the case when Google Maps is not installed
-            println("Google Maps is not installed.")
+        try {
+            if (activity?.packageManager?.let { mapIntent.resolveActivity(it) } != null) {
+                startActivity(mapIntent)
+            } else {
+                // Handle the case when Google Maps is not installed
+                println("Google Maps is not installed.")
+            }
+        } catch (e: Exception) {
+            e.message?.let {
+                showErrorMessage(e.message.toString())
+            }
         }
     }
 

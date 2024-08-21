@@ -45,6 +45,7 @@ object ApiModule {
     @Named("header")
     internal fun getHeaderInterceptor(session: Session): Interceptor {
         return Interceptor { chain ->
+            Log.e("TAG",session.userSession)
             val build = chain.request().newBuilder().addHeader(Session.API_KEY, session.apiKey)
                 .addHeader(Session.USER_SESSION, "Bearer " + session.userSession)
                 .header(Session.LANGUAGE, session.language).build()
@@ -59,7 +60,7 @@ object ApiModule {
         return Interceptor { chain ->
             val response = chain.proceed(chain.request())
             val code = response.code
-            Log.e("RES",response.body.toString())
+//            Log.e("RES",response.body.toString())
            /* if (code >= 500) throw ServerError("Unknown server error", response.body!!.string())
             else if (code == 401 || code == 403) throw AuthenticationException()*/
             response

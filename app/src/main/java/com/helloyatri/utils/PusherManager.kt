@@ -52,20 +52,19 @@ class PusherManager(private val context: Context) {
             override fun onConnectionStateChange(change: ConnectionStateChange?) {
                 println("onConnectionStateChange Previous:${change?.previousState}")
                 println("onConnectionStateChange Current :${change?.currentState}")
-                val handler: Handler = Handler(Looper.getMainLooper())
-
-                handler.post(Runnable {
-                    Toast.makeText(context, "" + change?.currentState, Toast.LENGTH_LONG).show()
-                })
+//                val handler: Handler = Handler(Looper.getMainLooper())
+//
+//                handler.post(Runnable {
+//                    Toast.makeText(context, "" + change?.currentState, Toast.LENGTH_LONG).show()
+//                })
             }
 
             override fun onError(message: String?, code: String?, e: Exception?) {
-                Log.i("TAG", "onError: " + message)
-                val handler: Handler = Handler(Looper.getMainLooper())
-
-                handler.post(Runnable {
-                    Toast.makeText(context, "error:" + message, Toast.LENGTH_LONG).show()
-                })
+//                val handler: Handler = Handler(Looper.getMainLooper())
+//
+//                handler.post(Runnable {
+//                    Toast.makeText(context, "error:" + message, Toast.LENGTH_LONG).show()
+//                })
 
             }
         })

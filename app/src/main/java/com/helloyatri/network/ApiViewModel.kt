@@ -1,13 +1,22 @@
 package com.helloyatri.network
 
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
+import com.helloyatri.data.model.RideActivityResponse
+import com.helloyatri.data.model.RideActivityTabs
 import com.helloyatri.data.model.SavedAddress
+import com.helloyatri.data.model.TripRiderModel
+import com.helloyatri.data.model.Trips
+import com.helloyatri.ui.rideactivity.RideActivityUseCases
+import com.helloyatri.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.RequestBody
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,7 +24,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
 
     val removeSpecificDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     var data = MutableLiveData<JsonObject>()
-
+    val tripRequest: MutableLiveData<TripRiderModel> by lazy { MutableLiveData<TripRiderModel>() }
 
     fun removeSpecificDocument(request: Request) {
         run {
@@ -228,10 +237,10 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val _sharedData by lazy { MutableLiveData<Triple<String,String,String>>() }
+    val _sharedData by lazy { MutableLiveData<Triple<String, String, String>>() }
 
     fun setSharedData(address: String, lat: String, long: String) {
-        _sharedData.value = Triple(address,lat,long)
+        _sharedData.value = Triple(address, lat, long)
     }
 
     val updateDriverVerificationStatusLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
@@ -243,12 +252,33 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getAllRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val getAllRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
 
-    fun getAllRideData() {
+
+    val rideTabs by lazy { ArrayList<RideActivityTabs>() }
+
+    fun getAllRideData(request: Map<String, String>) {
         run {
             getAllRideLiveData.value = Resource.loading()
-            getAllRideLiveData.value = authRepo.getAllRide()
+            val response = authRepo.getAllTrips(request)
+            val rideActivityUseCases = RideActivityUseCases()
+            rideTabs.clear()
+            rideTabs.addAll(response.data?.let {
+                val rideActivityResponse =
+                    Gson().fromJson(it, RideActivityResponse::class.java)
+                rideActivityResponse?.data?.filters?.takeIf { it.isNotEmpty() }?.let {
+                    it.map {
+                        RideActivityTabs(
+                            title = it.vTitle, paramType = it.vSubFilterParam ?: ""
+                        )
+                    } as ArrayList<RideActivityTabs>?
+                } ?: run {
+                    rideActivityUseCases.getDefaultTabs()
+                }
+            } ?: run {
+                rideActivityUseCases.getDefaultTabs()
+            })
+            getAllRideLiveData.value = response
         }
     }
 
@@ -330,11 +360,59 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val cancleRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-    fun cancleRideAPI(request: Request) {
+    fun cancelRideAPI(request: Request) {
         run {
             cancleRideLiveData.value = Resource.loading()
-            cancleRideLiveData.value = authRepo.cancleRide(request)
+            cancleRideLiveData.value = authRepo.cancelRide(request)
         }
     }
 
+    val getActiveRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val activeTrips by lazy { mutableListOf<Trips>() }
+
+
+    fun getActiveRideData(request: Map<String, String>) {
+        run {
+            getActiveRideLiveData.value = Resource.loading()
+            val response = authRepo.getAllTrips(request)
+            val rideActivityUseCases = RideActivityUseCases()
+            activeTrips.clear()
+            response.data?.let {
+                activeTrips.addAll(rideActivityUseCases.getActiveTrips(it.toString()))
+            }
+            getActiveRideLiveData.value = response
+        }
+    }
+
+    val getCompletedRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val completedTrips by lazy { mutableListOf<Trips>() }
+
+    fun getCompletedRideData(request: Map<String, String>) {
+        run {
+            getCompletedRideLiveData.value = Resource.loading()
+            val response = authRepo.getAllTrips(request)
+            val rideActivityUseCases = RideActivityUseCases()
+            completedTrips.clear()
+            response.data?.let {
+                completedTrips.addAll(rideActivityUseCases.getCompletedTrips(it.toString()))
+            }
+            getCompletedRideLiveData.value = response
+        }
+    }
+
+    val getCancelledRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val cancelledTrips by lazy { mutableListOf<Trips>() }
+
+    fun getCancelledRideData(request: Map<String, String>) {
+        run {
+            getCancelledRideLiveData.value = Resource.loading()
+            val response = authRepo.getAllTrips(request)
+            val rideActivityUseCases = RideActivityUseCases()
+            cancelledTrips.clear()
+            response.data?.let {
+                cancelledTrips.addAll(rideActivityUseCases.getCancelledTrips(it.toString()))
+            }
+            getCancelledRideLiveData.value = response
+        }
+    }
 }

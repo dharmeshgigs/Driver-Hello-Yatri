@@ -23,5 +23,10 @@ data class Request(
     @SerializedName("longitude") var longitude: String? = null,
     @SerializedName("availability") var availability: String? = null,
     @SerializedName("location") var location: String? = null,
-    @SerializedName("trip_id") var trip_id: String? = null
+    @SerializedName("trip_id") var trip_id: String? = null,
+    @SerializedName("filter_parameter") var filter_parameter: String? = null
+)
+
+data class GetRequest(
+    var queryMap: Map<String,Any>? = null,
 )
