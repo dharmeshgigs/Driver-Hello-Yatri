@@ -1,16 +1,13 @@
 package com.helloyatri.network
 
 import com.google.gson.JsonObject
-import com.helloyatri.data.GetRequest
 import com.helloyatri.data.Request
-import com.helloyatri.data.model.Driver
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
 interface AuthService {
@@ -128,5 +125,14 @@ interface AuthService {
 
     @GET(APIFactory.AuthApi.GET_TRIPS)
     suspend fun getAllTrips(@QueryMap request: Map<String, String>) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.TRIP_COMPLETE)
+    suspend fun completeTrip(@Body request: Request) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.COLLECT_TRIP_PAYMENT)
+    suspend fun collectTripPayment(@Body request: Request) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.UPDATE_FIREBASE_TOKEN)
+    suspend fun updateFirebaseToken(@Body request: Request) : Response<JsonObject>
 
 }

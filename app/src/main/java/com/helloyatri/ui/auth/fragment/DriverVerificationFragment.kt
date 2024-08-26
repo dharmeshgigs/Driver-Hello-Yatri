@@ -2,16 +2,14 @@ package com.helloyatri.ui.auth.fragment
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import com.helloyatri.network.Status
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverVerification
 import com.helloyatri.databinding.AuthDriverVerificationFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.auth.adapter.DriverVerificationAdapter
 import com.helloyatri.ui.base.BaseFragment

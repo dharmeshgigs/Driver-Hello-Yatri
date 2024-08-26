@@ -126,12 +126,26 @@
         tools:text="00:00" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewNote"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:maxLines="2"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="@id/editTextOTP4"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/editTextOTP1"
+        app:layout_constraintTop_toBottomOf="@id/textViewTimer"
+        tools:text="adf adfasdfdsfas fadsfadsfadfd sdfs dsf sdf sdfdsf sdfdsf sdfdsf sdfds" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewStartTheRide"
         style="@style/TextViewLufgaRegularBlack15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_5sdp"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_24sdp"
         android:layout_marginBottom="@dimen/_15sdp"
         android:background="@drawable/bg_top_round_rect_home_blue"
         android:elevation="@dimen/_1sdp"
@@ -142,6 +156,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
         app:layout_constraintStart_toStartOf="@id/guideLineStart"
-        app:layout_constraintTop_toBottomOf="@id/textViewTimer" />
+        app:layout_constraintTop_toBottomOf="@id/textViewNote" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:indeterminateTint="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/textViewNote"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,8 +6,6 @@ import com.helloyatri.R
 import com.helloyatri.databinding.AuthAcitivtyBinding
 import com.helloyatri.ui.auth.fragment.LoginFragment
 import com.helloyatri.ui.base.BaseActivity
-import com.helloyatri.ui.base.MapBaseFragment
-import com.helloyatri.ui.manager.FragmentActionPerformer
 import com.helloyatri.ui.tutorial.fragment.AuthTutorialFragment
 import dagger.hilt.android.AndroidEntryPoint
 

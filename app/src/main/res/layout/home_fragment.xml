@@ -97,7 +97,7 @@
                 style="@style/TextViewLufgaLightWhite15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/dummy_15_february_2024_9_41_pm"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/_8ssp"
                 app:layout_constraintEnd_toEndOf="parent"

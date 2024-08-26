@@ -2,7 +2,10 @@ package com.helloyatri.utils
 
 import android.text.format.DateUtils
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 object DateUtils {
     enum class DateFormat(val value: String) {
@@ -25,7 +28,8 @@ object DateUtils {
         PRIMARY_TIME("hh:mm a"),
         PRIMARY_TIME2("HH:mm:ss"),
         SERVER_DATE_TIME("yyyy-MM-dd HH:mm:ss"),
-        TRANSACTION_HISTORY_DATE_TIME("dd MMM, yyyy | hh:mm a")
+        TRANSACTION_HISTORY_DATE_TIME("dd MMM, yyyy | hh:mm a"),
+        TRANSACTION_HISTORY_DATE_TIME_FULL("dd MMMM, yyyy | hh:mm a")
     }
 
     enum class DateTimeZone(val timeZone: TimeZone) {

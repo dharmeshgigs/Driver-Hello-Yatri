@@ -7,7 +7,8 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.network.Status
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.R
@@ -17,6 +18,7 @@ import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.HomeAcitivtyBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.home.dialog.LogoutDialogFragment
 import com.helloyatri.ui.home.dialog.RequestRideDialogFragment
@@ -34,6 +36,7 @@ import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
 import com.helloyatri.ui.home.sidemenu.SideMenuTag
 import com.helloyatri.utils.PushEventListener
+import com.helloyatri.utils.PusherManager
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -42,11 +45,10 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class HomeActivity : BaseActivity(),PushEventListener {
+class HomeActivity : BaseActivity(), PushEventListener {
 
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
     private val apiViewModel by viewModels<ApiViewModel>()
-
 
     private val sideMenuAdapter by lazy {
         SideMenuAdapter()
@@ -71,6 +73,7 @@ class HomeActivity : BaseActivity(),PushEventListener {
         initObservers()
         load(HomeFragment::class.java).replace(false)
         myApp.pusherManager.setPushEventListener(this)
+        createFirebaseToken()
     }
 
     private fun initObservers() {
@@ -94,7 +97,7 @@ class HomeActivity : BaseActivity(),PushEventListener {
         apiViewModel.acceptRequestLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    load(PickUpSpotFragment::class.java).replace(true)
+                    load(PickUpSpotFragment::class.java).add(true)
                 }
 
                 Status.ERROR -> {
@@ -114,6 +117,19 @@ class HomeActivity : BaseActivity(),PushEventListener {
                 Status.LOADING -> {}
             }
         }
+        apiViewModel.firebaseTokenLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+//                    showSuccessMessage("Success")
+                }
+
+                Status.ERROR -> {
+                }
+
+                Status.LOADING -> {}
+            }
+        }
+
     }
 
     private fun setUserData(data: Driver?) = with(homeAcitivtyBinding) {
@@ -225,13 +241,38 @@ class HomeActivity : BaseActivity(),PushEventListener {
         apiViewModel.getDriverProfile()
     }
 
-    override fun onEvent(data: JsonObject) {
+    override fun onEvent(data: JsonObject, eventName: String) {
         try {
-            val response =
-                Gson().fromJson(data.toString(), TripRiderModel::class.java)
+            val response = Gson().fromJson(data.toString(), TripRiderModel::class.java)
             response?.let {
-                showRequestDialog(it)
-                apiViewModel.tripRequest.postValue(it)
+                when (eventName) {
+                    PusherManager.TRIP_UPDATED -> {
+                        if (it.tripDetails?.id == apiViewModel.tripRequest.value?.tripDetails?.id) {
+                            apiViewModel._pickupNoteLiveData.postValue(
+                                it.tripDetails?.pickup_note ?: "-"
+                            )
+                        }
+                    }
+
+                    PusherManager.YOUR_EVENT_NAME -> {
+                        it.let {
+                            if (it.tripDetails?.driverId == appSession.user?.id) {
+                                showRequestDialog(it)
+                                apiViewModel.tripRequest.postValue(it)
+                            }
+                        }
+                    }
+
+                    PusherManager.PAYMENT_COMPLETED -> {
+                        if (it.tripDetails?.id == apiViewModel.tripRequest.value?.tripDetails?.id) {
+                            it.let {
+                                apiViewModel._paymentCollectedLiveData.postValue(
+                                    it
+                                )
+                            }
+                        }
+                    }
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -245,6 +286,37 @@ class HomeActivity : BaseActivity(),PushEventListener {
             }, declineCallBack = {
                 apiViewModel.declineRequestAPI(Request(trip_id = tripRiderModel.tripDetails?.id.toString()))
             }, tripRiderModel).show(supportFragmentManager, BaseActivity::class.java.simpleName)
+        }
+    }
+
+    private fun createFirebaseToken() {
+        try {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                Log.e("FCM_TOKEN SUCCESS", task.isSuccessful.toString())
+                if (!task.isSuccessful) {
+                    Log.e("FCM_TOKEN", task.isSuccessful.toString())
+                    return@OnCompleteListener
+                }
+                //Get new Instance ID token
+                val token = task.result
+                Log.e("FCM_TOKEN", token)
+                try {
+                    Log.e("FCM_TOKEN TRY", token)
+                    if(appSession.deviceToken != token) {
+                        appSession.deviceToken = token
+                        apiViewModel.updateFirebaseToken(
+                            Request(
+                                firebase = token
+                            )
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("FCM_TOKEN", "CATCH")
+            e.printStackTrace()
         }
     }
 }

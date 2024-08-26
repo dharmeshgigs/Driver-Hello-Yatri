@@ -4,11 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.helloyatri.network.ResBody
-import java.util.Calendar
-import java.util.Date
 
 object AppUtils {
 
@@ -54,4 +50,14 @@ object AppUtils {
 
     fun Int?.fairValue(default: String) = this?.toString() ?: default
 
+    fun getFirstName(name: String): String {
+        if (name.isNotEmpty()) {
+            if (name.split(" ").size > 1) {
+                return name.split(" ")[0]
+            }
+        }
+        return name
+    }
+
+    fun Int?.fareAmountDefault(default: String) = this?.toString() ?: "0.0"
 }

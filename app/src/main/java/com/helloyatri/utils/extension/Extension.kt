@@ -16,7 +16,6 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
@@ -36,8 +35,6 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.helloyatri.R
-import com.helloyatri.utils.Formatter.DD_MMM_YYYY
 import com.fondesa.kpermissions.extension.onAccepted
 import com.fondesa.kpermissions.extension.onDenied
 import com.fondesa.kpermissions.extension.onPermanentlyDenied
@@ -48,8 +45,9 @@ import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.helloyatri.R
+import com.helloyatri.utils.Formatter.DD_MMM_YYYY
 import org.apache.commons.lang3.StringEscapeUtils
-import java.lang.Exception
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -545,10 +543,6 @@ fun TextView.enableTextView(isEnable: Boolean) {
     )
 }
 
-fun String?.nullify() = this?.let {
-    it
-} ?: ""
+fun String?.nullify() = this ?: ""
 
-fun String?.nullify(default: String) = this?.let {
-    it
-} ?: default
+fun String?.nullify(default: String) = this ?: default

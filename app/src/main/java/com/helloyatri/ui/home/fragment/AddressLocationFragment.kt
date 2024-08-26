@@ -5,7 +5,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -21,9 +20,7 @@ import com.helloyatri.R
 import com.helloyatri.data.model.SavedAddress
 import com.helloyatri.databinding.AdddressLocationFragmentBinding
 import com.helloyatri.network.ApiViewModel
-import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.base.BaseFragment
-import com.helloyatri.utils.location.LocationProvider
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
@@ -130,7 +127,6 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
                 override fun onTick(millisUntilFinished: Long) {
                 }
                 override fun onFinish() {
-                    Log.e("TAG", "onFinish")
                     try {
                         val center = googleMap?.cameraPosition?.target
                         center?.let {

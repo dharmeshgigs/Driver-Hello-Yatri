@@ -1,7 +1,6 @@
 package com.helloyatri.utils
 
 import android.content.Context
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -85,7 +84,6 @@ constructor(private val context: Context) {
 
                 if (textInputLayout != null) {
                     textInputLayout!!.error = null
-                    Log.e("Validation", "No error")
                 }
 
             } catch (e: ApplicationException) {
@@ -96,7 +94,6 @@ constructor(private val context: Context) {
                 //  new Handler().postDelayed(() -> showKeyboard(editText),500);
 
                 if (textInputLayout != null) {
-                    Log.e("Validation", " Error ")
                     if (!textInputLayout!!.isErrorEnabled)
                         textInputLayout!!.isErrorEnabled = true
                     textInputLayout!!.error = e.localizedMessage

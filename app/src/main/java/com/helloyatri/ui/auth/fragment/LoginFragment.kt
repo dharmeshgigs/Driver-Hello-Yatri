@@ -11,7 +11,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -19,6 +18,7 @@ import com.helloyatri.data.model.LoginResponse
 import com.helloyatri.databinding.AuthLoginFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.changeStatusBarColor

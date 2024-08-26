@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -17,6 +16,7 @@ import com.helloyatri.data.model.LoginResponse
 import com.helloyatri.data.model.OTPVerificationResponse
 import com.helloyatri.databinding.AuthVerificationFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.activity.DriverDocumentsActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity

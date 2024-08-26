@@ -2,23 +2,18 @@ package com.helloyatri.ui.home.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.GetAllAddressModel
 import com.helloyatri.data.model.SavedAddress
 import com.helloyatri.databinding.AccountSavedAddressFragmentBinding
 import com.helloyatri.network.ApiViewModel
-import com.helloyatri.ui.base.BaseActivity
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
-import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterSavedAddress
-import com.helloyatri.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 

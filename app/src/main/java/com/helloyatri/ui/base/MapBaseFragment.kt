@@ -1,31 +1,17 @@
 package com.helloyatri.ui.base
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.material.snackbar.Snackbar
-import com.helloyatri.R
 import com.helloyatri.core.Session
-import com.helloyatri.exception.ApplicationException
-import com.helloyatri.exception.AuthenticationException
-import com.helloyatri.exception.ServerException
 import com.helloyatri.ui.activity.AuthActivity
 import com.helloyatri.ui.base.loader.Loader
 import com.helloyatri.ui.manager.Navigator
 import com.helloyatri.utils.Validator
-import java.net.ConnectException
-import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 abstract class MapBaseFragment<T : ViewBinding> : SupportMapFragment() {

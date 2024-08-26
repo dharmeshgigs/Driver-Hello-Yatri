@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -22,7 +23,9 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.helloyatri.R
 import com.helloyatri.core.Session
 import com.helloyatri.di.App
@@ -35,7 +38,6 @@ import com.helloyatri.ui.manager.ActivityStarter
 import com.helloyatri.ui.manager.FragmentActionPerformer
 import com.helloyatri.ui.manager.FragmentNavigationFactory
 import com.helloyatri.ui.manager.Navigator
-import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.fileselector.MediaSelectHelper
 import com.helloyatri.utils.hideView
 import com.helloyatri.utils.showView
@@ -79,7 +81,6 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         super.onCreate(savedInstanceState)
         setContentView(createViewBinding())
         myApp = application as App
-        createFirebaseToken()
         setUpAlertDialog()
         progressDialog = ProgressDialog(this)
         progressDialog!!.setMessage("Please wait...")
@@ -390,32 +391,6 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         appSession.isLoggedIn = false
         appSession.clearSession()
         loadActivity(AuthActivity::class.java).byFinishingAll().start()
-    }
-
-    private fun createFirebaseToken() {
-        /*try {
-            Log.e("FCM_TOKEN", "TRY")
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                Log.e("FCM_TOKEN SUCCESS", task.isSuccessful.toString())
-                if (!task.isSuccessful) {
-                    Log.e("FCM_TOKEN", task.isSuccessful.toString())
-                    return@OnCompleteListener
-                }
-                //Get new Instance ID token
-                val token = task.result
-                Log.e("FCM_TOKEN", token)
-                try {
-                    Log.e("FCM_TOKEN TRY", token)
-
-                    appSession.deviceToken = token
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            })
-        } catch (e: Exception) {
-            Log.e("FCM_TOKEN", "CATCH")
-            e.printStackTrace()
-        }*/
     }
 
     fun sendNotification(title: String?, messageBody: String?) {

@@ -3,7 +3,6 @@ package com.helloyatri.ui.home.fragment
 import android.net.Uri
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.hbb20.CountryCodePicker
 import com.helloyatri.R
@@ -23,6 +21,7 @@ import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.AccountEditProfileFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.auth.fragment.OTPVerificationFragment
 import com.helloyatri.ui.auth.fragment.ResetPasswordFragment
 import com.helloyatri.ui.base.BaseFragment

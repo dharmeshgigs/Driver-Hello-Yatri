@@ -1,14 +1,12 @@
 package com.helloyatri.ui.auth.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -19,6 +17,7 @@ import com.helloyatri.data.model.GetVehicleDetailsModel
 import com.helloyatri.databinding.AuthDriverVehicleDetailsFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.common.fieldselection.bottomsheet.CommonFieldSelectionBottomSheet
 import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection

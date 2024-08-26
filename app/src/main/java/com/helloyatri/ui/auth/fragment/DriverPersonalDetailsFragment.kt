@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.hbb20.CountryCodePicker
 import com.helloyatri.R
@@ -18,6 +17,7 @@ import com.helloyatri.data.model.DriverResponse
 import com.helloyatri.databinding.AuthDriverPersonalDetailsFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.common.fieldselection.bottomsheet.CommonFieldSelectionBottomSheet
 import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection

@@ -7,8 +7,6 @@ import com.helloyatri.data.model.RidePickUps
 import com.helloyatri.databinding.ItemScheduleRideBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder
-import com.helloyatri.ui.home.dialog.LogoutDialogFragment
-import com.helloyatri.utils.EventReceiver
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.show

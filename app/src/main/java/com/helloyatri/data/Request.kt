@@ -24,7 +24,10 @@ data class Request(
     @SerializedName("availability") var availability: String? = null,
     @SerializedName("location") var location: String? = null,
     @SerializedName("trip_id") var trip_id: String? = null,
-    @SerializedName("filter_parameter") var filter_parameter: String? = null
+    @SerializedName("filter_parameter") var filter_parameter: String? = null,
+    @SerializedName("verification_code") var verification_code: String? = null,
+    @SerializedName("cancel_reason") var cancel_reason: String? = null,
+    @SerializedName("firebase") var firebase: String? = null
 )
 
 data class GetRequest(

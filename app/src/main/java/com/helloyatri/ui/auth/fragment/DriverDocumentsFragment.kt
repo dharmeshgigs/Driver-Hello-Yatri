@@ -7,14 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverDocuments
 import com.helloyatri.data.model.DriverStatusResponse
 import com.helloyatri.databinding.AuthDriverDocumentsFragmentBinding
 import com.helloyatri.network.ApiViewModel
-import com.helloyatri.ui.activity.DriverDocumentsActivity
+import com.helloyatri.network.Status
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity

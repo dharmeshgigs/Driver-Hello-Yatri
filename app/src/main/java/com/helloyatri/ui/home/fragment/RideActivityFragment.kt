@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.helloyatri.data.model.RideActivityTabs
 import com.helloyatri.databinding.RideActivityFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
@@ -48,7 +46,7 @@ class RideActivityFragment : BaseFragment<RideActivityFragmentBinding>() {
                         setViewPager()
                     }
                     com.helloyatri.network.Status.LOADING -> {
-//                        showLoader()
+                        showLoader()
                     }
                 }
             }

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:elevation="@dimen/_2sdp"
+    android:layout_marginTop="@dimen/_4sdp"
     android:layout_marginHorizontal="@dimen/_4sdp"
     android:layout_marginBottom="@dimen/_10sdp"
     app:cornerAll="@dimen/_10sdp">
@@ -101,6 +103,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:visibility="visible"
         android:text="@string/label_online_payment"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedWidth="true"

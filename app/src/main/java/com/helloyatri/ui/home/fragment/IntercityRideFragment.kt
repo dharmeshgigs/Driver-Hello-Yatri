@@ -2,11 +2,8 @@ package com.helloyatri.ui.home.fragment
 
 import android.app.DatePickerDialog
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.google.gson.Gson
-import com.helloyatri.R
 import com.helloyatri.databinding.IntercityRideRequestFragmentBinding
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.IntercityRideMainAdapter
@@ -38,9 +35,6 @@ class IntercityRideFragment : BaseFragment<IntercityRideRequestFragmentBinding>(
 
     private fun setClickListener() = with(binding) {
         intercityRideMainAdapter.setOnAcceptOrDeclineClickListener { item, subItem, action ->
-            Log.e("+++MainItem", Gson().toJson(item))
-            Log.e("+++SubItem", Gson().toJson(subItem))
-            Log.e("+++SubNotificationFragmentItemAction", action)
         }
 
         imageViewBack.setOnClickListener {

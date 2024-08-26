@@ -2,7 +2,6 @@ package com.helloyatri.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.annotation.StringDef
@@ -10,7 +9,10 @@ import com.helloyatri.R
 import java.text.DateFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 
@@ -502,7 +504,6 @@ object Formatter {
                     convTime = if (hour > 1L) "$hour hours $suffix" else "$hour hour $suffix"
                 }
                 else -> {
-                    Log.e("covertTimeToText: ", datetime)
                     convTime = DateUtils.format(
                         datetime as Date,
                         DateUtils.DateFormat.PRIMARY_TIME,
@@ -512,7 +513,6 @@ object Formatter {
             }
         } catch (e: ParseException) {
             e.printStackTrace()
-            Log.e("ConvTimeE", e.message!!)
         }
         return convTime
     }

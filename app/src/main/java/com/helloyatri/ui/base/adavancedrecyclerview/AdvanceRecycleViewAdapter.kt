@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.R
 import com.helloyatri.utils.extension.toBinding
 
 abstract class AdvanceRecycleViewAdapter<H : BaseHolder<E>, E> : RecyclerView.Adapter<BaseHolder<*>>, HasItem<E> {

@@ -41,8 +41,10 @@ abstract class BaseDialogFragment<T : ViewBinding> : DialogFragment() {
         setStyle(STYLE_NORMAL, R.style.DialogStyle)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = createViewBinding(inflater, container, false)
         return binding.root
     }
@@ -81,11 +83,13 @@ abstract class BaseDialogFragment<T : ViewBinding> : DialogFragment() {
             snackbar.setAction("OK", View.OnClickListener { snackbar.dismiss() })
             val snackView = snackbar.view
             val textView: TextView = snackView.findViewById(
-                                com.google.android.material.R.id.snackbar_text)
+                com.google.android.material.R.id.snackbar_text
+            )
             textView.maxLines = 4
 
             snackView.setBackgroundColor(
-                    requireActivity().resources.getColor(R.color.colorPrimary))
+                requireActivity().resources.getColor(R.color.colorPrimary)
+            )
             snackbar.show()
         }
     }
@@ -98,10 +102,11 @@ abstract class BaseDialogFragment<T : ViewBinding> : DialogFragment() {
         snackbar.setAction("OK", View.OnClickListener { snackbar.dismiss() })
         val snackView = snackbar.view
         val textView: TextView =
-                snackView.findViewById(com.google.android.material.R.id.snackbar_text)
+            snackView.findViewById(com.google.android.material.R.id.snackbar_text)
         textView.maxLines = 4
         snackView.setBackgroundColor(
-                requireActivity().resources.getColor(R.color.colorPrimary))
+            requireActivity().resources.getColor(R.color.colorPrimary)
+        )
         snackbar.show()
     }
 
@@ -143,11 +148,16 @@ abstract class BaseDialogFragment<T : ViewBinding> : DialogFragment() {
         session.user = null
         session.isLoggedIn = false
         session.clearSession()
+        if (activity is BaseActivity) {
+            (activity as BaseActivity).myApp.pusherManager.disconnectPusher()
+        }
         navigator.loadActivity(AuthActivity::class.java).byFinishingAll().start()
     }
 
-    protected abstract fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                             attachToRoot: Boolean): T
+    protected abstract fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): T
 
     protected abstract fun bindData()
 }

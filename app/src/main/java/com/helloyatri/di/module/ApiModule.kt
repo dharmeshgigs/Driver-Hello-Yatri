@@ -1,9 +1,6 @@
 package com.helloyatri.di.module
 
-import android.util.Log
 import com.helloyatri.core.Session
-import com.helloyatri.exception.AuthenticationException
-import com.helloyatri.exception.ServerError
 import com.helloyatri.network.APIFactory
 import dagger.Module
 import dagger.Provides
@@ -28,11 +25,11 @@ object ApiModule {
         @Named("header") headerInterceptor: Interceptor,
         @Named("pre_validation") networkInterceptor: Interceptor,
     ): OkHttpClient {
-           val httpLoggingInterceptor = HttpLoggingInterceptor()
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-            return OkHttpClient.Builder()
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        return OkHttpClient.Builder()
             .addInterceptor(headerInterceptor)
-             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(httpLoggingInterceptor)
             .addNetworkInterceptor(networkInterceptor)
             .connectTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
@@ -45,7 +42,6 @@ object ApiModule {
     @Named("header")
     internal fun getHeaderInterceptor(session: Session): Interceptor {
         return Interceptor { chain ->
-            Log.e("TAG",session.userSession)
             val build = chain.request().newBuilder().addHeader(Session.API_KEY, session.apiKey)
                 .addHeader(Session.USER_SESSION, "Bearer " + session.userSession)
                 .header(Session.LANGUAGE, session.language).build()
@@ -59,10 +55,6 @@ object ApiModule {
     internal fun provideNetworkInterceptor(): Interceptor {
         return Interceptor { chain ->
             val response = chain.proceed(chain.request())
-            val code = response.code
-//            Log.e("RES",response.body.toString())
-           /* if (code >= 500) throw ServerError("Unknown server error", response.body!!.string())
-            else if (code == 401 || code == 403) throw AuthenticationException()*/
             response
         }
     }

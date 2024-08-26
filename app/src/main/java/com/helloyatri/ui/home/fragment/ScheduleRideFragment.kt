@@ -6,19 +6,15 @@ import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.GetCencellation
-import com.helloyatri.data.model.MessageEvent
 import com.helloyatri.databinding.FragmentNotificationBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.ScheduleRideMainAdapter
-import com.helloyatri.ui.home.bottomsheet.CancelRideBottomSheet
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.getScheduleRideList
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 @AndroidEntryPoint
 class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
@@ -46,18 +42,18 @@ class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessageEvent(event: MessageEvent) {
-        if (event.message == "Cancle_Ride") {
-            val cancelRideBottomSheet = CancelRideBottomSheet(cancelRideCallBack = {
-
-            }, cencellationDataList)
-            cancelRideBottomSheet.show(childFragmentManager, cancelRideBottomSheet.tag)
-        } else if (event.message == "Navigate_To") {
-            navigator.load(PickUpSpotFragment::class.java).replace(false)
-        }
-
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    fun onMessageEvent(event: MessageEvent) {
+//        if (event.message == "Cancle_Ride") {
+//            val cancelRideBottomSheet = CancelRideBottomSheet(cancelRideCallBack = {
+//
+//            }, cencellationDataList)
+//            cancelRideBottomSheet.show(childFragmentManager, cancelRideBottomSheet.tag)
+//        } else if (event.message == "Navigate_To") {
+//            navigator.load(PickUpSpotFragment::class.java).replace(false)
+//        }
+//
+//    }
 
     private fun setUpClickListner() {
 //        scheduleRideMainAdapter.setOnItemClickListener {

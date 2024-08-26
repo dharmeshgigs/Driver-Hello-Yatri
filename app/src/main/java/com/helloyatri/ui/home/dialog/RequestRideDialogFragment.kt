@@ -9,7 +9,7 @@ import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.RequestRideDialogFragmentBinding
 import com.helloyatri.ui.base.BaseDialogFragment
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
-import com.helloyatri.utils.extension.trimmedText
+import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -69,10 +69,10 @@ class RequestRideDialogFragment(
                 tripRiderModel.tripDetails?.estimatedFare.toString()
             )
         )
-            .setTypeface(R.font.lufga_semi_bold, getString(R.string.label_rupees))
+            .setTypeface(R.font.lufga_semi_bold, getString(R.string.label_currency))
             .setAbsoluteSize(
                 resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                getString(R.string.label_rupees)
+                getString(R.string.label_currency)
             )
             .setTypeface(
                 R.font.lufga_semi_bold,
@@ -91,7 +91,7 @@ class RequestRideDialogFragment(
         imageViewUserProfile.loadImageFromServerWithPlaceHolder(tripRiderModel.riderDetails?.profile)
         textViewLabelAway.text = String.format(
             getString(R.string.label_mins_away),
-            updateTimerUIMin(tripRiderModel.tripDetails?.arrivingDuration?.toDouble() ?: 0.0),
+            tripRiderModel.tripDetails?.arriving_duration_txt?.nullify() ?: "0"
         )
         textViewDecline.text = tripRiderModel.popupDetails?.DECLINEBTNLBL.toString()
         textViewAccept.text = tripRiderModel.popupDetails?.ACCEPTBTNLBL.toString()

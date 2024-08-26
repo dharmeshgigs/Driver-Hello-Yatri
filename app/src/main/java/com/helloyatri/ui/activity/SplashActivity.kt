@@ -7,25 +7,15 @@ import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverStatusResponse
-import com.helloyatri.data.model.LoginResponse
-import com.helloyatri.data.model.OTPVerificationResponse
 import com.helloyatri.databinding.SplashActivityBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
-import com.helloyatri.ui.auth.fragment.DriverVerificationFragment
-import com.helloyatri.ui.auth.fragment.ForgotPasswordFragment
-import com.helloyatri.ui.auth.fragment.LoginFragment
-import com.helloyatri.ui.auth.fragment.OTPVerificationFragment
-import com.helloyatri.ui.auth.fragment.ResetPasswordFragment
-import com.helloyatri.ui.auth.fragment.SignUpFragment
 import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.utils.extension.changeStatusBarColor
-import com.helloyatri.utils.extension.clear
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {

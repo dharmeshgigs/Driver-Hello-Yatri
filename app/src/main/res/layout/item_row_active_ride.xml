@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_marginHorizontal="@dimen/_4sdp"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_4sdp"
+    android:layout_marginTop="@dimen/_4sdp"
     android:layout_marginBottom="@dimen/_10sdp"
+    android:elevation="@dimen/_2sdp"
     app:cornerAll="@dimen/_10sdp">
 
     <androidx.constraintlayout.widget.Guideline
@@ -34,17 +36,17 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewEstimatedReachTime"
+        style="@style/TextViewLufgaLightWhite15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextViewLufgaLightWhite15"
-        android:textSize="@dimen/_8ssp"
-        android:background="@drawable/bg_top_bottom_round_rect"
-        android:paddingVertical="@dimen/_5sdp"
-        android:paddingHorizontal="@dimen/_4sdp"
-        tools:text="@string/label_you_have_to_reach_in_45_20min"
         android:layout_marginEnd="@dimen/_15sdp"
+        android:background="@drawable/bg_top_bottom_round_rect"
+        android:paddingHorizontal="@dimen/_4sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:textSize="@dimen/_8ssp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/label_you_have_to_reach_in_45_20min" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewRoute"
@@ -158,6 +160,7 @@
         android:maxLines="1"
         android:text="@string/label_online_payment"
         android:textSize="@dimen/_8ssp"
+        android:visibility="visible"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
         app:layout_constraintEnd_toStartOf="@id/imageViewCall"
@@ -192,7 +195,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/_2sdp"
-        tools:text="@string/dummy_distance_n25_5_km"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
@@ -200,7 +202,8 @@
         app:layout_constraintEnd_toStartOf="@id/viewVerticalFirstDivider"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="@id/guideLineStart"
-        app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+        app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider"
+        tools:text="@string/dummy_distance_n25_5_km" />
 
     <View
         android:id="@+id/viewVerticalFirstDivider"
@@ -220,14 +223,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/_2sdp"
-        tools:text="@string/dummy_duration_n45_min"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/viewVerticalFirstDivider"
         app:layout_constraintEnd_toStartOf="@id/viewVerticalSecondDivider"
         app:layout_constraintStart_toEndOf="@id/viewVerticalFirstDivider"
-        app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider" />
+        app:layout_constraintTop_toTopOf="@id/viewVerticalFirstDivider"
+        tools:text="@string/dummy_duration_n45_min" />
 
     <View
         android:id="@+id/viewVerticalSecondDivider"
@@ -248,14 +251,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/_2sdp"
-        tools:text="@string/dummy_fare_price_n_780"
         android:textSize="@dimen/_10ssp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/viewVerticalSecondDivider"
         app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
         app:layout_constraintStart_toEndOf="@id/viewVerticalSecondDivider"
-        app:layout_constraintTop_toTopOf="@id/viewVerticalSecondDivider" />
+        app:layout_constraintTop_toTopOf="@id/viewVerticalSecondDivider"
+        tools:text="@string/dummy_fare_price_n_780" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewEmergency"

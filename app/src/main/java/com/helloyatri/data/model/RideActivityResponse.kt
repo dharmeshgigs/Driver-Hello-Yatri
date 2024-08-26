@@ -23,18 +23,18 @@ data class Trips (
     @SerializedName("start_longitude"             ) var startLongitude            : String?           = null,
     @SerializedName("end_latitude"                ) var endLatitude               : String?           = null,
     @SerializedName("end_longitude"               ) var endLongitude              : String?           = null,
-    @SerializedName("tip_amount"                  ) var tipAmount                 : Int?              = null,
-    @SerializedName("total_fare"                  ) var totalFare                 : Int?              = null,
+    @SerializedName("tip_amount"                  ) var tipAmount                 : Double?              = null,
+    @SerializedName("total_fare"                  ) var totalFare                 : Double?              = null,
     @SerializedName("estimated_fare"              ) var estimatedFare             : Double?           = null,
-    @SerializedName("estimated_arriving_duration" ) var estimatedArrivingDuration : Int?              = null,
-    @SerializedName("estimated_arriving_distance" ) var estimatedArrivingDistance : Int?              = null,
-    @SerializedName("waiting_time"                ) var waitingTime               : Int?              = null,
+    @SerializedName("estimated_arriving_duration" ) var estimatedArrivingDuration : Double?              = null,
+    @SerializedName("estimated_arriving_distance" ) var estimatedArrivingDistance : Double?              = null,
+    @SerializedName("waiting_time"                ) var waitingTime               : Double?              = null,
     @SerializedName("wheelchair_required"         ) var wheelchairRequired        : Int?              = null,
     @SerializedName("wheelchair_note"             ) var wheelchairNote            : String?           = null,
-    @SerializedName("estimated_duration"          ) var estimatedDuration         : Int?              = null,
+    @SerializedName("estimated_duration"          ) var estimatedDuration         : Double?              = null,
     @SerializedName("estimated_distance"          ) var estimatedDistance         : Double?           = null,
-    @SerializedName("total_duration"              ) var totalDuration             : Int?              = null,
-    @SerializedName("total_distance"              ) var totalDistance             : Int?              = null,
+    @SerializedName("total_duration"              ) var totalDuration             : Double?              = null,
+    @SerializedName("total_distance"              ) var totalDistance             : Double?              = null,
     @SerializedName("no_of_passengers"            ) var noOfPassengers            : Int?              = null,
     @SerializedName("pickup_note"                 ) var pickupNote                : String?           = null,
     @SerializedName("cancel_reason"               ) var cancelReason              : String?           = null,
@@ -46,7 +46,12 @@ data class Trips (
     @SerializedName("status"                      ) var status                    : String?           = null,
     @SerializedName("payment_status"              ) var paymentStatus             : String?           = null,
     @SerializedName("stop_over_points"            ) var stopOverPoints            : ArrayList<String>? = null,
-    @SerializedName("review_ratings"              ) var reviewRatings             : String?           = null
+    @SerializedName("review_ratings"              ) var reviewRatings             : ReviewRatings?           = null,
+    @SerializedName("distance_txt"              ) var distance_txt             : String?           = null,
+    @SerializedName("duration_txt"              ) var duration_txt             : String?           = null,
+    @SerializedName("total_fare_txt"              ) var total_fare_txt             : String?           = null,
+    @SerializedName("created_at"              ) var created_at             : String?           = null,
+    @SerializedName("reach_time_note"              ) var reach_time_note             : String?           = null,
 )
 
 data class VehicleType (
@@ -76,4 +81,17 @@ data class User (
 data class Filters (
     @SerializedName("vSubFilterParam" ) var vSubFilterParam : String? = null,
     @SerializedName("vTitle"          ) var vTitle          : String? = null
+)
+
+data class ReviewRatings (
+
+    @SerializedName("id"         ) var id        : Int?    = null,
+    @SerializedName("trip_id"    ) var tripId    : Int?    = null,
+    @SerializedName("from"       ) var from      : Int?    = null,
+    @SerializedName("to"         ) var to        : Int?    = null,
+    @SerializedName("rating"     ) var rating    : Int?    = null,
+    @SerializedName("comment"    ) var comment   : String? = null,
+    @SerializedName("created_at" ) var createdAt : String? = null,
+    @SerializedName("updated_at" ) var updatedAt : String? = null
+
 )

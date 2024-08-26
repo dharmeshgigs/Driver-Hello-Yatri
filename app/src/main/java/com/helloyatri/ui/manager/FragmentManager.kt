@@ -1,7 +1,5 @@
 package com.helloyatri.ui.manager
 
-import android.R
-import android.os.Handler
 import android.util.Pair
 import android.view.View
 import com.helloyatri.di.DiConstants

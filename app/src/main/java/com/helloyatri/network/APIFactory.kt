@@ -13,6 +13,7 @@ object APIFactory {
 
     object AuthApi {
 
+        const val PUSHER_AUTH_URL = "http://3.111.159.32/api/pusher/auth"
         const val RESEND_OTP = "resend-otp"
         const val DRIVER_REGISTER = "driver/register"
         const val DRIVER_LOGIN = "driver/login"
@@ -43,6 +44,7 @@ object APIFactory {
         const val VERIFY_TRIP = "driver/verifyTrip"
         const val UPDATE_ARRIVE_STATUS = "driver/updateArriveStatus"
         const val CANCLE_RIDE = "cancelRide"
+        const val TRIP_COMPLETE = "driver/completeTrip"
 
         const val GET_TRIPS = "getTrips"
         const val GET_ALL_RIDE = "getallride"
@@ -52,6 +54,8 @@ object APIFactory {
         const val GET_ALL_SCHEDULE_RIDE = "getAllScheduleRide"
         const val GET_CANCLLETION_REASON = "getCancellationReasons"
         const val GET_ALL_ADDRESS = "address"
+        const val COLLECT_TRIP_PAYMENT = "driver/collectTripPayment"
+        const val UPDATE_FIREBASE_TOKEN = "updateFirebaseToken"
 
 
 //        const val RESEND_OTP = "driver/resetPassword"

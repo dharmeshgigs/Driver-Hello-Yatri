@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.DriverDocuments
@@ -15,6 +14,7 @@ import com.helloyatri.data.model.DriverStatusResponse
 import com.helloyatri.data.model.DriverVerification
 import com.helloyatri.databinding.AccountDocumentsFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.auth.adapter.DriverDocumentsAdapter
 import com.helloyatri.ui.auth.adapter.DriverVerificationAdapter
 import com.helloyatri.ui.auth.fragment.DriverPersonalDetailsFragment

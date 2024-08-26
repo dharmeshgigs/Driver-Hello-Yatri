@@ -163,4 +163,14 @@ class ApiDataSource @Inject constructor(
     override suspend fun getAllTrips(request: Map<String, String>): Resource<JsonObject> {
         return run2 { authService.getAllTrips(request) }
     }
+    override suspend fun completeTrip(request: Request): Resource<JsonObject> {
+        return run2 { authService.completeTrip(request) }
+    }
+
+    override suspend fun collectTripPayment(request: Request): Resource<JsonObject> {
+        return run2 { authService.collectTripPayment(request) }
+    }
+    override suspend fun updateFirebaseToken(request: Request): Resource<JsonObject> {
+        return run2 { authService.updateFirebaseToken(request) }
+    }
 }

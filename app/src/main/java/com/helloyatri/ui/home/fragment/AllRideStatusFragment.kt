@@ -8,6 +8,7 @@ import com.helloyatri.databinding.AllRideStatusFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AllRidesStatusAdapter
+import com.helloyatri.ui.home.bottomsheet.EmergencyAssistanceBottomSheet
 import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.gone
 import com.helloyatri.utils.extension.visible
@@ -21,7 +22,9 @@ class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
 
     private val allRidesStatusAdapter by lazy {
         AllRidesStatusAdapter(onEmergencyClick = {
-
+            EmergencyAssistanceBottomSheet().show(
+                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+            )
         }, onEndHereClick = {
 
         })

@@ -7,7 +7,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.model.DataDocument
@@ -15,6 +14,7 @@ import com.helloyatri.data.model.DriverDocuments
 import com.helloyatri.data.model.GetAllRequiredDocument
 import com.helloyatri.databinding.AuthDriverRequiredDocumentsFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.auth.adapter.CommonAdapter
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.utils.Constants.BANK_DETAILS

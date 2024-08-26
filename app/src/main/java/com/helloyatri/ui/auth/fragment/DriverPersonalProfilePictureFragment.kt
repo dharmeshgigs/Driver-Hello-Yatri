@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.network.Status
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -26,6 +24,7 @@ import com.helloyatri.data.model.UploadDocumentModel
 import com.helloyatri.data.request.DriverProfilePictureDetails
 import com.helloyatri.databinding.AuthDriverPersonalProfilePictureFragmentBinding
 import com.helloyatri.network.ApiViewModel
+import com.helloyatri.network.Status
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureDetailsAdapter
 import com.helloyatri.ui.auth.adapter.DriverProfilePictureImagesAdapter
 import com.helloyatri.ui.base.BaseFragment

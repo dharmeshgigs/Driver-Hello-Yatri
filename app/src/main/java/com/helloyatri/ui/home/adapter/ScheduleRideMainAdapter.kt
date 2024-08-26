@@ -1,12 +1,10 @@
 package com.helloyatri.ui.home.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helloyatri.R
-import com.helloyatri.data.model.RidePickUps
 import com.helloyatri.data.model.ScheduleRide
 import com.helloyatri.databinding.ItemMainScheduleRideBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
