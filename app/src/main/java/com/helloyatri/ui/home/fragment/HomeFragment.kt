@@ -215,12 +215,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             }
             textViewOnlineOfflineStatus.enableTextView(!isOnline)
         }
-        TextDecorator.decorate(textViewUserName, textViewUserName.trimmedText)
-            .setTypeface(R.font.lufga_medium, getString(R.string.dummy_username_value))
-            .setAbsoluteSize(
-                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                getString(R.string.dummy_username_value)
-            ).build()
     }
 
     private fun setUserData(data: Driver?) = with(binding) {

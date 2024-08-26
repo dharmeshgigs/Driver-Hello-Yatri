@@ -35,9 +35,11 @@ import com.helloyatri.ui.home.fragment.RideActivityFragment
 import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
 import com.helloyatri.ui.home.sidemenu.SideMenuTag
+import com.helloyatri.utils.AppUtils.fareAmount
 import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.PusherManager
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
+import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -132,13 +134,53 @@ class HomeActivity : BaseActivity(), PushEventListener {
 
     }
 
-    private fun setUserData(data: Driver?) = with(homeAcitivtyBinding) {
+    fun setUserData(data: Driver?) = with(homeAcitivtyBinding) {
         navigationDrawerContent.imageViewUserProfile.loadImageFromServerWithPlaceHolder(
-            data?.profileImage ?: ""
+            data?.profileImage
         )
         navigationDrawerContent.textViewUserName.text = buildString {
-            append("Hello \n ")
+            append("Hello \n")
             append(data?.name)
+        }
+        navigationDrawerContent.textViewCoins.text = "0"
+
+        apiViewModel.homeData?.let {
+
+            TextDecorator.decorate(
+                navigationDrawerContent.textViewRide,
+                String.format(getString(R.string.label_dynamic_ride_n3), it.totalRides.fareAmount())
+            )
+                .setTypeface(R.font.lufga_medium, it.totalRides.fareAmount())
+                .setAbsoluteSize(
+                    resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                    it.totalRides.fareAmount()
+                ).build()
+
+            TextDecorator.decorate(
+                navigationDrawerContent.textViewDistance,
+                String.format(
+                    getString(R.string.label_dynamic_distance_n105_5_km),
+                    it.totalDistance.fareAmount()
+                )
+            )
+                .setTypeface(R.font.lufga_medium, it.totalDistance.fareAmount())
+                .setAbsoluteSize(
+                    resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                    it.totalDistance.fareAmount()
+                ).build()
+
+            TextDecorator.decorate(
+                navigationDrawerContent.textViewDuration,
+                String.format(
+                    getString(R.string.label_dynamic_duration_n02_40_hr),
+                    it.totalDuration.fareAmount()
+                )
+            )
+                .setTypeface(R.font.lufga_medium, it.totalDuration.fareAmount())
+                .setAbsoluteSize(
+                    resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                    it.totalDuration.fareAmount()
+                ).build()
         }
     }
 
@@ -302,7 +344,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
                 Log.e("FCM_TOKEN", token)
                 try {
                     Log.e("FCM_TOKEN TRY", token)
-                    if(appSession.deviceToken != token) {
+                    if (appSession.deviceToken != token) {
                         appSession.deviceToken = token
                         apiViewModel.updateFirebaseToken(
                             Request(

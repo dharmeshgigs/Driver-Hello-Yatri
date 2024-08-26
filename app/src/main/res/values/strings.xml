@@ -261,7 +261,7 @@
     <string name="label_emergency">Emergency</string>
     <string name="label_end_here">End here</string>
     <string name="labelcancel_by_rider">Cancel by rider</string>
-    <string name="dummy_4_0">4.0</string>
+    <string name="dummy_4_0">0.0</string>
     <string name="label_reason">Reason:</string>
     <string name="dummy_excellent_good_driver_and_car_too_overall_i_reach_my_destination_on_time">Excellent. Good driver and car too, overall I reach my destination on time.</string>
     <string name="label_emergency_assistance">Emergency assistance</string>
@@ -377,6 +377,6 @@ will be accepted.</string>
     <string name="label_note">Note:</string>
     <string name="label_dynamic_ride_n3">Ride\n%s</string>
     <string name="dummy_15_february_2024_9_41_pm">  </string>
-
+    <string name="dummy_coins">0</string>
 
 </resources>
