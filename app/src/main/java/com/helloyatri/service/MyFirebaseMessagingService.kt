@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.helloyatri.R
-import com.helloyatri.ui.base.BaseActivity
+import com.helloyatri.ui.activity.SplashActivity
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -29,7 +29,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
-        val intent = Intent(this, BaseActivity::class.java).apply {
+        val intent = Intent(this, SplashActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -39,7 +39,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(messageBody)
-            .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -55,5 +54,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         notificationManager.notify(0, notificationBuilder.build())
+    }
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
     }
 }

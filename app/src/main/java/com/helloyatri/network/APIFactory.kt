@@ -48,18 +48,17 @@ object APIFactory {
 
         const val GET_TRIPS = "getTrips"
         const val GET_ALL_RIDE = "getallride"
-        const val GET_ALL_NOTIFICATION = "getNotification"
+        const val GET_ALL_NOTIFICATION = "getNotifications"
         const val GET_ALL_PAYMENT = "getAllPayment"
-        const val GET_ALL_REVIEW = "getAllReview"
+        const val GET_ALL_REVIEW = "getReviewRatings"
         const val GET_ALL_SCHEDULE_RIDE = "getAllScheduleRide"
         const val GET_CANCLLETION_REASON = "getCancellationReasons"
         const val GET_ALL_ADDRESS = "address"
         const val COLLECT_TRIP_PAYMENT = "driver/collectTripPayment"
         const val UPDATE_FIREBASE_TOKEN = "updateFirebaseToken"
-
-
-//        const val RESEND_OTP = "driver/resetPassword"
-
+        const val UPDATE_NOTIFICATIONS_AS_MARK = "markAllNotificationAsRead"
+        const val GET_DRIVER_PREFERENCES = "driver/get-driver-preferences"
+        const val UPDATE_DRIVER_PREFERENCES = "driver/update-driver-preferences"
     }
 
     object ResponseCode {

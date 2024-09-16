@@ -135,4 +135,12 @@ interface AuthService {
     @POST(APIFactory.AuthApi.UPDATE_FIREBASE_TOKEN)
     suspend fun updateFirebaseToken(@Body request: Request) : Response<JsonObject>
 
+    @POST(APIFactory.AuthApi.UPDATE_NOTIFICATIONS_AS_MARK)
+    suspend fun markAllReadNotifications() : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_DRIVER_PREFERENCES)
+    suspend fun getDriverPreferences() : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.UPDATE_DRIVER_PREFERENCES)
+    suspend fun updateDriverPreferences(@Body request: Request) : Response<JsonObject>
 }

@@ -37,7 +37,7 @@ abstract class AdvanceRecycleViewAdapter<H : BaseHolder<E>, E> : RecyclerView.Ad
             notifyDataSetChanged()
         }
 
-    protected var onClickListener: ((item: E) -> Unit)? = null
+    protected open var onClickListener: ((item: E) -> Unit)? = null
     fun setOnItemClickListener(onItemClickListener: (item: E) -> Unit) {
         this.onClickListener = onItemClickListener
     }

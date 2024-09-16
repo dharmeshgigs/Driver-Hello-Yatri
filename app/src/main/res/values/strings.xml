@@ -378,5 +378,8 @@ will be accepted.</string>
     <string name="label_dynamic_ride_n3">Ride\n%s</string>
     <string name="dummy_15_february_2024_9_41_pm">  </string>
     <string name="dummy_coins">0</string>
-
+    <string name="menu_item_edit_profile">Edit Profile</string>
+    <string name="trip_is_cancelled">Trip is cancelled</string>
+    <string name="label_okay">Okay</string>
+    <string name="label_your_trip_cancelled_by">Your trip is cancelled by %s</string>
 </resources>

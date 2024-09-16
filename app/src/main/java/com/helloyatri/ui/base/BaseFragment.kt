@@ -287,9 +287,9 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         _binding = null
     }
 
-    fun getUserCurrentLocation(onLocation: (LatLng) -> Unit) {
+    fun getUserCurrentLocation(onLocation: (LatLng) -> Unit, update: Boolean = false) {
         locationProvider = LocationProvider((activity as BaseActivity),this)
-        locationProvider?.getCurrentLocation {
+        locationProvider?.getCurrentLocation(updated = update) {
             it?.let {
                 val lat = it.latitude.toString()
                 val long = it.longitude.toString()

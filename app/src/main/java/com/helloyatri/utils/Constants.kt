@@ -53,4 +53,8 @@ object Constants {
     // API Params
     const val PARAM_FILTER_PARAMETER = "filter_parameter"
 
+    // TRIP Statuses
+    const val CANCELLED = "CANCELLED"
+    const val FINISHED = "FINISHED"
+
 }

@@ -19,11 +19,7 @@ class CompletedRideFragment : BaseFragment<AllRideStatusFragmentBinding>() {
     private var rideStatus: String? = null
 
     private val allRidesStatusAdapter by lazy {
-        AllRidesStatusAdapter(onEmergencyClick = {
-            // TODO: Set up code for onEmergency click
-        }, onEndHereClick = {
-            // TODO: Set up code for onEndHere click
-        })
+        AllRidesStatusAdapter()
     }
 
     override fun createViewBinding(
@@ -94,6 +90,7 @@ class CompletedRideFragment : BaseFragment<AllRideStatusFragmentBinding>() {
     private fun showProgressBar() = with(binding) {
         progressBar.visible()
     }
+
     private fun hideProgressBar() = with(binding) {
         progressBar.gone()
     }

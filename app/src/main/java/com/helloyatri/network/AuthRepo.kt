@@ -57,4 +57,7 @@ interface AuthRepo {
     suspend fun completeTrip(request: Request) : Resource<JsonObject>
     suspend fun collectTripPayment(request: Request) : Resource<JsonObject>
     suspend fun updateFirebaseToken(request: Request) : Resource<JsonObject>
+    suspend fun markAllReadNotifications() : Resource<JsonObject>
+    suspend fun getDriverPreferences() : Resource<JsonObject>
+    suspend fun updateDriverPreferences(request: Request) : Resource<JsonObject>
 }

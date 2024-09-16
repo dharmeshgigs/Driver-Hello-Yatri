@@ -7,18 +7,21 @@ import com.helloyatri.data.model.EmergencyAssistance
 import com.helloyatri.databinding.EmergencyAssistanceBottomSheetBinding
 import com.helloyatri.ui.base.BaseBottomSheetDialogFragment
 import com.helloyatri.ui.home.adapter.AdapterEmergencyAssistance
+import com.helloyatri.utils.AppUtils.openCallDialer
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EmergencyAssistanceBottomSheet :
-        BaseBottomSheetDialogFragment<EmergencyAssistanceBottomSheetBinding>() {
+    BaseBottomSheetDialogFragment<EmergencyAssistanceBottomSheetBinding>() {
 
     private val adapterEmergencyAssistance by lazy {
         AdapterEmergencyAssistance()
     }
 
-    override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
-                                   attachToRoot: Boolean): EmergencyAssistanceBottomSheetBinding {
+    override fun createViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?,
+        attachToRoot: Boolean
+    ): EmergencyAssistanceBottomSheetBinding {
         return EmergencyAssistanceBottomSheetBinding.inflate(layoutInflater)
     }
 
@@ -40,13 +43,29 @@ class EmergencyAssistanceBottomSheet :
     private fun setAdapter() = with(binding) {
         recyclerViewEmergencyAssistance.apply {
             adapter = adapterEmergencyAssistance
-            adapterEmergencyAssistance.setItems(arrayListOf(
-                    EmergencyAssistance(title = "Call Hello Yatri Line",
-                            icon = R.drawable.image_call_support),
-                    EmergencyAssistance(title = "Get help from police",
-                            icon = R.drawable.image_call_police),
-                    EmergencyAssistance(title = "Report a crash", icon = R.drawable.image_crash)),
-                    1)
+            adapterEmergencyAssistance.setItems(
+                arrayListOf(
+                    EmergencyAssistance(
+                        title = "Call Hello Yatri Line",
+                        icon = R.drawable.image_call_support
+                    ),
+                    EmergencyAssistance(
+                        title = "Get help from police",
+                        icon = R.drawable.image_call_police
+                    ),
+                    EmergencyAssistance(title = "Report a crash", icon = R.drawable.image_crash)
+                ),
+                1
+            )
         }
+        adapterEmergencyAssistance.setOnItemClickListener {
+            if (it.equals("Get help from police")) {
+                activity?.openCallDialer("100")
+            } else if (it.equals("Call Hello Yatri Line")) {
+                activity?.openCallDialer("100")
+            } else if (it.equals("Report a crash")) {
+            }
+        }
+
     }
 }

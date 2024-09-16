@@ -60,4 +60,5 @@ object AppUtils {
     }
 
     fun Int?.fareAmountDefault(default: String) = this?.toString() ?: "0.0"
+    fun Double?.doubleDefault(default: String) = this?.toString() ?: "0.0"
 }

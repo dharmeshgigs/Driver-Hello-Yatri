@@ -12,7 +12,6 @@ import com.helloyatri.ui.base.adavancedrecyclerview.OnRecycleItemClick
 import com.helloyatri.utils.AppUtils.fareAmount
 import com.helloyatri.utils.AppUtils.fareAmountDefault
 import com.helloyatri.utils.AppUtils.openCallDialer
-import com.helloyatri.utils.DateUtils
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.nullify
@@ -22,7 +21,7 @@ import com.helloyatri.utils.textdecorator.TextDecorator
 
 
 class AllRidesStatusAdapter(
-    val onEmergencyClick: (Int) -> Unit, val onEndHereClick: (Int) -> Unit
+    val onEmergencyClick: ((Int) -> Unit)? = null, val onEndHereClick: ((Int,Trips) -> Unit)? = null
 ) : AdvanceRecycleViewAdapter<BaseHolder<Trips>, Trips>(arrayListOf()) {
 
     private var recyclerViewClickListener: OnRecycleItemClick<Trips>? = null
@@ -36,10 +35,11 @@ class AllRidesStatusAdapter(
             imageViewUserProfile.loadImageFromServerWithPlaceHolder(item.user?.profileImage)
             textViewUserName.text = item.user?.name.nullify()
             item.reach_time_note?.takeIf { it.trim().isNotEmpty() }?.let {
-                textViewEstimatedReachTime.text = String.format(
-                    getString(R.string.label_dynamic_you_have_to_reach_in_45_20min),
-                    item.reach_time_note
-                )
+                textViewEstimatedReachTime.text =  item.reach_time_note
+//                textViewEstimatedReachTime.text = String.format(
+//                    getString(R.string.label_dynamic_you_have_to_reach_in_45_20min),
+//                    item.reach_time_note
+//                )
             } ?: run {
                 textViewEstimatedReachTime.hide()
             }
@@ -78,12 +78,13 @@ class AllRidesStatusAdapter(
                     context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), it
                 ).build()
             }
+            textViewEndHere.text = item.activeTripBtnLbl.nullify(getString(R.string.label_end_here))
             imageViewCall.setOnClickListener { imageViewCall.context.openCallDialer(item.user?.mobile) }
             textViewEndHere.setOnClickListener {
-                onEndHereClick(bindingAdapterPosition)
+                onEndHereClick?.invoke(bindingAdapterPosition, item)
             }
             textViewEmergency.setOnClickListener {
-                onEmergencyClick(bindingAdapterPosition)
+                onEmergencyClick?.invoke(bindingAdapterPosition)
             }
             itemView.setOnClickListener {
                 recyclerViewClickListener?.onClick(item, it)
@@ -138,11 +139,7 @@ class AllRidesStatusAdapter(
                     getString(R.string.label_dynamic_cancel_by_rider), item.cancelledBy?.nullify()
                 )
                 if (!item.created_at.isNullOrEmpty()) {
-                    textViewDateAndTime.text = DateUtils.formatUtcToLocal(
-                        item.created_at!!,
-                        DateUtils.DateFormat.YYYY_MM_DD_T_HH_MM_SS_SSS_Z,
-                        DateUtils.DateFormat.TRANSACTION_HISTORY_DATE_TIME_FULL
-                    )
+                    textViewDateAndTime.text = item.created_at.nullify()
                 } else {
                     textViewDateAndTime.text = item.created_at?.nullify()
                 }

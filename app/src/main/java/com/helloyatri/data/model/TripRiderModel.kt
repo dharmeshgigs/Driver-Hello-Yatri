@@ -54,7 +54,8 @@ data class TripDetails(
     @SerializedName("total_fare_txt") var total_fare_txt: String? = null,
     @SerializedName("tip_amount_txt") var tip_amount_txt: String? = null,
     @SerializedName("total_amount_txt") var total_amount_txt: String? = null,
-    @SerializedName("payment_collect_note") var payment_collect_note: String? = null
+    @SerializedName("payment_collect_note") var payment_collect_note: String? = null,
+    @SerializedName("status") var status: String? = null
 )
 
 data class PopupDetails(
@@ -70,5 +71,7 @@ data class PopupDetails(
     @SerializedName("TITLE") var TITLE: String? = null,
     @SerializedName("PAYMENT_COLLECT_NOTE") var PAYMENT_COLLECT_NOTE: String? = null,
     @SerializedName("COLLECT_BTN_LBL") var COLLECT_BTN_LBL: String? = null,
+    @SerializedName("title") var title: String? = null,
+    @SerializedName("description") var description: String? = null,
 
 )

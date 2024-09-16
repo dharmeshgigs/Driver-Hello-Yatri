@@ -19,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AccountSavedAddressFragment : BaseFragment<AccountSavedAddressFragmentBinding>() {
-
     private val adapterSavedAddress by lazy {
         AdapterSavedAddress()
     }

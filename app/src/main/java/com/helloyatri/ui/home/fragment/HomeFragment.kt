@@ -3,21 +3,18 @@ package com.helloyatri.ui.home.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
-import com.helloyatri.data.model.GetHomeDataModel
-import com.helloyatri.data.model.HomeDataModel
 import com.helloyatri.data.model.UpdateLocationResponse
 import com.helloyatri.databinding.HomeFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
 import com.helloyatri.ui.activity.IsolatedActivity
-import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterRidesForPickups
@@ -30,18 +27,16 @@ import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.extension.show
-import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.extension.visible
 import com.helloyatri.utils.getRidePickUpList
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.OkHttpClient
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
     private var isOnline = false
-    private val apiViewModel by viewModels<ApiViewModel>()
+    private val apiViewModel by activityViewModels<ApiViewModel>()
 
     private val adapterPickUp by lazy {
         AdapterRidesForPickups()
@@ -92,7 +87,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             resource?.let { it ->
                 when (resource.status) {
                     Status.SUCCESS -> {
-                        hideLoader()
+//                        hideLoader()
                         it.data?.let { it ->
                             val response =
                                 Gson().fromJson(it, UpdateLocationResponse::class.java)
@@ -105,13 +100,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                     }
 
                     Status.ERROR -> {
-                        hideLoader()
+//                        hideLoader()
                         val error =
                             resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                         showErrorMessage(error)
                     }
 
-                    Status.LOADING -> showLoader()
+                    Status.LOADING -> {
+//                        showLoader()
+                    }
                 }
             }
 
@@ -153,8 +150,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
     private fun setData() = with(binding) {
         apiViewModel.homeData?.let {
             textViewDateAndTime.text = it.todayDate.nullify()
-            textViewPrice.text =
-                getString(R.string.label_currency).plus(" ").plus(it.totalEarn.fareAmount())
+            textViewPrice.text = it.totalEarn.nullify(getString(R.string.label_currency).plus(" 0"))
 
             TextDecorator.decorate(
                 textViewRide,
@@ -170,28 +166,33 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 textViewDistance,
                 String.format(
                     getString(R.string.label_dynamic_distance_n105_5_km),
-                    it.totalDistance.fareAmount()
+                    it.totalDistance.nullify("0")
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDistance.fareAmount())
+                .setTypeface(R.font.lufga_medium, it.totalDistance.nullify("0"))
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDistance.fareAmount()
+                    it.totalDistance.nullify("0")
                 ).build()
 
             TextDecorator.decorate(
                 textViewDuration,
                 String.format(
                     getString(R.string.label_dynamic_duration_n02_40_hr),
-                    it.totalDuration.fareAmount()
+                    it.totalDuration.nullify("00:00 Hr")
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDuration.fareAmount())
+                .setTypeface(R.font.lufga_medium, it.totalDuration.nullify("00:00 Hr"))
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDuration.fareAmount()
+                    it.totalDuration.nullify("00:00 Hr")
                 ).build()
-            textViewPercent.text = it.acceptanceRatio.fairValue("0").plus("%")
+            it.acceptanceRatio?.let {
+                textViewPercent.text = it.toInt().toString().plus("%")
+            } ?: run {
+                textViewPercent.text = "0%"
+            }
+
             textViewLabelTotalTripsWaiting.text = String.format(
                 getString(R.string.label_dummy_20_trips_are_in_waiting),
                 it.waitingTripsCount.fairValue("0")
@@ -214,6 +215,9 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 constraintLayoutRideRequest.visible()
             }
             textViewOnlineOfflineStatus.enableTextView(!isOnline)
+            if(activity is HomeActivity){
+                (activity as HomeActivity).setDrawerData()
+            }
         }
     }
 
@@ -255,8 +259,10 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
 
         imageViewNotification.setOnClickListener {
+//            (activity as BaseActivity).myApp?.pusherManager?.triggerDriverLocationEvent()
 //            (activity as BaseActivity).sendNotification("Test Test", "test body")
             navigator.load(NotificationFragment::class.java).replace(true)
+
 
         }
 
@@ -310,26 +316,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         )
     }
 
-    private fun setTextDecorator() = with(binding) {
-
-
-        TextDecorator.decorate(textViewDistance, textViewDistance.trimmedText)
-            .setTypeface(R.font.lufga_medium, "105.5 Km")
-            .setAbsoluteSize(
-                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                "105.5 Km"
-            )
-            .build()
-
-        TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
-            .setTypeface(R.font.lufga_medium, "02:40 Hr")
-            .setAbsoluteSize(
-                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                "02:40 Hr"
-            )
-            .build()
-    }
-
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(false).build()
     }
@@ -341,27 +327,34 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
     private fun getHomeDataAPI() {
         apiViewModel.getHomeData()
         apiViewModel.getDriverProfile()
-        getUserCurrentLocation {
+        getUserCurrentLocation(update = true, onLocation = {
             it?.let {
-                val request = Request(
-                    latitude = "23.033863",
-                    longitude = "72.5850221"
-                )
+//                val request = Request(
+//                    latitude = "23.033863",
+//                    longitude = "72.5850221"
+//                )
+
+//                val request = Request(
+//                    latitude = "21.2149576",
+//                    longitude = "72.8902811"
+//                )
                 // TODO: Remove static latlong
 
 //                    Request(
 //                        latitude = "21.2149601",
 //                        longitude = "72.8903101"
 //                    )
-//                    Request(
-//                        latitude = it.latitude.toString(),
-//                        longitude = it.longitude.toString()
-//                    )
-                getNearestLatLong()
-                apiViewModel.updateCurrentLocation(request
+                val request = Request(
+                    latitude = it.latitude.toString(),
+                    longitude = it.longitude.toString()
                 )
+                apiViewModel.updateCurrentLocation(
+                    request
+                )
+//                getNearestLatLong()
             }
-        }
+
+        })
     }
 
     private fun getNearestLatLong() {

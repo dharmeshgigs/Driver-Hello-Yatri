@@ -27,7 +27,8 @@ data class Request(
     @SerializedName("filter_parameter") var filter_parameter: String? = null,
     @SerializedName("verification_code") var verification_code: String? = null,
     @SerializedName("cancel_reason") var cancel_reason: String? = null,
-    @SerializedName("firebase") var firebase: String? = null
+    @SerializedName("firebase") var firebase: String? = null,
+    @SerializedName("key") var key: String? = null
 )
 
 data class GetRequest(

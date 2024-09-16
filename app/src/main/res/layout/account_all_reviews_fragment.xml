@@ -51,7 +51,7 @@
             android:drawableStart="@drawable/ic_yellow_star_big"
             android:drawablePadding="@dimen/_5sdp"
             android:includeFontPadding="true"
-            android:text="@string/label_4_0"
+            android:text="@string/dummy_4_0"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/textViewOverallAverage"
@@ -72,6 +72,18 @@
         app:layout_constraintTop_toBottomOf="@id/constraintReview"
         tools:itemCount="4"
         tools:listitem="@layout/account_all_reviews_row_item" />
+
+    <TextView
+        android:id="@+id/textViewPlaceholder"
+        android:layout_width="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/no_result_found"
+        android:layout_height="wrap_content" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
+import com.helloyatri.data.model.PopUp
 import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.HomeAcitivtyBinding
 import com.helloyatri.network.ApiViewModel
@@ -39,6 +40,7 @@ import com.helloyatri.utils.AppUtils.fareAmount
 import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.PusherManager
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
+import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -142,10 +144,20 @@ class HomeActivity : BaseActivity(), PushEventListener {
             append("Hello \n")
             append(data?.name)
         }
+    }
+
+    fun setDrawerData() = with(homeAcitivtyBinding) {
         navigationDrawerContent.textViewCoins.text = "0"
 
         apiViewModel.homeData?.let {
 
+            navigationDrawerContent.textViewPrice.text =
+                it.totalEarn.nullify(getString(R.string.label_currency).plus(" 0"))
+            it.averageReviewRating?.let {
+                navigationDrawerContent.textViewRatings.text = it.toString()
+            } ?: run {
+                navigationDrawerContent.textViewRatings.text = "0.0"
+            }
             TextDecorator.decorate(
                 navigationDrawerContent.textViewRide,
                 String.format(getString(R.string.label_dynamic_ride_n3), it.totalRides.fareAmount())
@@ -160,26 +172,26 @@ class HomeActivity : BaseActivity(), PushEventListener {
                 navigationDrawerContent.textViewDistance,
                 String.format(
                     getString(R.string.label_dynamic_distance_n105_5_km),
-                    it.totalDistance.fareAmount()
+                    it.totalDistance.nullify("0")
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDistance.fareAmount())
+                .setTypeface(R.font.lufga_medium, it.totalDistance.nullify("0"))
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDistance.fareAmount()
+                    it.totalDistance.nullify("0")
                 ).build()
 
             TextDecorator.decorate(
                 navigationDrawerContent.textViewDuration,
                 String.format(
                     getString(R.string.label_dynamic_duration_n02_40_hr),
-                    it.totalDuration.fareAmount()
+                    it.totalDuration.nullify("00:00 Hr")
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDuration.fareAmount())
+                .setTypeface(R.font.lufga_medium, it.totalDuration.nullify("00:00 Hr"))
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDuration.fareAmount()
+                    it.totalDuration.nullify("00:00 Hr")
                 ).build()
         }
     }
@@ -200,7 +212,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
         }
         sideMenuList.clear()
         sideMenuList.add(
-            SideMenu(sideMenuName = "Edit Profile", sideMenuTag = SideMenuTag.EDIT_PROFILE)
+            SideMenu(sideMenuName = getString(R.string.menu_item_edit_profile), sideMenuTag = SideMenuTag.EDIT_PROFILE)
         )
         sideMenuList.add(
             SideMenu(sideMenuName = "Ride Activity", sideMenuTag = SideMenuTag.RIDE_ACTIVITY)
@@ -241,7 +253,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
                 }
 
                 SideMenuTag.PAYMENT -> {
-                    load(AccountPaymentFragment::class.java).replace(true)
+                    load(AccountPaymentFragment::class.java).add(true)
                 }
 
                 SideMenuTag.SAVED_ADDRESS -> {
@@ -298,6 +310,10 @@ class HomeActivity : BaseActivity(), PushEventListener {
 
                     PusherManager.YOUR_EVENT_NAME -> {
                         it.let {
+                            apiViewModel.tripRequest.postValue(null)
+                            apiViewModel._pickupNoteLiveData.postValue(null)
+                            apiViewModel._paymentCollectedLiveData.postValue(null)
+                            apiViewModel._tripStatusUpdatedLiveData.postValue(null)
                             if (it.tripDetails?.driverId == appSession.user?.id) {
                                 showRequestDialog(it)
                                 apiViewModel.tripRequest.postValue(it)
@@ -312,6 +328,15 @@ class HomeActivity : BaseActivity(), PushEventListener {
                                     it
                                 )
                             }
+                        }
+                    }
+                    PusherManager.TRIP_STATUS_UPDATED -> {
+                        if (it.tripDetails?.id == apiViewModel.tripRequest.value?.tripDetails?.id) {
+                            val popUP = PopUp(POPUPTITLE = it.popupDetails?.title, POPUPMESSAGE = it.popupDetails?.description)
+                            apiViewModel.popUp = popUP
+                            apiViewModel._tripStatusUpdatedLiveData.postValue(
+                                it
+                            )
                         }
                     }
                 }
@@ -352,6 +377,11 @@ class HomeActivity : BaseActivity(), PushEventListener {
                             )
                         )
                     }
+                    apiViewModel.updateFirebaseToken(
+                        Request(
+                            firebase = token
+                        )
+                    )
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

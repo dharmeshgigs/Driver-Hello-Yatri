@@ -89,7 +89,6 @@ class RideVerificationResultDialogFragment :
     private fun setClickListener() = with(binding) {
         textViewLetsRide.setOnClickListener {
             if (successResult == SUCCESS) {
-                org.greenrobot.eventbus.EventBus.getDefault().postSticky(RIDE_VERIFIED)
                 apiViewModel._tripStartLiveData.postValue(
                     true
                 )

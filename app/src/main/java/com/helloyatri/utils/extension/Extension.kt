@@ -373,7 +373,7 @@ fun ImageView?.loadImageFromServerWithPlaceHolder(path: String?) {
         if (!path.isNullOrEmpty()) {
             Glide.with(it).load(path).into(this)
         } else {
-            Glide.with(it).load(R.drawable.icon_placeholder)
+            this.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.icon_placeholder))
         }
     }
 }
@@ -546,3 +546,13 @@ fun TextView.enableTextView(isEnable: Boolean) {
 fun String?.nullify() = this ?: ""
 
 fun String?.nullify(default: String) = this ?: default
+
+fun ImageView?.loadPassengerImageFromServerWithPlaceHolder(path: String?) {
+    this?.context?.let {
+        if (!path.isNullOrEmpty()) {
+            Glide.with(it).load(path).into(this)
+        } else {
+            this.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.icon_passenger))
+        }
+    }
+}

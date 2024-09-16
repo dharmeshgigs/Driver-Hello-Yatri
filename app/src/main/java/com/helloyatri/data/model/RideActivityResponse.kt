@@ -52,6 +52,7 @@ data class Trips (
     @SerializedName("total_fare_txt"              ) var total_fare_txt             : String?           = null,
     @SerializedName("created_at"              ) var created_at             : String?           = null,
     @SerializedName("reach_time_note"              ) var reach_time_note             : String?           = null,
+    @SerializedName("active_trip_btn_lbl"              ) var activeTripBtnLbl             : String?           = null,
 )
 
 data class VehicleType (

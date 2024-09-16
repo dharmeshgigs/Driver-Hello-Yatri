@@ -1,12 +1,10 @@
 package com.helloyatri.network
 
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
-import com.helloyatri.data.model.GetHomeDataModel
 import com.helloyatri.data.model.HomeDataModel
 import com.helloyatri.data.model.PopUp
 import com.helloyatri.data.model.RideActivityResponse
@@ -379,7 +377,6 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     val getActiveRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
     val activeTrips by lazy { mutableListOf<Trips>() }
 
-
     fun getActiveRideData(request: Map<String, String>) {
         run {
             getActiveRideLiveData.value = Resource.loading()
@@ -459,4 +456,42 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+    val getAcceptedPaymentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun getAcceptedPaymentAPI() {
+        run {
+            getAcceptedPaymentLiveData.value = Resource.loading()
+            getAcceptedPaymentLiveData.value = authRepo.getAllNotification()
+        }
+    }
+
+    val markAllReadNotificationLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+
+    fun markAllReadNotifications() {
+        run {
+            markAllReadNotificationLiveData.value = Resource.loading()
+            markAllReadNotificationLiveData.value = authRepo.markAllReadNotifications()
+        }
+    }
+
+    val _tripStatusUpdatedLiveData = MutableLiveData<TripRiderModel>()
+    val tripStatusUpdatedLiveData: LiveData<TripRiderModel> get() = _tripStatusUpdatedLiveData
+
+    val getDriverPreferencesLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+
+    fun getDriverPreferences() {
+        run {
+            getDriverPreferencesLiveData.value = Resource.loading()
+            getDriverPreferencesLiveData.value = authRepo.getDriverPreferences()
+        }
+    }
+
+    val updateDriverPreferencesLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+
+    fun updateDriverPreferences(request: Request) {
+        run {
+            updateDriverPreferencesLiveData.value = Resource.loading()
+            updateDriverPreferencesLiveData.value = authRepo.updateDriverPreferences(request)
+        }
+    }
 }

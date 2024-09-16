@@ -32,11 +32,13 @@ import com.helloyatri.ui.home.dialog.CommonYesNoDialogFragment.Companion.ICON
 import com.helloyatri.ui.home.dialog.CommonYesNoDialogFragment.Companion.OK_TEXT
 import com.helloyatri.ui.home.dialog.CommonYesNoDialogFragment.Companion.TITLE
 import com.helloyatri.ui.home.dialog.CommonYesNoDialogFragment.Companion.YES
+import com.helloyatri.ui.home.dialog.RideCancelledDialogFragment
 import com.helloyatri.ui.home.dialog.RideVerificationDialogFragment
 import com.helloyatri.ui.home.dialog.RideVerificationResultDialogFragment
 import com.helloyatri.ui.home.dialog.RideVerificationResultDialogFragment.Companion.SUCCESS
 import com.helloyatri.utils.AppUtils
 import com.helloyatri.utils.AppUtils.openCallDialer
+import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.location.LocationProvider
@@ -249,6 +251,22 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 
                     Status.LOADING -> {
                         showLoader()
+                    }
+                }
+            }
+        }
+
+        apiViewModel.tripStatusUpdatedLiveData.observe(requireActivity()) {
+            it?.let {
+                // TODO: Show cancel or end trip dialog here
+                it.tripDetails?.let {
+                    if(it.status.equals(Constants.CANCELLED)) {
+                        RideCancelledDialogFragment {
+                            navigator.goBack()
+                        }.show(childFragmentManager, PickUpSpotFragment::class.java.simpleName)
+                    } else if(it.status.equals(Constants.FINISHED)){
+                        navigator.load(RideCompleteFragment::class.java)
+                            .clearHistory(this@PickUpSpotFragment::class.java.simpleName).add(false)
                     }
                 }
             }

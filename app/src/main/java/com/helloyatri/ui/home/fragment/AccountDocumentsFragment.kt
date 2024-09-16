@@ -57,11 +57,10 @@ class AccountDocumentsFragment : BaseFragment<AccountDocumentsFragmentBinding>()
     }
 
     override fun bindData() {
-        apiViewModel.getDriverStatus()
-        setUpRecyclerView()
-        setUpData()
-        setUpClickListener()
         initObservers()
+        setUpRecyclerView()
+        setUpClickListener()
+        apiViewModel.getDriverStatus()
     }
 
     private fun initObservers() {
@@ -70,42 +69,36 @@ class AccountDocumentsFragment : BaseFragment<AccountDocumentsFragmentBinding>()
                 when (resource.status) {
                     Status.LOADING -> showLoader()
                     Status.SUCCESS -> {
-
                         hideLoader()
                         it.data?.let { it ->
                             val response =
                                 Gson().fromJson(it, DriverStatusResponse::class.java)
-                            when(response.code) {
-                                200 -> {
-                                    // nothing goes here
+                            response?.data?.let { driverStatus ->
+                                driverStatus.addVehicle?.let {
+                                    session.isAddVehicle = it.status ?: false
                                 }
-                                else -> {
-                                    response?.data?.let { driverStatus ->
-                                        driverStatus.addVehicle?.let {
-                                            session.isAddVehicle = it.status ?: false
-                                        }
-                                        driverStatus.profileImage?.let {
-                                            session.isProfilePictureAdded = it.status ?: false
-                                        }
-                                        driverStatus.profileInfo?.let {
-                                            session.isPersonalDetailsAdded = it.status ?: false
-                                        }
-                                        driverStatus.requiredDocuments?.let {
-                                            session.isRequiredDocumentsAdded = it.status ?: false
-                                        }
-                                        driverStatus.vehicleDocuments?.let {
-                                            session.isVehicleDocumentsAdded = it.status ?: false
-                                        }
-                                        driverStatus.vehicleImages?.let {
-                                            session.isVehiclePhotosAdded = it.status ?: false
-                                        }
-                                        driverStatus.verificationPending?.let {
-                                            session.isDriverVerified = it.status ?: false
-                                        }
-                                    } ?: run {
-                                        showSomethingMessage()
-                                    }
+                                driverStatus.profileImage?.let {
+                                    session.isProfilePictureAdded = it.status ?: false
                                 }
+                                driverStatus.profileInfo?.let {
+                                    session.isPersonalDetailsAdded = it.status ?: false
+                                }
+                                driverStatus.requiredDocuments?.let {
+                                    session.isRequiredDocumentsAdded = it.status ?: false
+                                }
+                                driverStatus.vehicleDocuments?.let {
+                                    session.isVehicleDocumentsAdded = it.status ?: false
+                                }
+                                driverStatus.vehicleImages?.let {
+                                    session.isVehiclePhotosAdded = it.status ?: false
+                                }
+                                driverStatus.verificationPending?.let {
+                                    session.isDriverVerified = it.status ?: false
+                                }
+                                session.verificationDetails = driverStatus.CHANGE_DETAILS
+                                setUpData()
+                            } ?: run {
+                                showSomethingMessage()
                             }
                         } ?: run {
                             showSomethingMessage()
@@ -253,7 +246,7 @@ class AccountDocumentsFragment : BaseFragment<AccountDocumentsFragmentBinding>()
     private fun setUpData() {
         driverVerificationDataList.clear()
         if (session.isInitial) {
-            session.verificationDetails?.CONTACTDETAILS?.let { it ->
+            session.verificationDetails?.AGENCY?.CONTACTDETAILS?.let { it ->
                 it.CONTACTNUMBERS?.let {
                     if (it.isNotEmpty()) {
                         var contactNo: String = ""
@@ -278,7 +271,7 @@ class AccountDocumentsFragment : BaseFragment<AccountDocumentsFragmentBinding>()
                 } ?: run { setUpDefaultContactData() }
             } ?: run { setUpDefaultContactData() }
 
-            session.verificationDetails?.LOCATION?.let {
+            session.verificationDetails?.AGENCY?.LOCATION?.let {
                 driverVerificationDataList.add(
                     DriverVerification(
                         image = R.drawable.image_navigate_there,
@@ -290,7 +283,8 @@ class AccountDocumentsFragment : BaseFragment<AccountDocumentsFragmentBinding>()
                 )
             } ?: run { setUpDefaultLocationData() }
 
-            binding.textViewDriverDescription.text = session.verificationDetails?.description
+            binding.textViewWantToChange.text = session.verificationDetails?.TITLE
+            binding.textViewDriverDescription.text = session.verificationDetails?.DESCRIPTION
                 ?: getString(R.string.dummy_lorem_ipsum_is_simply_dummy_text_of_the_printing_and_typesetting_industry_lorem_ipsum_has_been_the_industry_s_standard_dummy_text_ever_since)
 
             //            binding.buttonYouVerified.text = session.verificationDetails?.btn_lbl

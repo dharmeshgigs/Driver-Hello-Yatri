@@ -19,11 +19,7 @@ class CancelledRideFragment : BaseFragment<AllRideStatusFragmentBinding>() {
     private var rideStatus: String? = null
 
     private val allRidesStatusAdapter by lazy {
-        AllRidesStatusAdapter(onEmergencyClick = {
-
-        }, onEndHereClick = {
-
-        })
+        AllRidesStatusAdapter()
     }
 
     override fun createViewBinding(

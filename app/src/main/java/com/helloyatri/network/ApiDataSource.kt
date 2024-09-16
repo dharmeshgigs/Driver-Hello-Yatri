@@ -173,4 +173,15 @@ class ApiDataSource @Inject constructor(
     override suspend fun updateFirebaseToken(request: Request): Resource<JsonObject> {
         return run2 { authService.updateFirebaseToken(request) }
     }
+    override suspend fun markAllReadNotifications(): Resource<JsonObject> {
+        return run2 { authService.markAllReadNotifications() }
+    }
+
+    override suspend fun getDriverPreferences(): Resource<JsonObject> {
+        return run2 { authService.getDriverPreferences() }
+    }
+
+    override suspend fun updateDriverPreferences(request: Request): Resource<JsonObject> {
+        return run2 { authService.updateDriverPreferences(request) }
+    }
 }

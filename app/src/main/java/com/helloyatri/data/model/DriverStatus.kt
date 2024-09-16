@@ -19,5 +19,7 @@ data class DriverStatus(
     @SerializedName("verification_completed")
     val verificationCompleted: VerificationCompleted?,
     @SerializedName("verification_pending")
-    val verificationPending: VerificationPending?
+    val verificationPending: VerificationPending?,
+    @SerializedName("CHANGE_DETAILS")
+    val CHANGE_DETAILS: VerificationDetails
 )

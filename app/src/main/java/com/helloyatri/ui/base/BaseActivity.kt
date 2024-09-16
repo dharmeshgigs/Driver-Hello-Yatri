@@ -9,7 +9,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -23,9 +22,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.messaging.FirebaseMessaging
 import com.helloyatri.R
 import com.helloyatri.core.Session
 import com.helloyatri.di.App
@@ -393,6 +390,8 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
         loadActivity(AuthActivity::class.java).byFinishingAll().start()
     }
 
+
+
     fun sendNotification(title: String?, messageBody: String?) {
         val intent = Intent(this, SplashActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -418,7 +417,7 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
             )
             notificationManager.createNotificationChannel(channel)
         }
-        notificationManager.notify(0, notificationBuilder.build())
+        notificationManager.notify(1, notificationBuilder.build())
     }
 
     private fun pusherConnection() {

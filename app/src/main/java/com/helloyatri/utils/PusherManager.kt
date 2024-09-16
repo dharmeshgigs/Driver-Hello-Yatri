@@ -11,12 +11,10 @@ import com.helloyatri.network.APIFactory
 import com.helloyatri.pusher.CustomAuthorizer
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
-import com.pusher.client.channel.Channel
 import com.pusher.client.channel.PrivateChannel
 import com.pusher.client.channel.PrivateChannelEventListener
 import com.pusher.client.channel.PusherEvent
 import com.pusher.client.connection.ConnectionStateChange
-import java.util.Collections
 
 
 class PusherManager(private val context: Context) {
@@ -25,12 +23,13 @@ class PusherManager(private val context: Context) {
     private val YOUR_APP_KEY = "11288b3d484789c2c83d"
     private val YOUR_APP_CLUSTER = "ap2"
     private val YOUR_CHANNEL_NAME = "private-driver."
-    public companion object {
+    companion object {
          val YOUR_EVENT_NAME : String = "NewRideRequest"
          val PAYMENT_COMPLETED: String = "PaymentCompleted"
          val TRIP_UPDATED: String = "TripUpdated"
+         val TRIP_STATUS_UPDATED: String = "TripStatusUpdated"
     }
-    private var event = arrayOf(YOUR_EVENT_NAME, PAYMENT_COMPLETED,TRIP_UPDATED)
+    private var event = arrayOf(YOUR_EVENT_NAME, PAYMENT_COMPLETED,TRIP_UPDATED, TRIP_STATUS_UPDATED)
     var data = MutableLiveData<JsonObject>()
     private var pushEventListener: PushEventListener? = null
 

@@ -1,7 +1,7 @@
 package com.helloyatri.core
 
-import com.helloyatri.data.model.Details
 import com.helloyatri.data.model.Driver
+import com.helloyatri.data.model.VerificationDetails
 
 interface Session {
 
@@ -59,7 +59,7 @@ interface Session {
 
     var isVehicleWithYourPhotoAdded: Boolean
 
-    var verificationDetails : Details?
+    var verificationDetails : VerificationDetails?
 
     fun clearSession()
 

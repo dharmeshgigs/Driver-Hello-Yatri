@@ -1,29 +1,27 @@
 package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
-import com.helloyatri.data.model.AccountAllReviews
+import com.helloyatri.data.model.Review
 import com.helloyatri.databinding.AccountAllReviewsRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder
-import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
+import com.helloyatri.utils.AppUtils.doubleDefault
+import com.helloyatri.utils.extension.loadPassengerImageFromServerWithPlaceHolder
+import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.extension.toBinding
 
 class AdapterAccountAllReviews :
-        AdvanceRecycleViewAdapter<AdapterAccountAllReviews.ViewHolder, AccountAllReviews>() {
+        AdvanceRecycleViewAdapter<AdapterAccountAllReviews.ViewHolder, Review>() {
 
     inner class ViewHolder(private val binding: AccountAllReviewsRowItemBinding) :
-            BaseHolder<AccountAllReviews>(binding.root) {
+            BaseHolder<Review>(binding.root) {
 
-        override fun bind(item: AccountAllReviews) = with(binding) {
-            imageViewUserProfile.loadImageFromServerWithPlaceHolder(item.userImage)
-            textViewUserName.text = item.userName
-            textViewDateAndTime.text = item.date
-            textViewRatings.text = item.userRating
-            textViewReviewDetails.text = item.userReview
-
-            root.setOnClickListener {
-                onClickListener?.invoke(item)
-            }
+        override fun bind(item: Review) = with(binding) {
+            imageViewUserProfile.loadPassengerImageFromServerWithPlaceHolder(item.reviewer?.profileImage)
+            textViewUserName.text = item.reviewer?.name?.nullify() ?: ""
+            textViewDateAndTime.text = item.createdAt.nullify()
+            textViewRatings.text = item.rating?.doubleDefault("0.0")
+            textViewReviewDetails.text = item.comment.nullify()
         }
     }
 
@@ -31,7 +29,7 @@ class AdapterAccountAllReviews :
         return ViewHolder(parent.toBinding())
     }
 
-    override fun onBindDataHolder(holder: ViewHolder, position: Int, item: AccountAllReviews) {
+    override fun onBindDataHolder(holder: ViewHolder, position: Int, item: Review) {
         holder.bind(item)
     }
 }

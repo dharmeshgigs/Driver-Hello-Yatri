@@ -52,7 +52,7 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
         long = savedAddress?.longitude ?: ""
         address = savedAddress?.location ?: ""
         if(lat.isEmpty() && long.isEmpty()) {
-            getUserCurrentLocation {
+            getUserCurrentLocation( {
                 it?.let {
                     lat = it.latitude.toString()
                     long = it.longitude.toString()
@@ -63,7 +63,7 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
                     setUpMapCamera()
                     getAddress(it)
                 }
-            }
+            })
         }
     }
 

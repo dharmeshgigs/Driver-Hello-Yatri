@@ -25,14 +25,30 @@ class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
             EmergencyAssistanceBottomSheet().show(
                 childFragmentManager, PickUpSpotFragment::class.java.simpleName
             )
-        }, onEndHereClick = {
-
+        }, onEndHereClick = { position, item ->
+//            val tripRiderModel = TripRiderModel(
+//                riderDetails = RiderDetails(
+//                    id = item.user?.id,
+//                    name = item.user?.name,
+//                    profile = item.user?.profileImage,
+//                    paymentType = getString(R.string.dummy_cash_payment),
+//                    note = "",
+//                    mobile =  item.user?.mobile
+//                ),
+//                tripDetails = TripDetails(
+//                    id = item.id,
+//                    driverId = session.user?.id,
+//                    startLocation = StartLocation(
+//
+//                    )
+//                )
+//            )
         })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        rideStatus = arguments?.getString("status")
     }
 
     override fun createViewBinding(
@@ -43,7 +59,6 @@ class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
     }
 
     override fun bindData() {
-        rideStatus = arguments?.getString("status")
         initObservers()
         setUpRecyclerView()
     }

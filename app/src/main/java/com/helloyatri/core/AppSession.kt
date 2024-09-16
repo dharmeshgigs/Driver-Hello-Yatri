@@ -3,8 +3,8 @@ package com.helloyatri.core
 import android.content.Context
 import android.provider.Settings
 import com.google.gson.Gson
-import com.helloyatri.data.model.Details
 import com.helloyatri.data.model.Driver
+import com.helloyatri.data.model.VerificationDetails
 import com.helloyatri.di.DiConstants
 import javax.inject.Inject
 import javax.inject.Named
@@ -143,13 +143,13 @@ class AppSession @Inject constructor(
         get() = appPreferences.getBoolean(Session.VEHICLE_PHOTO_WITH_YOUR, false)
         set(value) = appPreferences.putBoolean(Session.VEHICLE_PHOTO_WITH_YOUR, value)
 
-    override var verificationDetails: Details?
+    override var verificationDetails: VerificationDetails?
         get() {
             val data = appPreferences.getString(Session.VERIFICATION_DETAILS)
             if (data.isNullOrEmpty()) {
                 return null
             }
-            val details = Gson().fromJson(data, Details::class.java)
+            val details = Gson().fromJson(data, VerificationDetails::class.java)
             return details
         }
         set(value) {

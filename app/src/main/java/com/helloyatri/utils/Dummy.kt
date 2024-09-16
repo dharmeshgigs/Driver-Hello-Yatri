@@ -4,8 +4,6 @@ import android.app.Activity
 import com.helloyatri.R
 import com.helloyatri.data.model.CancelRideReasons
 import com.helloyatri.data.model.NearByLocation
-import com.helloyatri.data.model.NotificationsData
-import com.helloyatri.data.model.NotificationsSubData
 import com.helloyatri.data.model.RidePickUps
 import com.helloyatri.data.model.ScheduleRide
 import com.helloyatri.data.model.Status
@@ -366,56 +364,56 @@ fun Activity.getScheduleRideList(): ArrayList<ScheduleRide> {
         )
     }
 }
-
-fun Activity.getNotificationList(): ArrayList<NotificationsData> {
-    return ArrayList<NotificationsData>().apply {
-        add(
-                NotificationsData(
-                        title = "Today",
-                        subList = arrayListOf(
-                                NotificationsSubData(
-                                        title = "Pooja send to note",
-                                        isRead = false
-                                ),
-                                NotificationsSubData(
-                                        title = "You have accept new ride",
-                                        isRead = false
-                                ),
-                                NotificationsSubData(
-                                        title = "Ride Request from Pooja",
-                                ),
-                                NotificationsSubData(
-                                        title = "Josh Cancel Pre-Book Ride",
-                                ),
-                                NotificationsSubData(
-                                        title = "Ride Cancel Successfully",
-                                )
-                        )
-                )
-        )
-        add(
-                NotificationsData(
-                        title = "Yesterday",
-                        subList = arrayListOf(
-                                NotificationsSubData(
-                                        title = "Pooja send to note",
-                                        isRead = false
-                                ),
-                                NotificationsSubData(
-                                        title = "You have accept new ride",
-                                        isRead = false
-                                ),
-                                NotificationsSubData(
-                                        title = "Ride Request from Pooja",
-                                ),
-                                NotificationsSubData(
-                                        title = "Josh Cancel Pre-Book Ride",
-                                ),
-                                NotificationsSubData(
-                                        title = "Ride Cancel Successfully",
-                                )
-                        )
-                )
-        )
-    }
-}
+//
+//fun Activity.getNotificationList(): ArrayList<NotificationsData> {
+//    return ArrayList<NotificationsData>().apply {
+//        add(
+//                NotificationsData(
+//                        title = "Today",
+//                        subList = arrayListOf(
+//                                NotificationsSubData(
+//                                        title = "Pooja send to note",
+//                                        isRead = false
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "You have accept new ride",
+//                                        isRead = false
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "Ride Request from Pooja",
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "Josh Cancel Pre-Book Ride",
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "Ride Cancel Successfully",
+//                                )
+//                        )
+//                )
+//        )
+//        add(
+//                NotificationsData(
+//                        title = "Yesterday",
+//                        subList = arrayListOf(
+//                                NotificationsSubData(
+//                                        title = "Pooja send to note",
+//                                        isRead = false
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "You have accept new ride",
+//                                        isRead = false
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "Ride Request from Pooja",
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "Josh Cancel Pre-Book Ride",
+//                                ),
+//                                NotificationsSubData(
+//                                        title = "Ride Cancel Successfully",
+//                                )
+//                        )
+//                )
+//        )
+//    }
+//}
