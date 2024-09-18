@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "348962939678",
+    "project_id": "hello-yatri-project",
+    "storage_bucket": "hello-yatri-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348962939678:android:3c170c73cedbb3e800df0f",
+        "android_client_info": {
+          "package_name": "com.helloyatri"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxZimLP6U9-vRdcjtMXVm2RKOinoCNYEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348962939678:android:7542608a2be1b6b800df0f",
+        "android_client_info": {
+          "package_name": "com.helloyatricustomer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxZimLP6U9-vRdcjtMXVm2RKOinoCNYEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
