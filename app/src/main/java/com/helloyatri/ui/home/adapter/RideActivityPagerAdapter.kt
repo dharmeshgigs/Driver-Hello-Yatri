@@ -31,7 +31,6 @@ class RideActivityPagerAdapter(fragmentActivity: Fragment,
                 return allRideStatusFragment
             }
         }
-
     }
 
     override fun getItemCount(): Int {

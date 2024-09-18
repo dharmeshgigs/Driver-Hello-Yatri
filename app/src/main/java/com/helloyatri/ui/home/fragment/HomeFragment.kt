@@ -55,7 +55,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         )
         initObservers()
         getHomeDataAPI()
-        setUpUi()
         setClickListener()
         setAdapter()
     }
@@ -310,18 +309,8 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
     }
 
-    private fun setUpUi() = with(binding) {
-        imageViewUserProfile.loadImageFromServerWithPlaceHolder(
-            "https://plus.unsplash.com/premium_photo-1669047668540-9e1712e29f1f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        )
-    }
-
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(false).build()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     private fun getHomeDataAPI() {
@@ -329,31 +318,19 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         apiViewModel.getDriverProfile()
         getUserCurrentLocation(update = true, onLocation = {
             it?.let {
-//                val request = Request(
-//                    latitude = "23.033863",
-//                    longitude = "72.5850221"
-//                )
-
-//                val request = Request(
-//                    latitude = "21.2149576",
-//                    longitude = "72.8902811"
-//                )
-                // TODO: Remove static latlong
-
-//                    Request(
-//                        latitude = "21.2149601",
-//                        longitude = "72.8903101"
-//                    )
                 val request = Request(
-                    latitude = it.latitude.toString(),
-                    longitude = it.longitude.toString()
+                    latitude = "21.2149576",
+                    longitude = "72.8902811"
                 )
+                // TODO: Remove static latlong
+//                val request = Request(
+//                    latitude = it.latitude.toString(),
+//                    longitude = it.longitude.toString()
+//                )
                 apiViewModel.updateCurrentLocation(
                     request
                 )
-//                getNearestLatLong()
             }
-
         })
     }
 

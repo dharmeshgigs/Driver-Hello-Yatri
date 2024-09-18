@@ -53,7 +53,11 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
             ContextCompat.getColor(requireContext(), R.color.backgroundColor), true
         )
         initObservers()
-
+        activityResultLauncherCamera =
+            requireActivity().registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { grantResults ->
+            }
     }
 
     private fun initObservers() {
@@ -103,11 +107,6 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
         setUpButton()
         setTextDecorator()
         setUpClickListener()
-        activityResultLauncherCamera =
-            requireActivity().registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()
-            ) { grantResults ->
-            }
     }
 
     override fun onResume() {

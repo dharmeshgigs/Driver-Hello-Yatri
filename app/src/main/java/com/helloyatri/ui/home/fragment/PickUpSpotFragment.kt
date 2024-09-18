@@ -278,7 +278,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         locationProvider?.getCurrentLocation(updated = true) {
             it?.let {
                 hideLoader()
-                showMessage("Location is ${it.latitude.toString()}:${it.longitude.toString()}")
+//                showMessage("Location is ${it.latitude.toString()}:${it.longitude.toString()}")
                 lat = it.latitude.toString()
                 long = it.longitude.toString()
                 location = LatLng(
@@ -380,7 +380,12 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         }
 
         textViewEmergency.setOnClickListener {
-            EmergencyAssistanceBottomSheet().show(
+            EmergencyAssistanceBottomSheet(callBack = {
+                location?.let {
+                    apiViewModel.location = Pair(it,address)
+                    navigator.load(TripReportCrashFragment::class.java).add(false)
+                }
+            }).show(
                 childFragmentManager, PickUpSpotFragment::class.java.simpleName
             )
         }
@@ -534,7 +539,6 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 //                override fun onTick(millisUntilFinished: Long) {
 //                }
 //                override fun onFinish() {
-//                    Log.e("TAG", "onFinish")
 //                    try {
 //                        val center = googleMap?.cameraPosition?.target
 //                        center?.let {

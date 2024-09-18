@@ -13,13 +13,12 @@ import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AdapterAccountPayment
-import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.gone
 import com.helloyatri.utils.extension.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AccountPaymentReqAcceptFragment : BaseFragment<AccountPaymentReqAcceptFragmentBinding>() {
+class AccountPaymentAcceptedFragment : BaseFragment<AccountPaymentReqAcceptFragmentBinding>() {
 
     private val apiViewModel by viewModels<ApiViewModel>()
 
@@ -47,37 +46,37 @@ class AccountPaymentReqAcceptFragment : BaseFragment<AccountPaymentReqAcceptFrag
 
     private fun initObservers() {
         if(status === TabTypeForPayment.REQUESTED) {
-            apiViewModel.getPaymentTripsLiveData.observe(this){resource->
-                when(resource.status){
-                    Status.SUCCESS -> {
-                        binding.progressBar.gone()
-                        setUpData()
-                    }
-                    Status.ERROR -> {
-                        binding.progressBar.gone()
-                        setUpData()
-                    }
-                    Status.LOADING -> {
-                        binding.progressBar.show()
-                    }
-                }
-            }
-        } else if (status === TabTypeForPayment.ACCEPTED) {
-            apiViewModel.getPaymentTripsLiveData.observe(this){resource->
-                when(resource.status){
-                    Status.SUCCESS -> {
-                        binding.progressBar.gone()
-                        setUpData()
-                    }
-                    Status.ERROR -> {
-                        binding.progressBar.gone()
-                        setUpData()
-                    }
-                    Status.LOADING -> {
-                        binding.progressBar.show()
-                    }
-                }
-            }
+//            apiViewModel.getAllPaymentLiveData.observe(this){resource->
+//                when(resource.status){
+//                    Status.SUCCESS -> {
+//                        binding.progressBar.gone()
+//                        setUpData()
+//                    }
+//                    Status.ERROR -> {
+//                        binding.progressBar.gone()
+//                        setUpData()
+//                    }
+//                    Status.LOADING -> {
+//                        binding.progressBar.show()
+//                    }
+//                }
+//            }
+        } else if(status === TabTypeForPayment.ACCEPTED) {
+//            apiViewModel.getAcceptedPaymentLiveData.observe(this){resource->
+//                when(resource.status){
+//                    Status.SUCCESS -> {
+//                        binding.progressBar.gone()
+//                        setUpData()
+//                    }
+//                    Status.ERROR -> {
+//                        binding.progressBar.gone()
+//                        setUpData()
+//                    }
+//                    Status.LOADING -> {
+//                        binding.progressBar.show()
+//                    }
+//                }
+//            }
         }
 
     }
@@ -91,15 +90,15 @@ class AccountPaymentReqAcceptFragment : BaseFragment<AccountPaymentReqAcceptFrag
 
     private fun setUpData() {
         accountPaymentDataList.clear()
-//        for (items in 1..3) {
-//            accountPaymentDataList.add(AccountPaymentData(
-//                    userImage = "https://images.unsplash.com/photo-1665779912168-c6d48ec98dcb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cGVyc29uJTIwaW1hZ2V8ZW58MHx8MHx8fDA%3D",
-//                    userName = "Aesha Mehta", paymentType = "Cash Payment",
-//                    awayDuration = "Was 5 mins Away",
-//                    startLocation = "Cinemax, Rectory Cottage, Court Road",
-//                    endLocation = "101 National Dr. San Bruno, CA 94580", distance = "25.5 Km",
-//                    duration = "45 min", farePrice = "₹ 480"))
-//        }
+        for (items in 1..3) {
+            accountPaymentDataList.add(AccountPaymentData(
+                    userImage = "https://images.unsplash.com/photo-1665779912168-c6d48ec98dcb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cGVyc29uJTIwaW1hZ2V8ZW58MHx8MHx8fDA%3D",
+                    userName = "Aesha Mehta", paymentType = "Cash Payment",
+                    awayDuration = "Was 5 mins Away",
+                    startLocation = "Cinemax, Rectory Cottage, Court Road",
+                    endLocation = "101 National Dr. San Bruno, CA 94580", distance = "25.5 Km",
+                    duration = "45 min", farePrice = "₹ 480"))
+        }
         adapterAccountPayment.setItems(accountPaymentDataList, 1)
     }
 
@@ -113,13 +112,9 @@ class AccountPaymentReqAcceptFragment : BaseFragment<AccountPaymentReqAcceptFrag
         binding.progressBar.show()
         status?.let {
             if(status === TabTypeForPayment.REQUESTED) {
-                apiViewModel.getRequestedTripPayments(mutableMapOf<String, String>().apply {
-                    put(Constants.PARAM_FILTER_PARAMETER, "REQUESTED")
-                })
+//                apiViewModel.getAllPaymentAPI()
             } else if(status === TabTypeForPayment.ACCEPTED) {
-                apiViewModel.getRequestedTripPayments(mutableMapOf<String, String>().apply {
-                    put(Constants.PARAM_FILTER_PARAMETER, "ACCEPTED")
-                })
+//                apiViewModel.getAcceptedPaymentAPI()
             }
         }
     }

@@ -2,6 +2,7 @@ package com.helloyatri.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
@@ -13,6 +14,7 @@ import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.data.model.Trips
 import com.helloyatri.ui.usecases.HomeUseCases
 import com.helloyatri.ui.usecases.RideActivityUseCases
+import com.helloyatri.ui.usecases.TripPaymentUseCases
 import com.helloyatri.ui.usecases.TripUseCases
 import com.helloyatri.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -257,8 +259,6 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val getAllRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
-
-
     val rideTabs by lazy { ArrayList<RideActivityTabs>() }
 
     fun getAllRideData(request: Map<String, String>) {
@@ -294,12 +294,17 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getAllPaymentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val getPaymentTripsLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val paymentTrips by lazy { mutableListOf<Trips>() }
 
-    fun getAllPaymentAPI() {
+    fun getRequestedTripPayments(request: Map<String, String>) {
         run {
-            getAllPaymentLiveData.value = Resource.loading()
-            getAllPaymentLiveData.value = authRepo.getAllNotification()
+            getPaymentTripsLiveData.value = Resource.loading()
+            val response = authRepo.getTripPayments(request)
+            val tripPaymentUseCases = TripPaymentUseCases()
+            paymentTrips.clear()
+            paymentTrips.addAll(tripPaymentUseCases.getTrips(response))
+            getPaymentTripsLiveData.value = response
         }
     }
 
@@ -492,6 +497,16 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         run {
             updateDriverPreferencesLiveData.value = Resource.loading()
             updateDriverPreferencesLiveData.value = authRepo.updateDriverPreferences(request)
+        }
+    }
+
+    val tripReportCrashLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    var location = Pair<LatLng, String>(LatLng(0.0, 0.0), "")
+
+    fun tripReportCrash(request: Request) {
+        run {
+            tripReportCrashLiveData.value = Resource.loading()
+            tripReportCrashLiveData.value = authRepo.tripReportCrash(request)
         }
     }
 }

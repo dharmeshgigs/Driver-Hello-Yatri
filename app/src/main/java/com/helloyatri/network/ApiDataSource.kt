@@ -184,4 +184,11 @@ class ApiDataSource @Inject constructor(
     override suspend fun updateDriverPreferences(request: Request): Resource<JsonObject> {
         return run2 { authService.updateDriverPreferences(request) }
     }
+
+    override suspend fun getTripPayments(request: Map<String, String>): Resource<JsonObject> {
+        return run2 { authService.getTripPayments(request) }
+    }
+    override suspend fun tripReportCrash(request: Request): Resource<JsonObject> {
+        return run2 { authService.tripReportCrash(request) }
+    }
 }

@@ -3,11 +3,13 @@ package com.helloyatri.network
 import okhttp3.HttpUrl
 
 object APIFactory {
+
+//    https://koolmindapps.com/Yatriapp/api/
     fun getHttpUrl() : HttpUrl {
         return HttpUrl.Builder()
-            .scheme("http")
-            .host("3.111.159.32")
-            .addPathSegments("api/")
+            .scheme("https")
+            .host("koolmindapps.com")
+            .addPathSegments("Yatriapp/api/")
             .build()
     }
 
@@ -59,6 +61,9 @@ object APIFactory {
         const val UPDATE_NOTIFICATIONS_AS_MARK = "markAllNotificationAsRead"
         const val GET_DRIVER_PREFERENCES = "driver/get-driver-preferences"
         const val UPDATE_DRIVER_PREFERENCES = "driver/update-driver-preferences"
+
+        const val GET_TRIP_PAYMENTS = "getTripPaymentList"
+        const val REPORT_CRASH = "reportCrash"
     }
 
     object ResponseCode {

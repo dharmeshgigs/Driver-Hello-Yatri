@@ -382,4 +382,9 @@ will be accepted.</string>
     <string name="trip_is_cancelled">Trip is cancelled</string>
     <string name="label_okay">Okay</string>
     <string name="label_your_trip_cancelled_by">Your trip is cancelled by %s</string>
+    <string name="label_photos">Photos</string>
+    <string name="label_call_hello_yatri_line">Call Hello Yatri Line</string>
+    <string name="label_get_help_from_police">Get help from police</string>
+    <string name="label_report_a_crash">Report a crash</string>
+    <string name="label_description">Description</string>
 </resources>

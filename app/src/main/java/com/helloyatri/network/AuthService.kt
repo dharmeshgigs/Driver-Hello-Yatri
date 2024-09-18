@@ -143,4 +143,10 @@ interface AuthService {
 
     @POST(APIFactory.AuthApi.UPDATE_DRIVER_PREFERENCES)
     suspend fun updateDriverPreferences(@Body request: Request) : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_TRIP_PAYMENTS)
+    suspend fun getTripPayments(@QueryMap request: Map<String, String>) : Response<JsonObject>
+
+    @POST(APIFactory.AuthApi.REPORT_CRASH)
+    suspend fun tripReportCrash(@Body request: Request) : Response<JsonObject>
 }

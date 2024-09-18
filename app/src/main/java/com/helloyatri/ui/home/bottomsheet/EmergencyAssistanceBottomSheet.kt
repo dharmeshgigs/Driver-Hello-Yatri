@@ -7,11 +7,13 @@ import com.helloyatri.data.model.EmergencyAssistance
 import com.helloyatri.databinding.EmergencyAssistanceBottomSheetBinding
 import com.helloyatri.ui.base.BaseBottomSheetDialogFragment
 import com.helloyatri.ui.home.adapter.AdapterEmergencyAssistance
+import com.helloyatri.ui.home.fragment.RideCompleteFragment
+import com.helloyatri.ui.home.fragment.TripReportCrashFragment
 import com.helloyatri.utils.AppUtils.openCallDialer
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EmergencyAssistanceBottomSheet :
+class EmergencyAssistanceBottomSheet(private val callBack: () -> Unit) :
     BaseBottomSheetDialogFragment<EmergencyAssistanceBottomSheetBinding>() {
 
     private val adapterEmergencyAssistance by lazy {
@@ -46,24 +48,28 @@ class EmergencyAssistanceBottomSheet :
             adapterEmergencyAssistance.setItems(
                 arrayListOf(
                     EmergencyAssistance(
-                        title = "Call Hello Yatri Line",
+                        title = getString(R.string.label_call_hello_yatri_line),
                         icon = R.drawable.image_call_support
                     ),
                     EmergencyAssistance(
-                        title = "Get help from police",
+                        title = getString(R.string.label_get_help_from_police),
                         icon = R.drawable.image_call_police
                     ),
-                    EmergencyAssistance(title = "Report a crash", icon = R.drawable.image_crash)
+                    EmergencyAssistance(title = getString(R.string.label_report_a_crash), icon = R.drawable.image_crash)
                 ),
                 1
             )
         }
         adapterEmergencyAssistance.setOnItemClickListener {
-            if (it.equals("Get help from police")) {
+            if (it.equals(getString(R.string.label_call_hello_yatri_line))) {
+                dismiss()
                 activity?.openCallDialer("100")
-            } else if (it.equals("Call Hello Yatri Line")) {
+            } else if (it.equals(getString(R.string.label_get_help_from_police))) {
+                dismiss()
                 activity?.openCallDialer("100")
-            } else if (it.equals("Report a crash")) {
+            } else if (it.equals(getString(R.string.label_report_a_crash))) {
+                dismiss()
+                callBack.invoke()
             }
         }
 

@@ -89,13 +89,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
                     setUserData(response.data)
                 }
 
-                Status.ERROR -> {
-
-                }
-
-                Status.LOADING -> {
-
-                }
+                else -> {}
             }
         }
         apiViewModel.acceptRequestLiveData.observe(this) { resource ->
@@ -104,36 +98,11 @@ class HomeActivity : BaseActivity(), PushEventListener {
                     load(PickUpSpotFragment::class.java).add(true)
                 }
 
-                Status.ERROR -> {
-                }
-
-                Status.LOADING -> {}
+                else -> {}
             }
         }
-        apiViewModel.declineRequestLiveData.observe(this) { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                }
-
-                Status.ERROR -> {
-                }
-
-                Status.LOADING -> {}
-            }
-        }
-        apiViewModel.firebaseTokenLiveData.observe(this) { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-//                    showSuccessMessage("Success")
-                }
-
-                Status.ERROR -> {
-                }
-
-                Status.LOADING -> {}
-            }
-        }
-
+        apiViewModel.declineRequestLiveData.observe(this) {}
+        apiViewModel.firebaseTokenLiveData.observe(this) { }
     }
 
     fun setUserData(data: Driver?) = with(homeAcitivtyBinding) {
@@ -212,7 +181,10 @@ class HomeActivity : BaseActivity(), PushEventListener {
         }
         sideMenuList.clear()
         sideMenuList.add(
-            SideMenu(sideMenuName = getString(R.string.menu_item_edit_profile), sideMenuTag = SideMenuTag.EDIT_PROFILE)
+            SideMenu(
+                sideMenuName = getString(R.string.menu_item_edit_profile),
+                sideMenuTag = SideMenuTag.EDIT_PROFILE
+            )
         )
         sideMenuList.add(
             SideMenu(sideMenuName = "Ride Activity", sideMenuTag = SideMenuTag.RIDE_ACTIVITY)
@@ -330,9 +302,13 @@ class HomeActivity : BaseActivity(), PushEventListener {
                             }
                         }
                     }
+
                     PusherManager.TRIP_STATUS_UPDATED -> {
                         if (it.tripDetails?.id == apiViewModel.tripRequest.value?.tripDetails?.id) {
-                            val popUP = PopUp(POPUPTITLE = it.popupDetails?.title, POPUPMESSAGE = it.popupDetails?.description)
+                            val popUP = PopUp(
+                                POPUPTITLE = it.popupDetails?.title,
+                                POPUPMESSAGE = it.popupDetails?.description
+                            )
                             apiViewModel.popUp = popUP
                             apiViewModel._tripStatusUpdatedLiveData.postValue(
                                 it
@@ -359,7 +335,6 @@ class HomeActivity : BaseActivity(), PushEventListener {
     private fun createFirebaseToken() {
         try {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                Log.e("FCM_TOKEN SUCCESS", task.isSuccessful.toString())
                 if (!task.isSuccessful) {
                     Log.e("FCM_TOKEN", task.isSuccessful.toString())
                     return@OnCompleteListener
@@ -368,7 +343,6 @@ class HomeActivity : BaseActivity(), PushEventListener {
                 val token = task.result
                 Log.e("FCM_TOKEN", token)
                 try {
-                    Log.e("FCM_TOKEN TRY", token)
                     if (appSession.deviceToken != token) {
                         appSession.deviceToken = token
                         apiViewModel.updateFirebaseToken(
@@ -387,7 +361,6 @@ class HomeActivity : BaseActivity(), PushEventListener {
                 }
             })
         } catch (e: Exception) {
-            Log.e("FCM_TOKEN", "CATCH")
             e.printStackTrace()
         }
     }

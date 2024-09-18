@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="21dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Location" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLocationAddress"
+            style="@style/TextViewLufgaRegularGrey15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLocation"
+            tools:text="User ID" />
+
+        <include
+            android:id="@+id/includedFullName"
+            layout="@layout/include_description_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewLocationAddress" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewPhotos"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/label_photos"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@+id/includedFullName"
+            tools:text="Photos" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewImages"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:visibility="visible"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/_60sdp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/textViewPhotos"
+            tools:itemCount="6"
+            tools:listitem="@layout/auth_driver_personal_profile_picture_image_row_item" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/buttonSubmit"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_15sdp"
+            android:background="@drawable/bg_top_round_rect_home_blue"
+            android:paddingHorizontal="@dimen/_40sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/btn_submit"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintVertical_bias="1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

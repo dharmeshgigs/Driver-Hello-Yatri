@@ -463,7 +463,6 @@ object Formatter {
 
         } catch (e: ParseException) {
             e.printStackTrace()
-            Log.e("ConvTimeE", e.message + "")
         }
 
         return convTime

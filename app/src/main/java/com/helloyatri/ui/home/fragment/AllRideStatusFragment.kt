@@ -22,7 +22,9 @@ class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
 
     private val allRidesStatusAdapter by lazy {
         AllRidesStatusAdapter(onEmergencyClick = {
-            EmergencyAssistanceBottomSheet().show(
+            EmergencyAssistanceBottomSheet(callBack = {
+
+            }).show(
                 childFragmentManager, PickUpSpotFragment::class.java.simpleName
             )
         }, onEndHereClick = { position, item ->
