@@ -44,7 +44,7 @@ import kotlin.math.roundToInt
 
 @ActivityScoped
 class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivity: BaseActivity) :
-        FileSelectorMethods, DefaultLifecycleObserver {
+    FileSelectorMethods, DefaultLifecycleObserver {
 
     private var extraMimeTypeVideo: Array<String> = arrayOf()
     private var canSelectMultipleFlag: Boolean = false
@@ -57,14 +57,14 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
     private var galleryIntent: Intent? = null
     private var videoIntent: Intent? = null
 
-    private val permissionList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.CAMERA)
+    private val permissionList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES)
     } else {
-        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+        arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
 
     }
 
-    private val permissionVideo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    private val permissionVideo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         arrayOf(Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA)
     } else {
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
@@ -94,7 +94,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
     init {
         cameraResult = mActivity.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
                 if (isSelectingVideo) {
                     mMediaSelector?.onCameraVideoUri(Uri.fromFile(File(fileForCameraIntent)))
@@ -107,7 +108,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         }
 
         activityResultLauncherCamera = mActivity.registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()) { grantResults ->
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { grantResults ->
             if (checkAllPermission(grantResults)) {
                 if (isSelectingVideo) dispatchTakeVideoIntent()
                 else openCamera()
@@ -119,7 +121,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         }
 
         activityResultLauncherGallery = mActivity.registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()) { grantResults ->
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { grantResults ->
             if (checkAllPermission(grantResults)) {
                 if (isSelectAnyFile) {
                     openAnyIntent()
@@ -135,7 +138,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         }
 
         singlePhotoPickerLauncher = mActivity.registerForActivityResult(
-                ActivityResultContracts.PickVisualMedia()) { uri ->
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri ->
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
             if (uri != null) {
@@ -150,7 +154,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
 
         anyFilePicker = mActivity.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.apply {
                     val selectedMedia: Uri? = data
@@ -161,22 +166,27 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                     val contentResolver = mActivity.contentResolver
                     when (contentResolver?.getType(selectedMedia)) {
                         "image/jpeg", "image/png" -> {
-                            mMediaSelector?.onAnyFileSelected(OutPutFileAny(
+                            mMediaSelector?.onAnyFileSelected(
+                                OutPutFileAny(
                                     Uri.fromFile(getActualPath(selectedMedia, createImageFile())),
-                                    FileType.Image))
+                                    FileType.Image
+                                )
+                            )
                         }
 
                         "application/pdf" -> {
                             val copyFile = getActualPath(selectedMedia, createAnyFile(".pdf"))
                             mMediaSelector?.onAnyFileSelected(
-                                    OutPutFileAny(Uri.fromFile(copyFile), FileType.Pdf))
+                                OutPutFileAny(Uri.fromFile(copyFile), FileType.Pdf)
+                            )
 
                         }
 
                         "application/msword" -> {
                             val copyFile = getActualPath(selectedMedia, createAnyFile(".doc"))
                             mMediaSelector?.onAnyFileSelected(
-                                    OutPutFileAny(Uri.fromFile(copyFile), FileType.Doc))
+                                OutPutFileAny(Uri.fromFile(copyFile), FileType.Doc)
+                            )
 
                         }
 
@@ -191,7 +201,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         }
 
         multiplePhotoPickerLauncher = mActivity.registerForActivityResult(
-                ActivityResultContracts.PickMultipleVisualMedia(10)) { imageUris: List<Uri> ->
+            ActivityResultContracts.PickMultipleVisualMedia(10)
+        ) { imageUris: List<Uri> ->
             if (imageUris.isNotEmpty()) {
                 if (isSelectingVideo) mMediaSelector?.onVideoURIList(imageUris as ArrayList<Uri>)
                 else mMediaSelector?.onImageUriList(imageUris as ArrayList<Uri>)
@@ -199,7 +210,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         }
 
         galleryVideoResult = mActivity.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.apply {
                     if (!canSelectMultipleVideo) {
@@ -236,7 +248,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
         }
         galleryResult = mActivity.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.apply {
                     if (!canSelectMultipleFlag) {
@@ -246,9 +259,14 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                         val mime = MimeTypeMap.getSingleton()
                         val type = mime.getExtensionFromMimeType(cR.getType(selectedMedia!!))
                         if (Objects.requireNonNull(type)
-                                    .equals("png", ignoreCase = true) || type!!.equals("jpeg",
-                                        ignoreCase = true) || type.equals("jpg",
-                                        ignoreCase = true)) {
+                                .equals("png", ignoreCase = true) || type!!.equals(
+                                "jpeg",
+                                ignoreCase = true
+                            ) || type.equals(
+                                "jpg",
+                                ignoreCase = true
+                            )
+                        ) {
                             if (selectedMedia.toString().contains("image")) {
                                 openCropViewOrNot(selectedMedia)
                             } else {
@@ -282,7 +300,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         }
 
         cropResult = mActivity.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()) { data: ActivityResult ->
+            ActivityResultContracts.StartActivityForResult()
+        ) { data: ActivityResult ->
             if (data.resultCode == RESULT_OK) {
                 val result = CropImage.getActivityResult(data.data)
                 val resultUri = result.uri
@@ -307,8 +326,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         this.mMediaSelector = mMediaSelector
     }
 
-    override fun selectVideoAndImagePicker(childFragmentManager: FragmentManager, isCrop1: Boolean,
-                                           cropType: String, extraMimeType: Array<String>) {
+    override fun selectVideoAndImagePicker(
+        childFragmentManager: FragmentManager, isCrop1: Boolean,
+        cropType: String, extraMimeType: Array<String>
+    ) {
         this.cropType = cropType
         this.isCrop = isCrop1
         isSelectingVideo = false
@@ -324,7 +345,7 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                     openGallery()
                 }
 
-                    R.id.layoutTakeVideo -> {
+                R.id.layoutTakeVideo -> {
                     isSelectingVideo = true
                     dispatchTakeVideoIntent()
                 }
@@ -348,8 +369,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         val builder = AlertDialog.Builder(mActivity)
         builder.setTitle("Choose Image Source")
 
-        val items = arrayOf(mActivity.resources?.getString(R.string.label_camera),
-                mActivity.resources?.getString(R.string.label_gallery))
+        val items = arrayOf(
+            mActivity.resources?.getString(R.string.label_camera),
+            mActivity.resources?.getString(R.string.label_gallery)
+        )
 
         builder.setItems(items) { _, which ->
 
@@ -370,8 +393,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         val builder = AlertDialog.Builder(mActivity)
         builder.setTitle("Choose Video Source")
 
-        val items = arrayOf(mActivity.resources?.getString(R.string.label_camera),
-                mActivity.resources?.getString(R.string.label_gallery))
+        val items = arrayOf(
+            mActivity.resources?.getString(R.string.label_camera),
+            mActivity.resources?.getString(R.string.label_gallery)
+        )
 
         builder.setItems(items) { _, which ->
 
@@ -389,19 +414,25 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         extraMimeTypeVideo = extraMimeType
         canSelectMultipleVideo(canSelectMultipleVideo, extraMimeType)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
+                mActivity,
+                Manifest.permission.READ_MEDIA_VIDEO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             activityResultLauncherGallery.launch(permissionVideo)
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                mActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             activityResultLauncherGallery.launch(permissionVideo)
         } else {
             if (isPhotoPickerAvailable() && extraMimeType.isEmpty()) {
                 if (canSelectMultipleFlag) multiplePhotoPickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+                )
                 else singlePhotoPickerLauncher?.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+                )
             } else {
                 videoIntent?.let { galleryVideoResult.launch(it) }
             }
@@ -439,18 +470,23 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
      * Open camera to click image
      */
     private fun openCamera() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-            activityResultLauncherCamera.launch(permissionList)
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && (ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             activityResultLauncherCamera.launch(permissionList)
         } else {
             dispatchTakePictureIntent()
         }
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
+//                        mActivity,
+//                        Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+//            activityResultLauncherCamera.launch(permissionList)
+//        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && (ContextCompat.checkSelfPermission(
+//                        mActivity,
+//                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+//            activityResultLauncherCamera.launch(permissionList)
+//        } else {
+//            dispatchTakePictureIntent()
+//        }
 
     }
 
@@ -481,7 +517,7 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (mActivity.packageManager?.let { takePictureIntent.resolveActivity(it) } != null) {
+//        if (mActivity.packageManager?.let { takePictureIntent.resolveActivity(it) } != null) {
             val photoFile: File? = try {
                 createImageFile()
             } catch (ex: IOException) {
@@ -490,27 +526,34 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
             }
             // Continue only if the File was successfully created
             photoFile?.also {
-                val photoURI: Uri = FileProvider.getUriForFile(mActivity,
-                        "com.helloyatri.provider", it)
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    mActivity,
+                    "com.helloyatri.provider", it
+                )
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 cameraResult.launch(takePictureIntent)
 
             }
-        }
+//        }
     }
 
 
     private fun dispatchTakeVideoIntent() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                mActivity,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             activityResultLauncherCamera.launch(permissionVideo)
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && (ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                mActivity,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                mActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED)
+        ) {
             activityResultLauncherCamera.launch(permissionVideo)
         } else {
             val takePictureIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
@@ -526,15 +569,19 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 val photoURI =
-                        FileProvider.getUriForFile(mActivity, "${mActivity.packageName}.provider",
-                                photoFile!!)
+                    FileProvider.getUriForFile(
+                        mActivity, "${mActivity.packageName}.provider",
+                        photoFile!!
+                    )
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 takePictureIntent.addFlags(
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
                 cameraResult.launch(takePictureIntent)
             } else {
                 takePictureIntent.addFlags(
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
                 cameraResult.launch(takePictureIntent)
             }
         }
@@ -543,8 +590,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
     override fun openAnyIntent() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                mActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 activityResultLauncherGallery.launch(permissionList)
             } else {
@@ -558,8 +607,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
     override fun openPdfIntent() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                mActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 activityResultLauncherGallery.launch(permissionList)
             } else {
@@ -567,7 +618,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
             }
         } else {
             anyFilePicker.launch(
-                    getFileChooserIntent(arrayOf("application/msword", "application/pdf")))
+                getFileChooserIntent(arrayOf("application/msword", "application/pdf"))
+            )
         }
     }
 
@@ -580,20 +632,26 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                mActivity,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             activityResultLauncherGallery.launch(permissionList)
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                        mActivity,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                mActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             activityResultLauncherGallery.launch(permissionList)
 
         } else {
             if (isPhotoPickerAvailable()) {
                 if (canSelectMultipleFlag) multiplePhotoPickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
                 else singlePhotoPickerLauncher?.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
             } else {
                 galleryIntent?.let { galleryResult.launch(it) }
             }
@@ -617,7 +675,8 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     getExtensionVersion(
-                            Build.VERSION_CODES.R) >= ANDROID_R_REQUIRED_EXTENSION_VERSION
+                        Build.VERSION_CODES.R
+                    ) >= ANDROID_R_REQUIRED_EXTENSION_VERSION
                 } else {
                     true
                 }
@@ -646,8 +705,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
         videoIntent = Intent(Intent.ACTION_GET_CONTENT)
         videoIntent?.type = "*/*"
 
-        if (extraMimeType.isEmpty()) videoIntent?.putExtra(Intent.EXTRA_MIME_TYPES,
-                arrayOf("video/*"))
+        if (extraMimeType.isEmpty()) videoIntent?.putExtra(
+            Intent.EXTRA_MIME_TYPES,
+            arrayOf("video/*")
+        )
         else videoIntent?.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType)
 
         videoIntent?.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, canSelect)
@@ -752,8 +813,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
         val canvas = Canvas(scaledBitmap!!)
         canvas.setMatrix(scaleMatrix)
-        canvas.drawBitmap(bmp, middleX - bmp.width / 2, middleY - bmp.height / 2,
-                Paint(Paint.FILTER_BITMAP_FLAG))
+        canvas.drawBitmap(
+            bmp, middleX - bmp.width / 2, middleY - bmp.height / 2,
+            Paint(Paint.FILTER_BITMAP_FLAG)
+        )
 
         //      check the rotation of the image and display it properly
         val exif: ExifInterface
@@ -780,8 +843,10 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                 }
             }
             scaledBitmap =
-                    Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height,
-                            matrix, true)
+                Bitmap.createBitmap(
+                    scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height,
+                    matrix, true
+                )
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -802,9 +867,9 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
 
 
     private fun calculateInSampleSize(
-            options: BitmapFactory.Options,
-            reqWidth: Int,
-            reqHeight: Int,
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int,
     ): Int {
         val height = options.outHeight
         val width = options.outWidth
@@ -834,11 +899,11 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
                 }
 
                 Constant.CropRectangle -> CropImage.activity(file).setAspectRatio(6, 4)
-                        .getIntent(mActivity)
+                    .getIntent(mActivity)
 
                 Constant.CropCircle -> CropImage.activity(file)
-                        .setCropShape(CropImageView.CropShape.OVAL).setAspectRatio(1, 1)
-                        .getIntent(mActivity)
+                    .setCropShape(CropImageView.CropShape.OVAL).setAspectRatio(1, 1)
+                    .getIntent(mActivity)
 
                 else -> CropImage.activity(file).getIntent(mActivity)
             }
@@ -872,9 +937,11 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
     fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 //        val storageDir = mActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(timeStamp, /* prefix */
-                ".jpg", /* suffix */
-                cacheDir      /* directory */)
+        val image = File.createTempFile(
+            timeStamp, /* prefix */
+            ".jpg", /* suffix */
+            cacheDir      /* directory */
+        )
         fileForCameraIntent = image.absolutePath
         return image
     }
@@ -883,9 +950,11 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
     private fun createAnyFile(extension: String): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 //        val storageDir = mActivity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-        return File.createTempFile(timeStamp, /* prefix */
-                extension, /* suffix */
-                cacheDir      /* directory */)
+        return File.createTempFile(
+            timeStamp, /* prefix */
+            extension, /* suffix */
+            cacheDir      /* directory */
+        )
     }
 
     private fun clearCacheFile() {
@@ -912,13 +981,13 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
     }
 
     fun getFilePathFromUri(context: Context, uri: Uri, uniqueName: Boolean): String =
-            if (uri.path?.contains("file://") == true) uri.path!!
-            else getFileFromContentUri(context, uri, uniqueName).path
+        if (uri.path?.contains("file://") == true) uri.path!!
+        else getFileFromContentUri(context, uri, uniqueName).path
 
     private fun getFileFromContentUri(
-            context: Context,
-            contentUri: Uri,
-            uniqueName: Boolean,
+        context: Context,
+        contentUri: Uri,
+        uniqueName: Boolean,
     ): File {
         // Preparing Temp file name
         val fileExtension = getFileExtension(context, contentUri) ?: ""
@@ -949,11 +1018,11 @@ class MediaSelectHelper @Inject constructor(@ActivityContext private var mActivi
     }
 
     private fun getFileExtension(context: Context, uri: Uri): String? =
-            if (uri.scheme == ContentResolver.SCHEME_CONTENT) MimeTypeMap.getSingleton()
-                    .getExtensionFromMimeType(context.contentResolver.getType(uri))
-            else uri.path?.let {
-                MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(it)).toString())
-            }
+        if (uri.scheme == ContentResolver.SCHEME_CONTENT) MimeTypeMap.getSingleton()
+            .getExtensionFromMimeType(context.contentResolver.getType(uri))
+        else uri.path?.let {
+            MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(it)).toString())
+        }
 
     @Throws(IOException::class)
     private fun copy(source: InputStream, target: OutputStream) {
@@ -1001,13 +1070,15 @@ interface FileSelectorMethods {
     */
     fun selectVideoFromGallery(extraMimeType: Array<String> = arrayOf())
     fun selectOptionsForImagePicker(
-            isCrop1: Boolean,
-            cropType: String = MediaSelectHelper.Constant.CropSquare,
+        isCrop1: Boolean,
+        cropType: String = MediaSelectHelper.Constant.CropSquare,
     )
 
-    fun selectVideoAndImagePicker(childFragmentManager: FragmentManager, isCrop1: Boolean,
-                                  cropType: String = MediaSelectHelper.Constant.CropSquare,
-                                  extraMimeType: Array<String> = arrayOf())
+    fun selectVideoAndImagePicker(
+        childFragmentManager: FragmentManager, isCrop1: Boolean,
+        cropType: String = MediaSelectHelper.Constant.CropSquare,
+        extraMimeType: Array<String> = arrayOf()
+    )
 
     fun canSelectMultipleImages(canSelect: Boolean)
     fun canSelectMultipleVideo(canSelect: Boolean, extraMimeType: Array<String> = arrayOf())

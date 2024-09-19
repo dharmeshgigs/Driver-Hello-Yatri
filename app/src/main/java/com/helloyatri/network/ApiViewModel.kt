@@ -500,10 +500,19 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
+//    val uploadDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+//    fun updateDocument(body: RequestBody) {
+//        run {
+//            uploadDocumentLiveData.value = Resource.loading()
+//            uploadDocumentLiveData.value = authRepo.uploadDocument(body)
+//        }
+//    }
+//
+
     val tripReportCrashLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
     var location = Pair<LatLng, String>(LatLng(0.0, 0.0), "")
 
-    fun tripReportCrash(request: Request) {
+    fun tripReportCrash(request: RequestBody) {
         run {
             tripReportCrashLiveData.value = Resource.loading()
             tripReportCrashLiveData.value = authRepo.tripReportCrash(request)

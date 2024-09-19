@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.Driver
@@ -46,6 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 
 @AndroidEntryPoint
@@ -71,6 +73,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getIntentData ()
         setUpToolbar()
         setUpSideMenu()
         setUpSideMenuClickListener()
@@ -78,6 +81,20 @@ class HomeActivity : BaseActivity(), PushEventListener {
         load(HomeFragment::class.java).replace(false)
         myApp.pusherManager.setPushEventListener(this)
         createFirebaseToken()
+    }
+
+    private fun getIntentData (){
+        Log.e(" >> >> >>> >> >>", "Home Activity Notification Data  fsfsfsf>> >> ${intent.getStringExtra("data")}")
+        intent.extras?.let {
+            if (it.containsKey("data")){
+             Log.e(" >> >> >>> >> >>", "Home Activity Notification Data >> >> ${it.getString("data")}")
+                val jsonObject = JsonParser.parseString(it.getString("data")).asJsonObject
+                onEvent(
+                    jsonObject,
+                    PusherManager.YOUR_EVENT_NAME
+                )
+            }
+        }
     }
 
     private fun initObservers() {

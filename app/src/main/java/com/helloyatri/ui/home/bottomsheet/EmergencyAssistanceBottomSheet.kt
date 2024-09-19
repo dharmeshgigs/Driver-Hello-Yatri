@@ -61,13 +61,13 @@ class EmergencyAssistanceBottomSheet(private val callBack: () -> Unit) :
             )
         }
         adapterEmergencyAssistance.setOnItemClickListener {
-            if (it.equals(getString(R.string.label_call_hello_yatri_line))) {
+            if (it.title.equals(getString(R.string.label_call_hello_yatri_line))) {
                 dismiss()
                 activity?.openCallDialer("100")
-            } else if (it.equals(getString(R.string.label_get_help_from_police))) {
+            } else if (it.title.equals(getString(R.string.label_get_help_from_police))) {
                 dismiss()
                 activity?.openCallDialer("100")
-            } else if (it.equals(getString(R.string.label_report_a_crash))) {
+            } else if (it.title.equals(getString(R.string.label_report_a_crash))) {
                 dismiss()
                 callBack.invoke()
             }
