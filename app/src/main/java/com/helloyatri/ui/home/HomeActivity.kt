@@ -47,7 +47,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 
 @AndroidEntryPoint
@@ -301,6 +300,9 @@ class HomeActivity : BaseActivity(), PushEventListener {
                         it.let {
                             apiViewModel.tripRequest.postValue(null)
                             apiViewModel._pickupNoteLiveData.postValue(null)
+                            apiViewModel._pickupNoteLiveData.postValue(null)
+                            apiViewModel.verifyTripLiveData.postValue(null)
+                            apiViewModel.popUp = null
                             apiViewModel._paymentCollectedLiveData.postValue(null)
                             apiViewModel._tripStatusUpdatedLiveData.postValue(null)
                             if (it.tripDetails?.driverId == appSession.user?.id) {

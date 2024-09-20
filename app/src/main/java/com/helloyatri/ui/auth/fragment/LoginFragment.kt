@@ -1,7 +1,5 @@
 package com.helloyatri.ui.auth.fragment
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -10,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
@@ -25,7 +21,6 @@ import com.helloyatri.databinding.AuthLoginFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
-import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.changeStatusBarColor

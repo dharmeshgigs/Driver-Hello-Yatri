@@ -5,10 +5,6 @@
         path="Android/data/com.helloyatri/files/Pictures" />
 
     <external-path
-        name="my_images"
-        path="Android/data/com.helloyatri/files/Pictures" />
-
-    <external-path
         name="external"
         path="." />
     <external-files-path

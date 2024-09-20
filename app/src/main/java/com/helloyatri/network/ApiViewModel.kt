@@ -16,7 +16,6 @@ import com.helloyatri.ui.usecases.HomeUseCases
 import com.helloyatri.ui.usecases.RideActivityUseCases
 import com.helloyatri.ui.usecases.TripPaymentUseCases
 import com.helloyatri.ui.usecases.TripUseCases
-import com.helloyatri.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -258,7 +257,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getAllRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val getAllRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     val rideTabs by lazy { ArrayList<RideActivityTabs>() }
 
     fun getAllRideData(request: Map<String, String>) {
@@ -294,7 +293,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getPaymentTripsLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val getPaymentTripsLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     val paymentTrips by lazy { mutableListOf<Trips>() }
 
     fun getRequestedTripPayments(request: Map<String, String>) {
@@ -379,7 +378,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getActiveRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val getActiveRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     val activeTrips by lazy { mutableListOf<Trips>() }
 
     fun getActiveRideData(request: Map<String, String>) {
@@ -393,7 +392,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getCompletedRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val getCompletedRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     val completedTrips by lazy { mutableListOf<Trips>() }
 
     fun getCompletedRideData(request: Map<String, String>) {
@@ -408,7 +407,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getCancelledRideLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val getCancelledRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     val cancelledTrips by lazy { mutableListOf<Trips>() }
 
     fun getCancelledRideData(request: Map<String, String>) {
@@ -428,7 +427,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     val _tripStartLiveData = MutableLiveData<Boolean>()
     val tripStartLiveData: LiveData<Boolean> get() = _tripStartLiveData
 
-    val completeTripLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val completeTripLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun completeTrip(request: Request) {
         run {
@@ -441,7 +440,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     val _paymentCollectedLiveData = MutableLiveData<TripRiderModel?>()
     val paymentCollectedLiveData: LiveData<TripRiderModel?> get() = _paymentCollectedLiveData
 
-    val collectPaymentLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val collectPaymentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun collectTripPayment(request: Request) {
         run {
@@ -451,7 +450,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val firebaseTokenLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val firebaseTokenLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun updateFirebaseToken(request: Request) {
         run {
@@ -482,7 +481,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     val _tripStatusUpdatedLiveData = MutableLiveData<TripRiderModel>()
     val tripStatusUpdatedLiveData: LiveData<TripRiderModel> get() = _tripStatusUpdatedLiveData
 
-    val getDriverPreferencesLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val getDriverPreferencesLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun getDriverPreferences() {
         run {
@@ -491,7 +490,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val updateDriverPreferencesLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val updateDriverPreferencesLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun updateDriverPreferences(request: Request) {
         run {
@@ -500,16 +499,7 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-//    val uploadDocumentLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-//    fun updateDocument(body: RequestBody) {
-//        run {
-//            uploadDocumentLiveData.value = Resource.loading()
-//            uploadDocumentLiveData.value = authRepo.uploadDocument(body)
-//        }
-//    }
-//
-
-    val tripReportCrashLiveData by lazy { SingleLiveEvent<Resource<JsonObject>>() }
+    val tripReportCrashLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
     var location = Pair<LatLng, String>(LatLng(0.0, 0.0), "")
 
     fun tripReportCrash(request: RequestBody) {

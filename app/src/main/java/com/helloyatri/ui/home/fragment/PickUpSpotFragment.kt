@@ -158,10 +158,12 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                             Gson().fromJson(resource.data.toString(), GetCencellation::class.java)
                         cencellationDataList.clear()
                         cencellationDataList.addAll(response.data)
+                        apiViewModel.getCanclletionReasonLiveData.value = null
                     }
 
                     Status.ERROR -> {
                         hideLoader()
+                        apiViewModel.getCanclletionReasonLiveData.value = null
                     }
 
                     Status.LOADING -> showLoader()
@@ -175,10 +177,12 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     Status.SUCCESS -> {
                         hideLoader()
                         showVerificationDialog()
+                        apiViewModel.updateArriveStatusLiveData.value = null
                     }
 
                     Status.ERROR -> {
                         hideLoader()
+                        apiViewModel.updateArriveStatusLiveData.value = null
                     }
 
                     Status.LOADING -> {
@@ -210,12 +214,13 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         }
 
         apiViewModel.completeTripLiveData.observe(this) { resource ->
-            resource.let {
+            resource?.let {
                 when (resource.status) {
                     Status.SUCCESS -> {
                         hideLoader()
                         navigator.load(RideCompleteFragment::class.java)
                             .clearHistory(this@PickUpSpotFragment::class.java.simpleName).add(false)
+                        apiViewModel.completeTripLiveData.value = null
                     }
 
                     Status.ERROR -> {
@@ -223,6 +228,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                         val error =
                             resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
                         showErrorMessage(error)
+                        apiViewModel.completeTripLiveData.value = null
                     }
 
                     Status.LOADING -> {

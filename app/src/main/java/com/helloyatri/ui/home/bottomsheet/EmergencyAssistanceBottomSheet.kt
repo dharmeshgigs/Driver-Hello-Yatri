@@ -7,8 +7,6 @@ import com.helloyatri.data.model.EmergencyAssistance
 import com.helloyatri.databinding.EmergencyAssistanceBottomSheetBinding
 import com.helloyatri.ui.base.BaseBottomSheetDialogFragment
 import com.helloyatri.ui.home.adapter.AdapterEmergencyAssistance
-import com.helloyatri.ui.home.fragment.RideCompleteFragment
-import com.helloyatri.ui.home.fragment.TripReportCrashFragment
 import com.helloyatri.utils.AppUtils.openCallDialer
 import dagger.hilt.android.AndroidEntryPoint
 
