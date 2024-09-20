@@ -6,11 +6,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.helloyatri.R
-import com.helloyatri.ui.activity.SplashActivity
+import com.helloyatri.ui.home.HomeActivity
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -20,20 +24,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Handle the received message
         remoteMessage.data.isNotEmpty().let {
             // Handle data payload
+            val jsonObject = JsonParser.parseString(Gson().toJson(remoteMessage.data)).asJsonObject
+            Log.e("HELLO Yatri Driver >> >> ", "Notification Data >> >> ${jsonObject}")
+
+            remoteMessage.notification?.let {
+                // Handle notification payload
+                sendNotification(it.title, it.body, jsonObject)
+            }
         }
-        
-        remoteMessage.notification?.let {
-            // Handle notification payload
-            sendNotification(it.title, it.body)
-        }
+
+
+
+
     }
 
-    private fun sendNotification(title: String?, messageBody: String?) {
-        val intent = Intent(this, SplashActivity::class.java).apply {
+    private fun sendNotification(title: String?, messageBody: String?, jsonObject: JsonObject) {
+        Log.e(" >> >> >> >> >> ", " passing homeActivity data >> >> ${Gson().toJson(jsonObject)}")
+        val intent = Intent(this, HomeActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra("data", Gson().toJson(jsonObject))
         }
+//        intent.putExtra("data", Gson().toJson(jsonObject))
+
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.FLAG_UPDATE_CURRENT  or PendingIntent.FLAG_IMMUTABLE)
 
         val notificationBuilder = NotificationCompat.Builder(this, "Driver_hello_yatri")
             .setSmallIcon(R.drawable.ic_notification)

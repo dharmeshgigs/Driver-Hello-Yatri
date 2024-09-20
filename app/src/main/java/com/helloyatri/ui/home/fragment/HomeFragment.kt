@@ -319,8 +319,8 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         getUserCurrentLocation(update = true, onLocation = {
             it?.let {
                 val request = Request(
-                    latitude = "21.2149576",
-                    longitude = "72.8902811"
+                    latitude = "23.0708186",
+                    longitude = "72.5365617"
                 )
                 // TODO: Remove static latlong
 //                val request = Request(

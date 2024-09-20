@@ -7,9 +7,9 @@ object APIFactory {
 //    https://koolmindapps.com/Yatriapp/api/
     fun getHttpUrl() : HttpUrl {
         return HttpUrl.Builder()
-            .scheme("https")
-            .host("koolmindapps.com")
-            .addPathSegments("Yatriapp/api/")
+            .scheme("http")
+            .host("3.111.159.32")
+            .addPathSegments("api/")
             .build()
     }
 

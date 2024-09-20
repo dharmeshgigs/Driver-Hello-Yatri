@@ -675,7 +675,6 @@ class DriverPersonalProfilePictureFragment :
     private fun setUpClickListener() = with(binding) {
         constraintUploadDocuments.setOnClickListener {
             mediaSelectHelper.selectOptionsForImagePicker(false)
-
         }
 
         driverProfilePictureImagesAdapter.setOnItemClickListener {

@@ -387,4 +387,5 @@ will be accepted.</string>
     <string name="label_get_help_from_police">Get help from police</string>
     <string name="label_report_a_crash">Report a crash</string>
     <string name="label_description">Description</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

@@ -61,6 +61,6 @@ interface AuthRepo {
     suspend fun getDriverPreferences() : Resource<JsonObject>
     suspend fun updateDriverPreferences(request: Request) : Resource<JsonObject>
     suspend fun getTripPayments(request: Map<String, String>) : Resource<JsonObject>
-    suspend fun tripReportCrash(request: Request) : Resource<JsonObject>
+    suspend fun tripReportCrash(request: RequestBody) : Resource<JsonObject>
 
 }

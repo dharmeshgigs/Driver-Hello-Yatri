@@ -42,7 +42,7 @@ data class TripDetails(
     @SerializedName("driver_id") var driverId: Int? = null,
     @SerializedName("start_location") var startLocation: StartLocation? = StartLocation(),
     @SerializedName("end_location") var endLocation: EndLocation? = EndLocation(),
-    @SerializedName("drop_points") var dropPoints: ArrayList<String> = arrayListOf(),
+    @SerializedName("drop_points") var dropPoints: ArrayList<DropPoints> = arrayListOf(),
     @SerializedName("distance") var distance: String? = null,
     @SerializedName("distance_txt") var distanceTxt: String? = null,
     @SerializedName("duration") var duration: String? = null,
@@ -56,6 +56,12 @@ data class TripDetails(
     @SerializedName("total_amount_txt") var total_amount_txt: String? = null,
     @SerializedName("payment_collect_note") var payment_collect_note: String? = null,
     @SerializedName("status") var status: String? = null
+)
+
+data class DropPoints (
+    @SerializedName("latitude") var latitude: String? = null,
+    @SerializedName("longitude") var longitude: String? = null,
+    @SerializedName("address") var address: String? = null
 )
 
 data class PopupDetails(

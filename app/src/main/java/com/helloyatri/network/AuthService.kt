@@ -148,5 +148,5 @@ interface AuthService {
     suspend fun getTripPayments(@QueryMap request: Map<String, String>) : Response<JsonObject>
 
     @POST(APIFactory.AuthApi.REPORT_CRASH)
-    suspend fun tripReportCrash(@Body request: Request) : Response<JsonObject>
+    suspend fun tripReportCrash(@Body request: RequestBody) : Response<JsonObject>
 }
