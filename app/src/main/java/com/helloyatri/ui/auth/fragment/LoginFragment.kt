@@ -38,8 +38,8 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
     private val apiViewModel by viewModels<ApiViewModel>()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private val permissionList = arrayOf(Manifest.permission.POST_NOTIFICATIONS)
-    private lateinit var activityResultLauncherCamera: ActivityResultLauncher<Array<String>>
+
+
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?,
         attachToRoot: Boolean
@@ -53,11 +53,7 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
             ContextCompat.getColor(requireContext(), R.color.backgroundColor), true
         )
         initObservers()
-        activityResultLauncherCamera =
-            requireActivity().registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()
-            ) { grantResults ->
-            }
+
     }
 
     private fun initObservers() {
@@ -107,21 +103,6 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
         setUpButton()
         setTextDecorator()
         setUpClickListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        notificationPermission()
-    }
-
-    private fun notificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                activity as BaseActivity,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            activityResultLauncherCamera.launch(permissionList)
-        }
     }
 
     private fun setUpText() = with(binding) {

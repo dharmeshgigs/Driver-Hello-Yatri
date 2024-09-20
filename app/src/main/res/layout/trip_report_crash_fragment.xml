@@ -82,7 +82,7 @@
             app:layout_constraintStart_toStartOf="@id/guideLineStart"
             app:layout_constraintTop_toBottomOf="@id/textViewPhotos"
             tools:itemCount="6"
-            tools:listitem="@layout/auth_driver_personal_profile_picture_image_row_item" />
+            tools:listitem="@layout/auth_driver_personal_profile_picture_image_row_add_item" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/buttonSubmit"
