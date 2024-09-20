@@ -1,7 +1,5 @@
 package com.helloyatri.ui.auth.fragment
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -10,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
@@ -25,7 +21,6 @@ import com.helloyatri.databinding.AuthLoginFragmentBinding
 import com.helloyatri.exception.ApplicationException
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
-import com.helloyatri.ui.base.BaseActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.changeStatusBarColor
@@ -38,8 +33,8 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
     private val apiViewModel by viewModels<ApiViewModel>()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private val permissionList = arrayOf(Manifest.permission.POST_NOTIFICATIONS)
-    private lateinit var activityResultLauncherCamera: ActivityResultLauncher<Array<String>>
+
+
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?,
         attachToRoot: Boolean
@@ -53,11 +48,7 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
             ContextCompat.getColor(requireContext(), R.color.backgroundColor), true
         )
         initObservers()
-        activityResultLauncherCamera =
-            requireActivity().registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()
-            ) { grantResults ->
-            }
+
     }
 
     private fun initObservers() {
@@ -107,21 +98,6 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
         setUpButton()
         setTextDecorator()
         setUpClickListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        notificationPermission()
-    }
-
-    private fun notificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
-                activity as BaseActivity,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            activityResultLauncherCamera.launch(permissionList)
-        }
     }
 
     private fun setUpText() = with(binding) {

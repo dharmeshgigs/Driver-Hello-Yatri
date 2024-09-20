@@ -10,7 +10,6 @@ import com.helloyatri.data.model.AccountPaymentData
 import com.helloyatri.data.model.TabTypeForPayment
 import com.helloyatri.databinding.AccountPaymentReqAcceptFragmentBinding
 import com.helloyatri.network.ApiViewModel
-import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.adapter.AdapterAccountPayment
 import com.helloyatri.utils.extension.gone

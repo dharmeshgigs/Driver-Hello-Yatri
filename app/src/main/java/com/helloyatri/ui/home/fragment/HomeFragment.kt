@@ -197,8 +197,10 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 it.waitingTripsCount.fairValue("0")
             )
             it.rideRequest?.let {
-                textViewYouAreOffline.text = it.subTitle ?: getString(R.string.label_you_are_offline)
-                textViewLabelTurnOnAndFindRide.text = it.title ?: getString(R.string.label_turn_on_go_online_to_find_ride_request)
+                textViewYouAreOffline.text =
+                    it.subTitle ?: getString(R.string.label_you_are_offline)
+                textViewLabelTurnOnAndFindRide.text =
+                    it.title ?: getString(R.string.label_turn_on_go_online_to_find_ride_request)
             }
             it?.let {
                 it.driverAvailabilityStatus?.let {
@@ -214,7 +216,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 constraintLayoutRideRequest.visible()
             }
             textViewOnlineOfflineStatus.enableTextView(!isOnline)
-            if(activity is HomeActivity){
+            if (activity is HomeActivity) {
                 (activity as HomeActivity).setDrawerData()
             }
         }
@@ -318,9 +320,13 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         apiViewModel.getDriverProfile()
         getUserCurrentLocation(update = true, onLocation = {
             it?.let {
+//                val request = Request(
+//                    latitude = "23.0708186",
+//                    longitude = "72.5365617"
+//                )
                 val request = Request(
-                    latitude = "23.0708186",
-                    longitude = "72.5365617"
+                    latitude = "21.214776",
+                    longitude = "72.8902554"
                 )
                 // TODO: Remove static latlong
 //                val request = Request(
