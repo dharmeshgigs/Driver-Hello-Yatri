@@ -4,28 +4,30 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.helloyatri.data.model.PaymentTab
-import com.helloyatri.data.model.TabTypeForPayment
 import com.helloyatri.ui.home.fragment.AccountPaymentAcceptedFragment
-import com.helloyatri.ui.home.fragment.AccountPaymentReqAcceptFragment
+import com.helloyatri.ui.home.fragment.AccountPaymentRequestedFragment
 
 class AccountPaymentPagerAdapter(
     fragmentActivity: Fragment, private var tablist: ArrayList<PaymentTab>
 ) : FragmentStateAdapter(fragmentActivity) {
 
-    override fun createFragment(position: Int): Fragment {
+    val fragmentList = arrayListOf<Fragment>()
 
-        when (tablist[position].status) {
-            TabTypeForPayment.ACCEPTED -> {
-                val accountPaymentAcceptedFragment = AccountPaymentAcceptedFragment()
-                accountPaymentAcceptedFragment.arguments =
-                    bundleOf("status" to tablist[position].status)
-                return accountPaymentAcceptedFragment
+    override fun createFragment(position: Int): Fragment {
+        when (position) {
+            0 -> {
+                val accountPaymentFragment = AccountPaymentRequestedFragment()
+                accountPaymentFragment.arguments = bundleOf("status" to tablist[position].status)
+                fragmentList.add(accountPaymentFragment)
+                return accountPaymentFragment
             }
 
             else -> {
-                val accountPaymentFragment = AccountPaymentReqAcceptFragment()
-                accountPaymentFragment.arguments = bundleOf("status" to tablist[position].status)
-                return accountPaymentFragment
+                val accountPaymentAcceptedFragment = AccountPaymentAcceptedFragment()
+                accountPaymentAcceptedFragment.arguments =
+                    bundleOf("status" to tablist[position].status)
+                fragmentList.add(accountPaymentAcceptedFragment)
+                return accountPaymentAcceptedFragment
             }
         }
     }

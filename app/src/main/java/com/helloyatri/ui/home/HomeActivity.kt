@@ -38,6 +38,7 @@ import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
 import com.helloyatri.ui.home.sidemenu.SideMenuTag
 import com.helloyatri.utils.AppUtils.fareAmount
+import com.helloyatri.utils.Constants
 import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.PusherManager
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
@@ -72,7 +73,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getIntentData ()
+        getIntentData()
         setUpToolbar()
         setUpSideMenu()
         setUpSideMenuClickListener()
@@ -82,11 +83,17 @@ class HomeActivity : BaseActivity(), PushEventListener {
         createFirebaseToken()
     }
 
-    private fun getIntentData (){
-        Log.e(" >> >> >>> >> >>", "Home Activity Notification Data  fsfsfsf>> >> ${intent.getStringExtra("data")}")
+    private fun getIntentData() {
+        Log.e(
+            " >> >> >>> >> >>",
+            "Home Activity Notification Data  fsfsfsf>> >> ${intent.getStringExtra("data")}"
+        )
         intent.extras?.let {
-            if (it.containsKey("data")){
-             Log.e(" >> >> >>> >> >>", "Home Activity Notification Data >> >> ${it.getString("data")}")
+            if (it.containsKey("data")) {
+                Log.e(
+                    " >> >> >>> >> >>",
+                    "Home Activity Notification Data >> >> ${it.getString("data")}"
+                )
                 val jsonObject = JsonParser.parseString(it.getString("data")).asJsonObject
                 onEvent(
                     jsonObject,
@@ -157,26 +164,29 @@ class HomeActivity : BaseActivity(), PushEventListener {
                 navigationDrawerContent.textViewDistance,
                 String.format(
                     getString(R.string.label_dynamic_distance_n105_5_km),
-                    it.totalDistance.nullify("0")
+                    it.totalDistance.nullify(Constants.DEFAULT_DISTANCE)
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDistance.nullify("0"))
+                .setTypeface(
+                    R.font.lufga_medium,
+                    it.totalDistance.nullify(Constants.DEFAULT_DISTANCE)
+                )
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDistance.nullify("0")
+                    it.totalDistance.nullify(Constants.DEFAULT_DISTANCE)
                 ).build()
 
             TextDecorator.decorate(
                 navigationDrawerContent.textViewDuration,
                 String.format(
                     getString(R.string.label_dynamic_duration_n02_40_hr),
-                    it.totalDuration.nullify("00:00 Hr")
+                    it.totalDuration.nullify(Constants.DEFAULT_HOURS)
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDuration.nullify("00:00 Hr"))
+                .setTypeface(R.font.lufga_medium, it.totalDuration.nullify(Constants.DEFAULT_HOURS))
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDuration.nullify("00:00 Hr")
+                    it.totalDuration.nullify(Constants.DEFAULT_HOURS)
                 ).build()
         }
     }
@@ -300,11 +310,11 @@ class HomeActivity : BaseActivity(), PushEventListener {
                         it.let {
                             apiViewModel.tripRequest.postValue(null)
                             apiViewModel._pickupNoteLiveData.postValue(null)
-                            apiViewModel._pickupNoteLiveData.postValue(null)
                             apiViewModel.verifyTripLiveData.postValue(null)
+                            apiViewModel._tripStartLiveData.postValue(false)
+                            apiViewModel._tripStatusUpdatedLiveData.postValue(null)
                             apiViewModel.popUp = null
                             apiViewModel._paymentCollectedLiveData.postValue(null)
-                            apiViewModel._tripStatusUpdatedLiveData.postValue(null)
                             if (it.tripDetails?.driverId == appSession.user?.id) {
                                 showRequestDialog(it)
                                 apiViewModel.tripRequest.postValue(it)

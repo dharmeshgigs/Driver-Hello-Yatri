@@ -20,6 +20,7 @@ import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterRidesForPickups
 import com.helloyatri.utils.AppUtils.fairValue
 import com.helloyatri.utils.AppUtils.fareAmount
+import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.changeStatusBarColor
 import com.helloyatri.utils.extension.enableTextView
 import com.helloyatri.utils.extension.gone
@@ -165,26 +166,29 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 textViewDistance,
                 String.format(
                     getString(R.string.label_dynamic_distance_n105_5_km),
-                    it.totalDistance.nullify("0")
+                    it.totalDistance.nullify(Constants.DEFAULT_DISTANCE)
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDistance.nullify("0"))
+                .setTypeface(
+                    R.font.lufga_medium,
+                    it.totalDistance.nullify(Constants.DEFAULT_DISTANCE)
+                )
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDistance.nullify("0")
+                    it.totalDistance.nullify(Constants.DEFAULT_DISTANCE)
                 ).build()
 
             TextDecorator.decorate(
                 textViewDuration,
                 String.format(
                     getString(R.string.label_dynamic_duration_n02_40_hr),
-                    it.totalDuration.nullify("00:00 Hr")
+                    it.totalDuration.nullify(Constants.DEFAULT_HOURS)
                 )
             )
-                .setTypeface(R.font.lufga_medium, it.totalDuration.nullify("00:00 Hr"))
+                .setTypeface(R.font.lufga_medium, it.totalDuration.nullify(Constants.DEFAULT_HOURS))
                 .setAbsoluteSize(
                     resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
-                    it.totalDuration.nullify("00:00 Hr")
+                    it.totalDuration.nullify(Constants.DEFAULT_HOURS)
                 ).build()
             it.acceptanceRatio?.let {
                 textViewPercent.text = it.toInt().toString().plus("%")

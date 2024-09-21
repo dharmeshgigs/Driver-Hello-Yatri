@@ -53,9 +53,16 @@ object Constants {
 
     // API Params
     const val PARAM_FILTER_PARAMETER = "filter_parameter"
+    const val PARAM_FILTER_DATE = "filter_date"
 
     // TRIP Statuses
     const val CANCELLED = "CANCELLED"
     const val FINISHED = "FINISHED"
+
+
+    // Hours
+    const val DEFAULT_HOURS = "00:00 Hr"
+    const val DEFAULT_DISTANCE = "0 Km"
+    const val DEFAULT_PRICE = "₹0"
 
 }

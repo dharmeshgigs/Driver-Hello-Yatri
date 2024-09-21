@@ -16,6 +16,7 @@ import java.util.Locale
 class CalenderDialog(private val callBack: (action: String) -> Unit) :
         BaseDialogFragment<CalenderDialogBinding>() {
 
+    var string = ""
     override fun createViewBinding(inflater: LayoutInflater, container: ViewGroup?,
                                    attachToRoot: Boolean): CalenderDialogBinding {
         return CalenderDialogBinding.inflate(layoutInflater)
@@ -23,10 +24,14 @@ class CalenderDialog(private val callBack: (action: String) -> Unit) :
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun bindData() {
+
         fun getCurrentDateFormatted(): String {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+            string = inputFormat.format(Date())
             return dateFormat.format(Date())
         }
+
         binding.textViewDate.text = getCurrentDateFormatted()
         isCancelable = true
         binding.composeView.setContent {
@@ -38,6 +43,7 @@ class CalenderDialog(private val callBack: (action: String) -> Unit) :
     }
 
     private fun formatDate(inputDate: String): String {
+        string = inputDate
         val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val date = inputFormat.parse(inputDate)
@@ -51,6 +57,7 @@ class CalenderDialog(private val callBack: (action: String) -> Unit) :
 
     private fun setClickListener() = with(binding) {
         buttonUpdate.setOnClickListener {
+            callBack.invoke(string)
             dismissAllowingStateLoss()
         }
     }

@@ -45,7 +45,7 @@ data class Trips (
     @SerializedName("cancelled_by"                ) var cancelledBy               : String?           = null,
     @SerializedName("status"                      ) var status                    : String?           = null,
     @SerializedName("payment_status"              ) var paymentStatus             : String?           = null,
-    @SerializedName("stop_over_points"            ) var stopOverPoints            : ArrayList<String>? = null,
+    @SerializedName("stop_over_points"            ) var stopOverPoints            : ArrayList<StopOverPoints>? = null,
     @SerializedName("review_ratings"              ) var reviewRatings             : ReviewRatings?           = null,
     @SerializedName("distance_txt"              ) var distance_txt             : String?           = null,
     @SerializedName("duration_txt"              ) var duration_txt             : String?           = null,
@@ -94,5 +94,19 @@ data class ReviewRatings (
     @SerializedName("comment"    ) var comment   : String? = null,
     @SerializedName("created_at" ) var createdAt : String? = null,
     @SerializedName("updated_at" ) var updatedAt : String? = null
+
+)
+data class StopOverPoints (
+
+    @SerializedName("id"                    ) var id                  : Int?    = null,
+    @SerializedName("trip_id"               ) var tripId              : Int?    = null,
+    @SerializedName("dest_latitude"         ) var destLatitude        : String? = null,
+    @SerializedName("dest_longitude"        ) var destLongitude       : String? = null,
+    @SerializedName("dest_address"          ) var destAddress         : String? = null,
+    @SerializedName("actual_dest_latitude"  ) var actualDestLatitude  : String? = null,
+    @SerializedName("actual_dest_longitude" ) var actualDestLongitude : String? = null,
+    @SerializedName("actual_dest_address"   ) var actualDestAddress   : String? = null,
+    @SerializedName("created_at"            ) var createdAt           : String? = null,
+    @SerializedName("updated_at"            ) var updatedAt           : String? = null
 
 )

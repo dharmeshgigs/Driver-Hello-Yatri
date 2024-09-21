@@ -2,6 +2,8 @@ package com.helloyatri.ui.home.fragment
 
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -90,13 +92,12 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             tripRiderModel?.tripDetails?.endLocation?.latitude?.toDouble() ?: 0.0,
             tripRiderModel?.tripDetails?.endLocation?.longitude?.toDouble() ?: 0.0
         )
-//        EventBus.getDefault().register(this)
         getCurrentLocation()
+        initObservers()
     }
 
     override fun bindData() {
         initViews()
-        initObservers()
         apiViewModel.getCancelletionReasonAPI()
         setUpView()
         setUpClickListener()
@@ -137,15 +138,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     )
                 }
             }
-
         }
-
-//        TextDecorator.decorate(
-//            textViewNote, String.format(
-//                getString(R.string.label_dynamic_note_message_show_here),
-//                apiViewModel._pickupNoteLiveData.value ?: ""
-//            )
-//        ).setTextColor(R.color.colorPrimary, "Note:").build()
     }
 
     private fun initObservers() {
@@ -201,9 +194,10 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                 ).setTextColor(R.color.colorPrimary, getString(R.string.label_note)).build()
             }
         }
+
         apiViewModel.tripStartLiveData.observe(requireActivity()) {
             it?.let {
-                if (it === true) {
+                if (it) {
                     activity?.runOnUiThread {
                         requireActivity().runCatching {
                             setUpApprovedRideUI()
@@ -226,7 +220,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     Status.ERROR -> {
                         hideLoader()
                         val error =
-                            resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                            resource.message ?: getString(resource.resId!!)
                         showErrorMessage(error)
                         apiViewModel.completeTripLiveData.value = null
                     }
@@ -250,7 +244,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     Status.ERROR -> {
                         hideLoader()
                         val error =
-                            resource.message?.let { it } ?: getString(resource.resId?.let { it }!!)
+                            resource.message ?: getString(resource.resId!!)
                         showErrorMessage(error)
                         apiViewModel.cancleRideLiveData.value = null
                     }
@@ -262,15 +256,15 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             }
         }
 
-        apiViewModel.tripStatusUpdatedLiveData.observe(requireActivity()) {
+        apiViewModel._tripStatusUpdatedLiveData.observe(this) {
             it?.let {
-                // TODO: Show cancel or end trip dialog here
                 it.tripDetails?.let {
-                    if(it.status.equals(Constants.CANCELLED)) {
+                    if (it.status.equals(Constants.CANCELLED)) {
                         RideCancelledDialogFragment {
                             navigator.goBack()
+                            apiViewModel._tripStatusUpdatedLiveData.value = null
                         }.show(childFragmentManager, PickUpSpotFragment::class.java.simpleName)
-                    } else if(it.status.equals(Constants.FINISHED)){
+                    } else if (it.status.equals(Constants.FINISHED)) {
                         navigator.load(RideCompleteFragment::class.java)
                             .clearHistory(this@PickUpSpotFragment::class.java.simpleName).add(false)
                     }
@@ -282,9 +276,8 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     private fun getCurrentLocation() {
         locationProvider = LocationProvider((activity as BaseActivity), this)
         locationProvider?.getCurrentLocation(updated = true) {
-            it?.let {
+            it.let {
                 hideLoader()
-//                showMessage("Location is ${it.latitude.toString()}:${it.longitude.toString()}")
                 lat = it.latitude.toString()
                 long = it.longitude.toString()
                 location = LatLng(
@@ -292,8 +285,8 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                 )
                 googleMap?.let {
                     setUpMapCamera()
-//                    addStartMarker()
-//                    addPickUpMarker()
+                    //                    addStartMarker()
+                    //                    addPickUpMarker()
                 }
                 getAddress(it)
             }
@@ -388,7 +381,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         textViewEmergency.setOnClickListener {
             EmergencyAssistanceBottomSheet(callBack = {
                 location?.let {
-                    apiViewModel.location = Pair(it,address)
+                    apiViewModel.location = Pair(it, address)
                     navigator.load(TripReportCrashFragment::class.java).add(false)
                 }
             }).show(
@@ -429,7 +422,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     .equals(getString(R.string.label_navigate_in_full_screen), false)
             ) {
                 textViewNavigateToFullScreen.text = getString(R.string.label_show_rider_details)
-                apiViewModel.tripStartLiveData.value?.takeIf { it === true }?.let {
+                apiViewModel.tripStartLiveData.value?.takeIf { it }?.let {
                     constraintLayoutApprovedRide.hide()
                 } ?: run {
                     layoutRideDetails.hide()
@@ -437,7 +430,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             } else {
                 textViewNavigateToFullScreen.text =
                     getString(R.string.label_navigate_in_full_screen)
-                apiViewModel.tripStartLiveData.value?.takeIf { it === true }?.let {
+                apiViewModel.tripStartLiveData.value?.takeIf { it }?.let {
                     constraintLayoutApprovedRide.show()
                 } ?: run {
                     layoutRideDetails.show()

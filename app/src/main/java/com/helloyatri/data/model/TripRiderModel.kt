@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class TripRiderModel(
+    @SerializedName("eventName") var eventName: String? = null,
     @SerializedName("riderDetails") var riderDetails: RiderDetails? = null,
     @SerializedName("tripDetails") var tripDetails: TripDetails? = null,
     @SerializedName("popupDetails") var popupDetails: PopupDetails? = null,
@@ -40,9 +41,9 @@ data class TripDetails(
 
     @SerializedName("id") var id: Int? = null,
     @SerializedName("driver_id") var driverId: Int? = null,
-    @SerializedName("start_location") var startLocation: StartLocation? = StartLocation(),
-    @SerializedName("end_location") var endLocation: EndLocation? = EndLocation(),
-    @SerializedName("drop_points") var dropPoints: ArrayList<DropPoints> = arrayListOf(),
+    @SerializedName("start_location") var startLocation: StartLocation? = null,
+    @SerializedName("end_location") var endLocation: EndLocation? = null,
+    @SerializedName("drop_points") var dropPoints: ArrayList<DropPoints>? = null,
     @SerializedName("distance") var distance: String? = null,
     @SerializedName("distance_txt") var distanceTxt: String? = null,
     @SerializedName("duration") var duration: String? = null,

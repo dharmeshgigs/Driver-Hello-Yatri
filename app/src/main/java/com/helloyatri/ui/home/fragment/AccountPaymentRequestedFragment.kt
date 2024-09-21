@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.data.model.AccountPaymentData
 import com.helloyatri.databinding.AccountPaymentReqAcceptFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
@@ -22,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
 @AndroidEntryPoint
-class AccountPaymentAcceptedFragment : BaseFragment<AccountPaymentReqAcceptFragmentBinding>() {
+class AccountPaymentRequestedFragment : BaseFragment<AccountPaymentReqAcceptFragmentBinding>() {
 
     private val apiViewModel by activityViewModels<ApiViewModel>()
     private var status: String? = null
@@ -48,7 +46,7 @@ class AccountPaymentAcceptedFragment : BaseFragment<AccountPaymentReqAcceptFragm
     }
 
     private fun initObservers() {
-        apiViewModel.getAcceptedPaymentTripsLiveData.observe(this) { resource ->
+        apiViewModel.getRequestedPaymentTripsLiveData.observe(this) { resource ->
             resource?.let {
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -91,7 +89,7 @@ class AccountPaymentAcceptedFragment : BaseFragment<AccountPaymentReqAcceptFragm
         binding.textViewPlaceholder.gone()
         binding.progressBar.show()
         status?.let {
-            if (status === "ACCEPTED") {
+            if (status === "REQUESTED") {
                 if(apiViewModel.filterDate.isNotEmpty()) {
                     invokeApi(apiViewModel.filterDate)
                 } else {
@@ -116,8 +114,8 @@ class AccountPaymentAcceptedFragment : BaseFragment<AccountPaymentReqAcceptFragm
     }
 
     fun invokeApi(date: String) {
-        apiViewModel.getAcceptedTripPayments(mutableMapOf<String, String>().apply {
-            put(Constants.PARAM_FILTER_PARAMETER, "ACCEPTED")
+        apiViewModel.getRequestedTripPayments(mutableMapOf<String, String>().apply {
+            put(Constants.PARAM_FILTER_PARAMETER, "REQUESTED")
             put(Constants.PARAM_FILTER_DATE, date)
         })
     }

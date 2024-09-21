@@ -289,7 +289,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             android:gravity="end"
-            android:text="@string/dummy_1_780"
+            android:text="123"
             android:textColor="@color/white"
             android:textSize="@dimen/_23ssp"
             app:layout_constraintBottom_toBottomOf="@id/textViewTotalRequested"

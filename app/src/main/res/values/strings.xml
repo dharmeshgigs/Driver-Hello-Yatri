@@ -388,4 +388,9 @@ will be accepted.</string>
     <string name="label_report_a_crash">Report a crash</string>
     <string name="label_description">Description</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="dummy_ride_n3_dynamic">Ride\n%s</string>
+    <string name="label_currency_dynamic">₹%s</string>
+    <string name="label_total_accepted_nfare_price">Total Accepted \nFare Price</string>
+    <string name="label_total_you_earn">Total you earn</string>
+    <string name="label_dynamic_fare_price_n_780_paymenbt">Fare Price\n%s</string>
 </resources>

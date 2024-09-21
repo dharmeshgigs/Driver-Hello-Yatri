@@ -6,11 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PaymentTab(
     val title: String,
-    val status: TabTypeForPayment
+    val status: String
 ) : Parcelable
-
-@kotlinx.parcelize.Parcelize
-enum class TabTypeForPayment : Parcelable {
-    REQUESTED,
-    ACCEPTED
-}

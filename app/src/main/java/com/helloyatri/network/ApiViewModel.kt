@@ -7,6 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.HomeDataModel
+import com.helloyatri.data.model.Payment
+import com.helloyatri.data.model.PaymentHistory
 import com.helloyatri.data.model.PopUp
 import com.helloyatri.data.model.RideActivityResponse
 import com.helloyatri.data.model.RideActivityTabs
@@ -293,17 +295,16 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getPaymentTripsLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-    val paymentTrips by lazy { mutableListOf<Trips>() }
+    val getRequestedPaymentTripsLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val requestedPaymentTrips by lazy { MutableLiveData<PaymentHistory?>() }
 
     fun getRequestedTripPayments(request: Map<String, String>) {
         run {
-            getPaymentTripsLiveData.value = Resource.loading()
+            getRequestedPaymentTripsLiveData.value = Resource.loading()
             val response = authRepo.getTripPayments(request)
             val tripPaymentUseCases = TripPaymentUseCases()
-            paymentTrips.clear()
-            paymentTrips.addAll(tripPaymentUseCases.getTrips(response))
-            getPaymentTripsLiveData.value = response
+            requestedPaymentTrips.value = tripPaymentUseCases.getPaymentHistory(response)
+            getRequestedPaymentTripsLiveData.value = response
         }
     }
 
@@ -506,6 +507,18 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         run {
             tripReportCrashLiveData.value = Resource.loading()
             tripReportCrashLiveData.value = authRepo.tripReportCrash(request)
+        }
+    }
+
+    val getAcceptedPaymentTripsLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    var filterDate = ""
+    fun getAcceptedTripPayments(request: Map<String, String>) {
+        run {
+            getAcceptedPaymentTripsLiveData.value = Resource.loading()
+            val response = authRepo.getTripPayments(request)
+            val tripPaymentUseCases = TripPaymentUseCases()
+            requestedPaymentTrips.value = tripPaymentUseCases.getPaymentHistory(response)
+            getAcceptedPaymentTripsLiveData.value = response
         }
     }
 }
