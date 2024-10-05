@@ -7,7 +7,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.HomeDataModel
-import com.helloyatri.data.model.Payment
 import com.helloyatri.data.model.PaymentHistory
 import com.helloyatri.data.model.PopUp
 import com.helloyatri.data.model.RideActivityResponse
@@ -519,6 +518,14 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
             val tripPaymentUseCases = TripPaymentUseCases()
             requestedPaymentTrips.value = tripPaymentUseCases.getPaymentHistory(response)
             getAcceptedPaymentTripsLiveData.value = response
+        }
+    }
+
+    val getActiveTripLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun tripConfigData() {
+        run {
+            getActiveTripLiveData.value = Resource.loading()
+            getActiveTripLiveData.value = authRepo.tripConfigData()
         }
     }
 }

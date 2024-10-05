@@ -20,7 +20,7 @@ import com.helloyatri.utils.extension.toBinding
 import com.helloyatri.utils.textdecorator.TextDecorator
 
 
-class AllRidesStatusAdapter(
+class AllRidesStatusAdapter(val status: String? = null,
     val onEmergencyClick: ((Int) -> Unit)? = null, val onEndHereClick: ((Int,Trips) -> Unit)? = null
 ) : AdvanceRecycleViewAdapter<BaseHolder<Trips>, Trips>(arrayListOf()) {
 
@@ -163,7 +163,7 @@ class AllRidesStatusAdapter(
     }
 
     override fun getViewType(position: Int): Int {
-        return if (items?.get(position)?.status == "ACTIVE") TYPE_1
+        return if (status == "ACTIVE") TYPE_1
         else TYPE_2
 
     }

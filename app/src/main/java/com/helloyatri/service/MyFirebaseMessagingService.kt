@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -15,7 +14,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.helloyatri.R
 import com.helloyatri.core.AppPreferences
-import com.helloyatri.di.App
 import com.helloyatri.ui.home.HomeActivity
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {

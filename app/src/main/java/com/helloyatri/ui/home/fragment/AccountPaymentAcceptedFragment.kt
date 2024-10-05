@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.helloyatri.data.model.AccountPaymentData
 import com.helloyatri.databinding.AccountPaymentReqAcceptFragmentBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status

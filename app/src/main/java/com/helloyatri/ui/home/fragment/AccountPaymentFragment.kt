@@ -20,10 +20,7 @@ import com.helloyatri.utils.DateUtils
 import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 @AndroidEntryPoint
 class AccountPaymentFragment : BaseFragment<AccountPaymentFragmentBinding>() {

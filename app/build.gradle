@@ -11,11 +11,25 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/Users/dharmesh/Desktop/Work/Client/Neel/Driver-Hello-Yatri/app/driver-helloyatri')
+            storePassword 'helloyatri'
+            keyAlias 'helloyatri'
+            keyPassword 'helloyatri'
+        }
+        release {
+            storeFile file('/Users/dharmesh/Desktop/Work/Client/Neel/Driver-Hello-Yatri/app/driver-helloyatri')
+            storePassword 'helloyatri'
+            keyAlias 'helloyatri'
+            keyPassword 'helloyatri'
+        }
+    }
     compileSdk 34
     namespace "com.helloyatri"
     defaultConfig {
         applicationId "com.helloyatri"
-        minSdk 23
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -26,6 +40,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        applicationVariants.all{
+            variant ->
+                variant.outputs.each{
+                    output->
+                        def formattedDate = new Date().format('dd-MM-yyyy')
+                        def name = "Driver-Release-VN${versionName}-${formattedDate}.apk"
+                        output.outputFileName = name
+                }
         }
     }
 
@@ -94,7 +118,6 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:2.3.0'
     implementation 'com.google.firebase:firebase-crashlytics:19.0.3'
 
-
     // Ktx
     implementation "androidx.fragment:fragment-ktx:1.5.6"
 
@@ -113,9 +136,6 @@ dependencies {
     // lottie
     implementation 'com.airbnb.android:lottie:6.4.1'
 
-    //crop image library
-//    implementation("com.vanniktech:android-image-cropper:4.6.0")
-
     // otpView
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:3.2.0'
 
@@ -125,13 +145,6 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     kapt 'com.github.bumptech.glide:compiler:4.14.2'
-
-    // Single Month Year Picker
-//    implementation 'com.whiteelephant:monthandyearpicker:1.3.0'
-
-    implementation 'io.github.dzmitry-lakisau:month-year-picker-dialog:1.0.0'
-
-    implementation("org.greenrobot:eventbus:3.3.1")
 
     implementation("androidx.compose.ui:ui:1.4.0")
     implementation("androidx.compose.material:material:1.4.0")
@@ -144,8 +157,6 @@ dependencies {
     implementation 'com.kizitonwose.calendar:view:2.5.2'
     implementation 'com.kizitonwose.calendar:compose:2.5.2'
     implementation 'com.pusher:pusher-java-client:2.4.4'
-//    implementation 'com.pusher:pusher-java-client:2.4.4'
-//    implementation 'com.pusher.client:pusher-java-client:2.4.4'
 }
 
 // Allow references to generated code

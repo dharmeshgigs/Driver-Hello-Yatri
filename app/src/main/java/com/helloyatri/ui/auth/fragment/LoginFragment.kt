@@ -48,7 +48,6 @@ class LoginFragment : BaseFragment<AuthLoginFragmentBinding>() {
             ContextCompat.getColor(requireContext(), R.color.backgroundColor), true
         )
         initObservers()
-
     }
 
     private fun initObservers() {

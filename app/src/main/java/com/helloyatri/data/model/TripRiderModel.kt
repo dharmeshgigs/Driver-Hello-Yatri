@@ -49,6 +49,7 @@ data class TripDetails(
     @SerializedName("duration") var duration: String? = null,
     @SerializedName("duration_txt") var durationTxt: String? = null,
     @SerializedName("estimated_fare") var estimatedFare: String? = null,
+    @SerializedName("estimated_fare_txt") var estimatedFareTxt: String? = null,
     @SerializedName("arriving_duration") var arrivingDuration: Double? = null,
     @SerializedName("pickup_note") var pickup_note: String? = null,
     @SerializedName("arriving_duration_txt") var arriving_duration_txt: String? = null,
@@ -56,6 +57,7 @@ data class TripDetails(
     @SerializedName("tip_amount_txt") var tip_amount_txt: String? = null,
     @SerializedName("total_amount_txt") var total_amount_txt: String? = null,
     @SerializedName("payment_collect_note") var payment_collect_note: String? = null,
+    @SerializedName("payment_status") var payment_status: String? = null,
     @SerializedName("status") var status: String? = null
 )
 

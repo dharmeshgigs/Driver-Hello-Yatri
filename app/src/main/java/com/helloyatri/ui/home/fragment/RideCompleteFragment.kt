@@ -23,7 +23,6 @@ import com.helloyatri.utils.extension.enableTextView
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.show
-import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -169,9 +168,20 @@ class RideCompleteFragment : BaseFragment<RideCompleteFragmentBinding>() {
                 } ?: run {
                     constraintYouHaveCollect.hide()
                 }
+
+                it.tip_amount_txt?.let {
+                    TextDecorator.decorate(
+                        textViewCustomerSetTip, String.format(
+                            getString(R.string.dummy_dynamic_customer_set_70_tip_for_you), it
+                        )
+                    ).build()
+                    binding.textViewCustomerSetTip.show()
+                }?:  kotlin.run {
+                    binding.textViewCustomerSetTip.hide()
+                }
             }
         }
-        binding.textViewCustomerSetTip.hide()
+
         binding.textViewNote.text = ""
         apiViewModel.pickupNoteLiveData.value?.let {
             if (it.isNotEmpty()) {
@@ -182,6 +192,7 @@ class RideCompleteFragment : BaseFragment<RideCompleteFragmentBinding>() {
                 ).setTextColor(R.color.colorPrimary, getString(R.string.label_note)).build()
             }
         }
+
     }
 
     private fun setClickListener() = with(binding) {
@@ -216,26 +227,6 @@ class RideCompleteFragment : BaseFragment<RideCompleteFragmentBinding>() {
                 activity?.openCallDialer(it)
             }
         }
-    }
-
-    private fun setTextDecorator() = with(binding) {
-        TextDecorator.decorate(textViewNote, textViewNote.trimmedText)
-            .setTextColor(R.color.homeBgBlueColor, "Note:").build()
-
-        TextDecorator.decorate(textViewFairPrice, textViewFairPrice.trimmedText)
-            .setTypeface(R.font.lufga_medium, "₹780")
-            .setAbsoluteSize(resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "₹780")
-            .build()
-
-        TextDecorator.decorate(textViewDistance, textViewDistance.trimmedText)
-            .setTypeface(R.font.lufga_medium, "25.5 Km").setAbsoluteSize(
-                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "25.5 Km"
-            ).build()
-
-        TextDecorator.decorate(textViewDuration, textViewDuration.trimmedText)
-            .setTypeface(R.font.lufga_medium, "45 min").setAbsoluteSize(
-                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp), "45 min"
-            ).build()
     }
 
     override fun setUpToolbar() = with(toolbar) {

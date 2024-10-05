@@ -5,11 +5,16 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
+import com.helloyatri.data.model.ActiveTripResponse
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
+import com.helloyatri.data.model.RiderDetails
+import com.helloyatri.data.model.TripDetails
+import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.data.model.UpdateLocationResponse
 import com.helloyatri.databinding.HomeFragmentBinding
 import com.helloyatri.network.ApiViewModel
@@ -18,6 +23,7 @@ import com.helloyatri.ui.activity.IsolatedActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterRidesForPickups
+import com.helloyatri.utils.AppUtils.doubleDefault
 import com.helloyatri.utils.AppUtils.fairValue
 import com.helloyatri.utils.AppUtils.fareAmount
 import com.helloyatri.utils.Constants
@@ -61,7 +67,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
     }
 
     private fun initObservers() {
-        apiViewModel.getHomeLiveData.observe(this) { resource ->
+        apiViewModel.getHomeLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
@@ -83,7 +89,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             }
         }
 
-        apiViewModel.updateCurrentLocationLiveData.observe(this) { resource ->
+        apiViewModel.updateCurrentLocationLiveData.observe(viewLifecycleOwner) { resource ->
             resource?.let { it ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -114,7 +120,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
         }
 
-        apiViewModel.updateDriverAvalabilityLiveData.observe(this) { resource ->
+        apiViewModel.updateDriverAvalabilityLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     hideLoader()
@@ -131,7 +137,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             }
         }
 
-        apiViewModel.getDriverProfileLiveData.observe(this) { resource ->
+        apiViewModel.getDriverProfileLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     val response =
@@ -144,6 +150,89 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 Status.LOADING -> {}
             }
 
+        }
+
+        apiViewModel.getActiveTripLiveData.observe(viewLifecycleOwner) { resource ->
+            resource?.let {
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        val response =
+                            Gson().fromJson(
+                                resource.data.toString(),
+                                ActiveTripResponse::class.java
+                            )
+                        var riderDetails: RiderDetails? = null
+                        var tripDetails: TripDetails? = null
+                        var tripRiderModel: TripRiderModel? = null
+                        response?.data?.trip?.let { trip ->
+                            response.data?.EVENTDATA?.let {
+                                it.riderDetails?.let { item ->
+                                    riderDetails = RiderDetails(
+                                        id = item.id,
+                                        name = item.name,
+                                        profile = item.profile,
+                                        paymentType = getString(R.string.dummy_cash_payment),
+                                        note = "",
+                                        mobile = item.mobile
+                                    )
+                                }
+                                it.tripDetails?.let { item ->
+                                    tripDetails = item
+                                    tripDetails?.estimatedFareTxt = trip.commonTotalFareTxt
+                                    tripDetails?.estimatedFare =
+                                        trip.commonTotalFare.doubleDefault("0.0")
+                                    tripDetails?.status = trip.status
+                                }
+
+                                riderDetails?.let { rd ->
+                                    tripDetails?.let { td ->
+                                        tripRiderModel = TripRiderModel(
+                                            riderDetails = rd,
+                                            tripDetails = td,
+                                            popupDetails = it.popupDetails
+                                        )
+                                    }
+                                }
+                            }
+                            tripRiderModel?.let {
+                                if (trip.status == "ACTIVE" || trip.status == "ARRIVED") {
+                                    response.data?.EVENTDATA?.let {
+                                        apiViewModel.tripRequest.value = it
+                                        apiViewModel._tripStartLiveData.value = false
+                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
+                                        apiViewModel.getActiveTripLiveData.value = null
+                                    }
+                                } else if (trip.status == "FINISHED" && trip.paymentStatus == "PAID") {
+                                    response.data?.EVENTDATA?.let {
+                                        apiViewModel.tripRequest.value = it
+                                        apiViewModel._tripStartLiveData.value = true
+                                        navigator.load(RideCompleteFragment::class.java)
+                                            .replace(false)
+                                        apiViewModel.getActiveTripLiveData.value = null
+                                    }
+                                } else if(trip.status == "ON_GOING") {
+                                    response.data?.EVENTDATA?.let {
+                                        apiViewModel.tripRequest.value = it
+                                        apiViewModel._tripStartLiveData.value = true
+                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
+                                        apiViewModel.getActiveTripLiveData.value = null
+                                    }
+                                } else {
+
+                                }
+                            }
+                        }
+                    }
+
+                    Status.ERROR -> {
+
+                    }
+
+                    Status.LOADING -> {
+
+                    }
+                }
+            }
         }
     }
 
@@ -328,20 +417,32 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 //                    latitude = "23.0708186",
 //                    longitude = "72.5365617"
 //                )
-                val request = Request(
-                    latitude = "21.214776",
-                    longitude = "72.8902554"
-                )
-                // TODO: Remove static latlong
 //                val request = Request(
-//                    latitude = it.latitude.toString(),
-//                    longitude = it.longitude.toString()
+//                    latitude = "21.214776",
+//                    longitude = "72.8902554"
 //                )
+                // TODO: Remove static latlong
+                val request = Request(
+                    latitude = it.latitude.toString(),
+                    longitude = it.longitude.toString()
+                )
+                val triple = getAddressLocation(it)
+                triple?.let {
+                    apiViewModel.location = Pair(
+                        LatLng(triple.first.toDouble(), triple.second.toDouble()),
+                        triple.third
+                    )
+                }
                 apiViewModel.updateCurrentLocation(
                     request
                 )
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        apiViewModel.tripConfigData()
     }
 
     private fun getNearestLatLong() {

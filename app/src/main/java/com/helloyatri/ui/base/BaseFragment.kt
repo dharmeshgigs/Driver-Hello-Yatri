@@ -2,6 +2,7 @@ package com.helloyatri.ui.base
 
 import android.content.Context
 import android.graphics.Color
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import com.helloyatri.utils.Validator
 import com.helloyatri.utils.location.LocationProvider
 import java.net.ConnectException
 import java.net.SocketTimeoutException
+import java.util.Locale
 import javax.inject.Inject
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
@@ -300,6 +302,23 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
                 onLocation(location)
             }
         }
+    }
+
+    fun getAddressLocation(center: LatLng?) : Triple<String,String,String>? {
+        var lat: String = ""
+        var long: String = ""
+        var address: String = ""
+        center?.let {
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            val addresses = geocoder.getFromLocation(center.latitude, center.longitude, 1)
+             lat = center.latitude.toString()
+             long = center.longitude.toString()
+            if (!addresses.isNullOrEmpty()) {
+                address = addresses[0].getAddressLine(0)
+                return Triple(lat,long,address)
+            }
+        }
+        return null
     }
 }
 

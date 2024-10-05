@@ -2,9 +2,7 @@ package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
 import com.helloyatri.R
-import com.helloyatri.data.model.AccountPaymentData
 import com.helloyatri.data.model.Payment
-import com.helloyatri.data.model.PaymentHistory
 import com.helloyatri.databinding.AccountPaymentRowItemBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
 import com.helloyatri.ui.base.adavancedrecyclerview.BaseHolder
@@ -12,7 +10,6 @@ import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.extension.toBinding
-import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.textdecorator.TextDecorator
 
 class AdapterAccountPayment :

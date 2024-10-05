@@ -149,4 +149,7 @@ interface AuthService {
 
     @POST(APIFactory.AuthApi.REPORT_CRASH)
     suspend fun tripReportCrash(@Body request: RequestBody) : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_TRIP_CONFIG_DATA)
+    suspend fun tripConfigData() : Response<JsonObject>
 }

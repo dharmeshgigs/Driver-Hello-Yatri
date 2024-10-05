@@ -2,8 +2,6 @@ package com.helloyatri.ui.home.fragment
 
 import android.location.Geocoder
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -46,7 +44,6 @@ import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.location.LocationProvider
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
-import org.greenrobot.eventbus.EventBus
 import java.util.Locale
 
 
@@ -137,7 +134,22 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                         getString(R.string.label_dynamic_note_note_message_show_here), it
                     )
                 }
+                if(it.status == "ARRIVED") {
+                    showVerificationDialog()
+                }
             }
+        }
+
+        apiViewModel.tripStartLiveData.value?.takeIf { it }?.let {
+            if(it) {
+                constraintLayoutApprovedRide.show()
+                layoutRideDetails.hide()
+            } else {
+                constraintLayoutApprovedRide.hide()
+                layoutRideDetails.show()
+            }
+        } ?: run {
+            layoutRideDetails.show()
         }
     }
 
@@ -467,11 +479,6 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(false).build()
-    }
-
-    override fun onDestroy() {
-        EventBus.getDefault().unregister(this)
-        super.onDestroy()
     }
 
     override fun onMapReady(map: GoogleMap) {

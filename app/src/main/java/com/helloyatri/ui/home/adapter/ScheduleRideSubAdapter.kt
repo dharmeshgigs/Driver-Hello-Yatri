@@ -2,7 +2,6 @@ package com.helloyatri.ui.home.adapter
 
 import android.view.ViewGroup
 import com.helloyatri.R
-import com.helloyatri.data.model.MessageEvent
 import com.helloyatri.data.model.RidePickUps
 import com.helloyatri.databinding.ItemScheduleRideBinding
 import com.helloyatri.ui.base.adavancedrecyclerview.AdvanceRecycleViewAdapter
@@ -13,7 +12,6 @@ import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.extension.toBinding
 import com.helloyatri.utils.extension.trimmedText
 import com.helloyatri.utils.textdecorator.TextDecorator
-import org.greenrobot.eventbus.EventBus
 
 class ScheduleRideSubAdapter :
         AdvanceRecycleViewAdapter<ScheduleRideSubAdapter.ViewHolder, RidePickUps>() {
@@ -40,12 +38,10 @@ class ScheduleRideSubAdapter :
                 onClickListener?.invoke(item)
             }
             textViewNavigateTo.setOnClickListener {
-                EventBus.getDefault().post(MessageEvent("Navigate_To"))
 //                onClickPositionListener?.invoke(item,position)
             }
 
             textViewCancelRide.setOnClickListener {
-                EventBus.getDefault().post(MessageEvent("Cancle_Ride"))
             }
         }
 

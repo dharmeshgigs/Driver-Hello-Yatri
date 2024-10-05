@@ -1,9 +1,6 @@
 package com.helloyatri.utils
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -53,21 +50,17 @@ class PusherManager(private val context: Context) {
         channel = pusher?.subscribePrivate(YOUR_CHANNEL_NAME.plus(userId))
         pusher?.connect(object : com.pusher.client.connection.ConnectionEventListener {
             override fun onConnectionStateChange(change: ConnectionStateChange?) {
-//                println("onConnectionStateChange Previous:${change?.previousState}")
-//                println("onConnectionStateChange Current :${change?.currentState}")
-                val handler: Handler = Handler(Looper.getMainLooper())
+//                val handler: Handler = Handler(Looper.getMainLooper())
 
-                handler.post(Runnable {
-                    Toast.makeText(context, "" + change?.currentState, Toast.LENGTH_LONG).show()
-                })
+//                handler.post(Runnable {
+//                    Toast.makeText(context, "" + change?.currentState, Toast.LENGTH_LONG).show()
+//                })
             }
 
             override fun onError(message: String?, code: String?, e: Exception?) {
-                val handler: Handler = Handler(Looper.getMainLooper())
-
-                handler.post(Runnable {
-                    Toast.makeText(context, "error:" + message, Toast.LENGTH_LONG).show()
-                })
+//                Handler(Looper.getMainLooper()).post(Runnable {
+//                    Toast.makeText(context, "error:" + message, Toast.LENGTH_LONG).show()
+//                })
 
             }
         })
@@ -105,7 +98,7 @@ class PusherManager(private val context: Context) {
     fun triggerDriverLocationEvent() {
         if (channel?.isSubscribed == true) {
             channel?.trigger(
-                "client-event",
+                "rider-event",
                 "Hello"
             ); }
     }

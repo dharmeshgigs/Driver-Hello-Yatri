@@ -4,8 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.helloyatri.data.model.PaymentHistory
 import com.helloyatri.data.model.PaymentHistoryResponse
-import com.helloyatri.data.model.RideActivityResponse
-import com.helloyatri.data.model.Trips
 import com.helloyatri.network.Resource
 
 class TripPaymentUseCases {

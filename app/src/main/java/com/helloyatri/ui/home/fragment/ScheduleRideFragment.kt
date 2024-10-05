@@ -14,7 +14,6 @@ import com.helloyatri.ui.home.adapter.ScheduleRideMainAdapter
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.getScheduleRideList
 import dagger.hilt.android.AndroidEntryPoint
-import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint
 class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
@@ -106,17 +105,5 @@ class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
     override fun setUpToolbar() = with(toolbar) {
         showToolbar(true).showBackButton(true).setToolbarColor(R.color.backgroundColor)
             .setToolbarTitle(getString(R.string.titleschedule_ride)).build()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
     }
 }
