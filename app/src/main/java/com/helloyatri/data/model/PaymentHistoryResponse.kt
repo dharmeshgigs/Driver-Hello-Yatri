@@ -20,7 +20,7 @@ data class PaymentHistory(
     @SerializedName("total_accepted_fare") var totalAcceptedFare: String? = null,
     @SerializedName("total_requested_fare") var totalRequestedFare: String? = null,
     @SerializedName("data") var data: ArrayList<Payment>? = null,
-    @SerializedName("filters") var filters: String? = null
+//    @SerializedName("filters") var filters: String? = null
 )
 
 data class Payment(

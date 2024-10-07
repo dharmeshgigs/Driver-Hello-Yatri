@@ -578,7 +578,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewHello.text = getString(R.string.label_upload)
                 includedTopContent.textViewWelcomeBack.text = getString(R.string.label_bank_details)
                 textViewProfilePicture.text = getString(R.string.label_attach_bank_account_details)
-                setUpData(resources.getStringArray(R.array.all_common_lablel))
+                setUpData(resources.getStringArray(R.array.all_bank_common_lablel))
             }
 
             UPLOAD_VEHICLE_PUC -> {
@@ -630,7 +630,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_left_right_side_exterior)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
                 textViewNote.text =
                     getString(R.string.label_note_please_upload_both_sides_exterior_left_right_side)
                 textViewNote.visibility = View.VISIBLE
@@ -641,7 +641,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_chassis_number_images)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
             }
 
             UPLOAD_YOUR_PHOTO_WITH_VEHICLE -> {
@@ -649,7 +649,7 @@ class DriverPersonalProfilePictureFragment :
                 includedTopContent.textViewWelcomeBack.text =
                     getString(R.string.label_vehicle_photos)
                 textViewProfilePicture.text = getString(R.string.label_your_photo_with_vehicle)
-                setUpData(resources.getStringArray(R.array.profile_image))
+                setUpData(resources.getStringArray(R.array.all_common_lablel))
                 textViewNote.text =
                     getString(R.string.label_note_please_upload_your_photo_by_standing_in_front_of_your_vehicle)
                 textViewNote.visibility = View.VISIBLE

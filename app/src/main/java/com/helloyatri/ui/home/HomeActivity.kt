@@ -1,12 +1,19 @@
 package com.helloyatri.ui.home
 
+import android.content.Intent
+import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
@@ -43,11 +50,13 @@ import com.helloyatri.utils.PushEventListener
 import com.helloyatri.utils.PusherManager
 import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.nullify
+import com.helloyatri.utils.location.LocationProvider
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -55,6 +64,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
 
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
     private val apiViewModel by viewModels<ApiViewModel>()
+    private var locationProvider : LocationProvider? = null
 
     private val sideMenuAdapter by lazy {
         SideMenuAdapter()
@@ -78,9 +88,16 @@ class HomeActivity : BaseActivity(), PushEventListener {
         setUpSideMenu()
         setUpSideMenuClickListener()
         initObservers()
-        load(HomeFragment::class.java).replace(false)
         myApp.pusherManager.setPushEventListener(this)
+        locationProvider = LocationProvider(this)
+        load(HomeFragment::class.java).replace(false)
         createFirebaseToken()
+        getLocationAPI()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        getLocationAPI()
     }
 
     private fun getIntentData() {
@@ -392,5 +409,82 @@ class HomeActivity : BaseActivity(), PushEventListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun getLocationAPI() {
+        getUserCurrentLocation(update = true, onLocation = {
+            it?.let {
+                val triple = getAddressLocation(it)
+                triple?.let {
+                    apiViewModel.location = Pair(
+                        LatLng(triple.first.toDouble(), triple.second.toDouble()),
+                        triple.third
+                    )
+                    apiViewModel.locationLiveData.value = LatLng(triple.first.toDouble(), triple.second.toDouble())
+                }
+
+            }
+        }, onPermissionDenied = {
+            if (it) {
+                showLocationPermissionDialog()
+            } else {
+                getLocationAPI()
+            }
+        })
+    }
+
+    fun getAddressLocation(center: LatLng?) : Triple<String,String,String>? {
+        var lat: String = ""
+        var long: String = ""
+        var address: String = ""
+        center?.let {
+            val geocoder = Geocoder(this, Locale.getDefault())
+            val addresses = geocoder.getFromLocation(center.latitude, center.longitude, 1)
+            lat = center.latitude.toString()
+            long = center.longitude.toString()
+            if (!addresses.isNullOrEmpty()) {
+                address = addresses[0].getAddressLine(0)
+                return Triple(lat,long,address)
+            }
+        }
+        return null
+    }
+
+    fun showLocationPermissionDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Location Permission Required");
+        builder.setMessage("This app needs location access to provide location-based services. Please grant the permission in the app settings.");
+        builder.setCancelable(false)
+        builder.setPositiveButton("Go to Settings"
+        ) { dialog, which ->
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", packageName, null)
+            intent.setData(uri)
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("Cancel"
+        ) { dialog, which ->
+            dialog.cancel()
+            showLocationPermissionDialog()
+        }
+        builder.show();
+    }
+
+    fun getUserCurrentLocation(onLocation: (LatLng) -> Unit, update: Boolean = false, onPermissionDenied: (forever: Boolean) -> Unit) {
+
+        locationProvider?.getCurrentLocation(updated = update, onLocationFound =  {
+            it?.let {
+                val lat = it.latitude.toString()
+                val long = it.longitude.toString()
+                val location =
+                    LatLng(
+                        lat.toDouble(), long.toDouble()
+                    )
+                onLocation(location)
+            }
+        }, onPermissionDenied = {
+            onPermissionDenied(it)
+        })
     }
 }

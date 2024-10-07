@@ -1,9 +1,12 @@
 package com.helloyatri.ui.base
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.google.android.gms.maps.model.LatLng
@@ -289,9 +293,9 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         _binding = null
     }
 
-    fun getUserCurrentLocation(onLocation: (LatLng) -> Unit, update: Boolean = false) {
+    fun getUserCurrentLocation(onLocation: (LatLng) -> Unit, update: Boolean = false, onPermissionDenied: (forever: Boolean) -> Unit) {
         locationProvider = LocationProvider((activity as BaseActivity),this)
-        locationProvider?.getCurrentLocation(updated = update) {
+        locationProvider?.getCurrentLocation(updated = update, onLocationFound =  {
             it?.let {
                 val lat = it.latitude.toString()
                 val long = it.longitude.toString()
@@ -301,24 +305,9 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
                     )
                 onLocation(location)
             }
-        }
-    }
-
-    fun getAddressLocation(center: LatLng?) : Triple<String,String,String>? {
-        var lat: String = ""
-        var long: String = ""
-        var address: String = ""
-        center?.let {
-            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            val addresses = geocoder.getFromLocation(center.latitude, center.longitude, 1)
-             lat = center.latitude.toString()
-             long = center.longitude.toString()
-            if (!addresses.isNullOrEmpty()) {
-                address = addresses[0].getAddressLine(0)
-                return Triple(lat,long,address)
-            }
-        }
-        return null
+        }, onPermissionDenied = {
+            onPermissionDenied(it)
+        })
     }
 }
 

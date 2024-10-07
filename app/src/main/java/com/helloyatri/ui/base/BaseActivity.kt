@@ -22,6 +22,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import com.helloyatri.R
 import com.helloyatri.core.Session
@@ -37,6 +38,7 @@ import com.helloyatri.ui.manager.FragmentNavigationFactory
 import com.helloyatri.ui.manager.Navigator
 import com.helloyatri.utils.fileselector.MediaSelectHelper
 import com.helloyatri.utils.hideView
+import com.helloyatri.utils.location.LocationProvider
 import com.helloyatri.utils.showView
 import com.helloyatri.utils.textdecorator.TextDecorator
 import com.helloyatri.utils.toolbar.CustomToolbar
@@ -63,6 +65,7 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
     private var progressDialog: ProgressDialog? = null
     private var alertDialog: AlertDialog? = null
     lateinit var myApp: App
+
 
     private val view by lazy {
         createViewBinding()
@@ -429,4 +432,6 @@ abstract class BaseActivity : AppCompatActivity(), HasToolbar, Navigator {
             )
         }
     }
+
+
 }

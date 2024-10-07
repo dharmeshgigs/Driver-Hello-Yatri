@@ -32,39 +32,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
 
     private val apiViewModel by viewModels<ApiViewModel>()
-
     private lateinit var countryCodePicker: CountryCodePicker
     private var countryCode: String? = null
     private var countryShortCode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        apiViewModel.driverRegisterLiveData.get(this,{
-//            hideLoader()
-//
-//            when(it.code) {
-//                APIFactory.ResponseCode.SUCCESS -> {
-//                    navigator.load(OTPVerificationFragment::class.java).setBundle(
-//                        OTPVerificationFragment.createBundle(
-//                            sourceScreen = SignUpFragment::class.java.simpleName
-//                            , phonenumber = binding.includedMobileNumber.editText.text.toString().trim(),
-//                            countrycode = binding.includedMobileNumber.textViewCountryCode.text.toString().trim(),
-//                            name = binding.includedFullName.editText.text.toString().trim(),
-//                            userId = binding.includedUserId.editText.text.toString().trim(),
-//                            pwd = binding.includedPassword.editText.text.toString().trim())
-//                        ,).replace(true)
-//                }
-//
-//                else -> {
-//                    showMessage(it.message)
-//                }
-//            }
-//        //    navigator.load(DriverVerificationFragment::class.java).replace(false)
-//        })
-
         initObservers()
-
     }
 
     private fun initObservers() {
@@ -95,7 +69,6 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
                         } ?: run {
                             showSomethingMessage()
                         }
-
                     }
 
                     Status.ERROR -> {
@@ -148,7 +121,6 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
         includedUserId.editText.imeOptions = EditorInfo.IME_ACTION_NEXT
         includedMobileNumber.editText.imeOptions = EditorInfo.IME_ACTION_NEXT
         includedPassword.editText.imeOptions = EditorInfo.IME_ACTION_DONE
-
         includedMobileNumber.editText.doAfterTextChanged {
             if (it?.length == 10) {
                 includedMobileNumber.imageViewVerify.isVisible(true)
@@ -209,7 +181,6 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
         radioButtonTermsCondition.setOnCheckedChangeListener { buttonView, isChecked ->
             enableVerifyButton()
         }
-
         includedMobileNumber.editText.doAfterTextChanged {
             if (it?.length == 10) {
                 includedMobileNumber.imageViewVerify.isVisible(true)
@@ -278,7 +249,7 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
                 return@with
             }
 
-
+            hideKeyBoard()
             apiViewModel.driverRegister(
                 Request(
                     name = binding.includedFullName.editText.text.toString().trim(),
@@ -287,17 +258,6 @@ class SignUpFragment : BaseFragment<AuthSignupFragmentBinding>() {
                     password = binding.includedPassword.editText.text.toString().trim()
                 )
             )
-            /*
-            navigator.load(OTPVerificationFragment::class.java).setBundle(
-                    OTPVerificationFragment.createBundle(
-                            sourceScreen = SignUpFragment::class.java.simpleName
-                        , phonenumber = binding.includedMobileNumber.editText.text.toString().trim(),
-                        countrycode = binding.includedMobileNumber.textViewCountryCode.text.toString().trim(),
-                        name = binding.includedFullName.editText.text.toString().trim(),
-                        userId = binding.includedUserId.editText.text.toString().trim(),
-                        pwd = binding.includedPassword.editText.text.toString().trim())
-            ,).replace(true)*/
-
         } catch (e: ApplicationException) {
             showMessage(e.message)
         }

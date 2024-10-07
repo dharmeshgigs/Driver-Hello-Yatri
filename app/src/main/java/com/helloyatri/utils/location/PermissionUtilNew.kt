@@ -67,7 +67,9 @@ class PermissionUtilNew(private val activity: ComponentActivity, fragment: Fragm
 
     private fun deniedForever(grantResults: Map<String, Boolean>): Boolean {
         for (data in grantResults) {
-            if (!activity.shouldShowRequestPermissionRationale(data.key)) return false
+            if (!activity.shouldShowRequestPermissionRationale(data.key)) {
+                return false
+            }
         }
 
         return true

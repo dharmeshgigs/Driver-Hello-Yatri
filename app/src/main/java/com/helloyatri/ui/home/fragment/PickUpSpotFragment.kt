@@ -4,6 +4,7 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -56,7 +57,6 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     private var lat = ""
     private var long = ""
     private var tripRiderModel: TripRiderModel? = null
-    private var locationProvider: LocationProvider? = null
     var location: LatLng? = null
     var endLocation: LatLng? = null
     var pickupLocation: LatLng? = null
@@ -89,7 +89,6 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             tripRiderModel?.tripDetails?.endLocation?.latitude?.toDouble() ?: 0.0,
             tripRiderModel?.tripDetails?.endLocation?.longitude?.toDouble() ?: 0.0
         )
-        getCurrentLocation()
         initObservers()
     }
 
@@ -98,6 +97,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         apiViewModel.getCancelletionReasonAPI()
         setUpView()
         setUpClickListener()
+        getCurrentLocation()
     }
 
     private fun initViews() = with(binding) {
@@ -286,9 +286,9 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     }
 
     private fun getCurrentLocation() {
-        locationProvider = LocationProvider((activity as BaseActivity), this)
-        locationProvider?.getCurrentLocation(updated = true) {
-            it.let {
+
+        apiViewModel.locationLiveData.observe(this) {
+            it?.let {
                 hideLoader()
                 lat = it.latitude.toString()
                 long = it.longitude.toString()

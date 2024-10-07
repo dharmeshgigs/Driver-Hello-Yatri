@@ -528,4 +528,6 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
             getActiveTripLiveData.value = authRepo.tripConfigData()
         }
     }
+
+    val locationLiveData by lazy { MutableLiveData<LatLng>() }
 }

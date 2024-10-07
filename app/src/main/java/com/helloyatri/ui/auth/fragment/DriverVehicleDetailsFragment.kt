@@ -22,6 +22,7 @@ import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.common.fieldselection.bottomsheet.CommonFieldSelectionBottomSheet
 import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection
 import com.helloyatri.utils.Constants
+import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.extension.trimmedText
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -147,7 +148,7 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
                     resource?.data?.let {
                         val response =
                             Gson().fromJson(it.toString(), CommonResponse::class.java)
-                        showMessage(resource.message.toString())
+                        showMessage(response.message.nullify())
                         session.isAddVehicle = true
                         navigator.goBack()
                     } ?: run {
@@ -329,7 +330,7 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
             validator.submit(includedVehicleModelYear.editText).checkEmpty()
                 .errorMessage(getString(R.string.validation_please_select_vehicle_model_year))
                 .check()
-
+            hideKeyBoard()
             apiViewModel.updateVehicleDetails(
                 Request(
                     name = data?.name ?: includedVehicleName.editText.text.toString().trim(),

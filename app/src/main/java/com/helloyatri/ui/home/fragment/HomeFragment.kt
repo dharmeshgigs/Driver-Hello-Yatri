@@ -1,7 +1,15 @@
 package com.helloyatri.ui.home.fragment
 
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.location.Geocoder
+import android.net.Uri
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -38,6 +46,7 @@ import com.helloyatri.utils.extension.visible
 import com.helloyatri.utils.getRidePickUpList
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeFragmentBinding>() {
@@ -210,7 +219,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                                             .replace(false)
                                         apiViewModel.getActiveTripLiveData.value = null
                                     }
-                                } else if(trip.status == "ON_GOING") {
+                                } else if (trip.status == "ON_GOING") {
                                     response.data?.EVENTDATA?.let {
                                         apiViewModel.tripRequest.value = it
                                         apiViewModel._tripStartLiveData.value = true
@@ -232,6 +241,16 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
                     }
                 }
+            }
+        }
+
+        apiViewModel.locationLiveData.observe(this) {
+            it?.let {
+                val request = Request(
+                    latitude = it.latitude.toString(),
+                    longitude = it.longitude.toString()
+                )
+                apiViewModel.updateCurrentLocation(request = request)
             }
         }
     }
@@ -319,10 +338,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         imageViewUserProfile.loadImageFromServerWithPlaceHolder(
             data?.profileImage ?: ""
         )
-        textViewUserName.text = buildString {
-            append("Hello \n")
-            append(data?.name)
-        }
+        TextDecorator.decorate(
+            textViewUserName,
+            String.format(getString(R.string.label_hello_home), data?.name)
+        )
+            .setTypeface(R.font.lufga_medium, data?.name.nullify())
+            .setAbsoluteSize(
+                resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._14ssp),
+                data?.name.nullify()
+            ).build()
     }
 
     private fun setAdapter() = with(binding) {
@@ -411,60 +435,10 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
     private fun getHomeDataAPI() {
         apiViewModel.getHomeData()
         apiViewModel.getDriverProfile()
-        getUserCurrentLocation(update = true, onLocation = {
-            it?.let {
-//                val request = Request(
-//                    latitude = "23.0708186",
-//                    longitude = "72.5365617"
-//                )
-//                val request = Request(
-//                    latitude = "21.214776",
-//                    longitude = "72.8902554"
-//                )
-                // TODO: Remove static latlong
-                val request = Request(
-                    latitude = it.latitude.toString(),
-                    longitude = it.longitude.toString()
-                )
-                val triple = getAddressLocation(it)
-                triple?.let {
-                    apiViewModel.location = Pair(
-                        LatLng(triple.first.toDouble(), triple.second.toDouble()),
-                        triple.third
-                    )
-                }
-                apiViewModel.updateCurrentLocation(
-                    request
-                )
-            }
-        })
     }
 
     override fun onResume() {
         super.onResume()
         apiViewModel.tripConfigData()
-    }
-
-    private fun getNearestLatLong() {
-//        val apiKey = "YOUR_API_KEY"
-//        val latitude = 21.1702 // Example latitude
-//        val longitude = 72.8311 // Example longitude
-//
-//        val url = "https://roads.googleapis.com/v1/snapToRoad?path=${latitude},${longitude}&interpolate=true&key=${apiKey}"
-//
-//        val request = Request.Builder()
-//            .url(url)
-//            .build()
-//
-//        val client = OkHttpClient()
-//        val response = client.newCall(request).execute()
-//
-//        if (response.isSuccessful)
-//        {
-//            val data = response.body()?.string()
-//            // Parse the JSON data and extract the snapped points
-//        } else {
-//            // Handle errors
-//        }
     }
 }

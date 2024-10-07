@@ -234,10 +234,10 @@
     <string name="label_vehicle_insurance">Vehicle Insurance</string>
     <string name="label_vehicle_registration_certificate">Vehicle Registration Certificate</string>
     <string name="label_vehicle_permit">Vehicle Permit</string>
-    <string name="label_front_back_with_number_plate">Front-back With Number Plate</string>
-    <string name="label_left_right_side_exterior">Left-Right Side Exterior</string>
-    <string name="label_chassis_number_images">Chassis Number Images</string>
-    <string name="label_your_photo_with_vehicle">Your Photo With Vehicle</string>
+    <string name="label_front_back_with_number_plate">Front-back with number plate</string>
+    <string name="label_left_right_side_exterior">Left-Right side exterior</string>
+    <string name="label_chassis_number_images">Chassis number images</string>
+    <string name="label_your_photo_with_vehicle">Your photo with vehicle</string>
     <string name="label_note_please_upload_both_sides_front_and_back">Note : Please upload both sides, Front and Back.</string>
     <string name="label_note_please_upload_both_sides_exterior_left_right_side">Note : Please upload both sides exterior, Left-Right Side.</string>
     <string name="label_note_please_upload_your_photo_by_standing_in_front_of_your_vehicle">Note : Please upload your photo by standing in front of your vehicle.</string>
@@ -393,4 +393,12 @@ will be accepted.</string>
     <string name="label_total_accepted_nfare_price">Total Accepted \nFare Price</string>
     <string name="label_total_you_earn">Total you earn</string>
     <string name="label_dynamic_fare_price_n_780_paymenbt">Fare Price\n%s</string>
+    <string name="label_upload_bank_document">Upload Bank Document (Passbook, Cancelled Cheque, Bank Statement, or Digital Account Screenshot)</string>
+
+    <string-array name="all_bank_common_lablel">
+        <item>@string/label_upload_bank_document</item>
+        <item>@string/label_photo_all_details_must_be_clearly_visible</item>
+        <item>@string/label_document_less_than_10MB</item>
+    </string-array>
+    <string name="label_hello_home">Hello\n%s</string>
 </resources>

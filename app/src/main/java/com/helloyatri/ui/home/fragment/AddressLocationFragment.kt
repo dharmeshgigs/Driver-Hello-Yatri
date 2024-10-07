@@ -52,18 +52,16 @@ class AddressLocationFragment : BaseFragment<AdddressLocationFragmentBinding>(),
         long = savedAddress?.longitude ?: ""
         address = savedAddress?.location ?: ""
         if(lat.isEmpty() && long.isEmpty()) {
-            getUserCurrentLocation( {
-                it?.let {
-                    lat = it.latitude.toString()
-                    long = it.longitude.toString()
-                    location =
-                        LatLng(
-                            lat.toDouble(), long.toDouble()
-                        )
-                    setUpMapCamera()
-                    getAddress(it)
-                }
-            })
+            apiViewModel.locationLiveData.observe(this) {
+                lat = it.latitude.toString()
+                long = it.longitude.toString()
+                location =
+                    LatLng(
+                        lat.toDouble(), long.toDouble()
+                    )
+                setUpMapCamera()
+                getAddress(it)
+            }
         }
     }
 

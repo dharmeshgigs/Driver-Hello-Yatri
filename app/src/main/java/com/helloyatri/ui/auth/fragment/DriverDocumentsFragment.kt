@@ -189,7 +189,7 @@ class DriverDocumentsFragment : BaseFragment<AuthDriverDocumentsFragmentBinding>
         }
 
         buttonSubmit.setOnClickListener {
-            navigator.load(DriverVerificationFragment::class.java)
+            navigator.load(DriverVerificationFragment::class.java).clearHistory(this@DriverDocumentsFragment::class.java.simpleName)
                 .replace(false)
         }
     }

@@ -27,8 +27,8 @@ class LocationProvider(private val activity: ComponentActivity, fragment: Fragme
     }
 
     @SuppressLint("MissingPermission")
-    fun getCurrentLocation(priority: Int = Priority.PRIORITY_HIGH_ACCURACY, updated : Boolean = false, onLocationFound: (latLng: LatLng) -> Unit) {
-        requestLocationPermission {
+    fun getCurrentLocation(priority: Int = Priority.PRIORITY_HIGH_ACCURACY, updated : Boolean = false, onLocationFound: (latLng: LatLng) -> Unit, onPermissionDenied: (forever: Boolean) -> Unit) {
+        requestLocationPermission( onPermissionGranted = {
             if(updated) {
                 val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
                     .setWaitForAccurateLocation(false)
@@ -57,9 +57,13 @@ class LocationProvider(private val activity: ComponentActivity, fragment: Fragme
                 }
             }
         }
+           , onPermissionDenied = {
+               onPermissionDenied(it)
+            }
+        )
     }
 
-    private fun requestLocationPermission(onPermissionGranted: () -> Unit) {
+    private fun requestLocationPermission(onPermissionGranted: () -> Unit, onPermissionDenied: (forever: Boolean) -> Unit) {
         permissionUtil.apply {
             requestPermissions(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -71,6 +75,12 @@ class LocationProvider(private val activity: ComponentActivity, fragment: Fragme
                 setOnGpsPermissionEnabledListener {
                     onPermissionGranted()
                 }
+            }
+            setOnPermissionDeniedListener {
+                onPermissionDenied(false)
+            }
+            setOnPermissionDeniedForeverListener {
+                onPermissionDenied(true)
             }
         }
     }
