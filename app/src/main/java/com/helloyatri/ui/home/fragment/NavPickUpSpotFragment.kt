@@ -2,10 +2,13 @@ package com.helloyatri.ui.home.fragment
 
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import com.fondesa.kpermissions.BuildConfig
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,15 +17,25 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
+import com.google.android.libraries.navigation.CustomControlPosition
+import com.google.android.libraries.navigation.NavigationApi
+import com.google.android.libraries.navigation.Navigator
+import com.google.android.libraries.navigation.RoutingOptions
+import com.google.android.libraries.navigation.SimulationOptions
+import com.google.android.libraries.navigation.SupportNavigationFragment
+import com.google.android.libraries.navigation.Waypoint
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
 import com.helloyatri.data.model.GetCencellation
 import com.helloyatri.data.model.TripRiderModel
+import com.helloyatri.databinding.FragmentNavPickUpSpotBinding
 import com.helloyatri.databinding.FragmentPickUpSpotBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
+import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.bottomsheet.CancelRideBottomSheet
 import com.helloyatri.ui.home.bottomsheet.EmergencyAssistanceBottomSheet
 import com.helloyatri.ui.home.dialog.CommonYesNoDialogFragment
@@ -38,6 +51,11 @@ import com.helloyatri.ui.home.dialog.RideVerificationResultDialogFragment.Compan
 import com.helloyatri.utils.AppUtils
 import com.helloyatri.utils.AppUtils.openCallDialer
 import com.helloyatri.utils.Constants
+import com.helloyatri.utils.InitializedMapScope
+import com.helloyatri.utils.InitializedNavRunnable
+import com.helloyatri.utils.InitializedNavScope
+import com.helloyatri.utils.NavForwardingManager
+import com.helloyatri.utils.NavInfoReceivingService
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.textdecorator.TextDecorator
@@ -46,7 +64,7 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReadyCallback {
+class NavPickUpSpotFragment : BaseFragment<FragmentNavPickUpSpotBinding>(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private val apiViewModel: ApiViewModel by activityViewModels()
 
@@ -60,6 +78,12 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     var cencellationDataList: ArrayList<String> = arrayListOf()
     var startMarker: Marker? = null
     var endMarker: Marker? = null
+    private var arrivalListener: Navigator.ArrivalListener? = null
+    private var navigatorScope: InitializedNavScope? = null
+    private var routeChangedListener: Navigator.RouteChangedListener? = null
+    private var pendingNavActions = mutableListOf<InitializedNavRunnable>()
+    private lateinit var navFragment: SupportNavigationFragment
+    private var headerNavInfo: NavInfo? = null
 
     companion object {
         fun createBundle(
@@ -71,8 +95,8 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
 
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean
-    ): FragmentPickUpSpotBinding {
-        return FragmentPickUpSpotBinding.inflate(layoutInflater)
+    ): FragmentNavPickUpSpotBinding {
+        return FragmentNavPickUpSpotBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,14 +111,22 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             tripRiderModel?.tripDetails?.endLocation?.longitude?.toDouble() ?: 0.0
         )
         initObservers()
+        registerNavigationListeners()
+        initializeNavigationApi()
     }
 
     override fun bindData() {
+        navFragment =
+            childFragmentManager.findFragmentById(R.id.navigation_fragment) as SupportNavigationFragment
+        navFragment.setEtaCardEnabled(false)
         initViews()
         apiViewModel.getCancelletionReasonAPI()
-        setUpView()
+//        setUpView()
         setUpClickListener()
         getCurrentLocation()
+        withNavigatorAsync {
+            NavForwardingManager.startNavForwarding(navigatorNav, requireActivity())
+        }
     }
 
     private fun initViews() = with(binding) {
@@ -222,7 +254,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     Status.SUCCESS -> {
                         hideLoader()
                         navigator.load(RideCompleteFragment::class.java)
-                            .clearHistory(this@PickUpSpotFragment::class.java.simpleName).add(false)
+                            .clearHistory(this@NavPickUpSpotFragment::class.java.simpleName).add(false)
                         apiViewModel.completeTripLiveData.value = null
                     }
 
@@ -272,14 +304,21 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                         RideCancelledDialogFragment {
                             navigator.goBack()
                             apiViewModel._tripStatusUpdatedLiveData.value = null
-                        }.show(childFragmentManager, PickUpSpotFragment::class.java.simpleName)
+                        }.show(childFragmentManager, NavPickUpSpotFragment::class.java.simpleName)
                     } else if (it.status.equals(Constants.FINISHED)) {
                         navigator.load(RideCompleteFragment::class.java)
-                            .clearHistory(this@PickUpSpotFragment::class.java.simpleName).add(false)
+                            .clearHistory(this@NavPickUpSpotFragment::class.java.simpleName).add(false)
                     }
                 }
             }
         }
+
+        val navInfoObserver = Observer { navInfo: NavInfo? ->
+            navInfo?.let {
+                Log.e("TAG",Gson().toJson(it))
+            }
+        }
+        NavInfoReceivingService.navInfoLiveData.observe(this, navInfoObserver)
     }
 
     private fun getCurrentLocation() {
@@ -321,7 +360,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
     }
 
     private fun setUpView() {
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
+        val mapFragment = childFragmentManager.findFragmentById(R.id.navigation_fragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
@@ -367,7 +406,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             )
 
             commonYesNoDialogFragment.show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, NavPickUpSpotFragment::class.java.simpleName
             )
         }
 
@@ -383,7 +422,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     )
                 }
             }, cencellationDataList).show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, NavPickUpSpotFragment::class.java.simpleName
             )
         }
 
@@ -394,7 +433,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                     navigator.load(TripReportCrashFragment::class.java).add(false)
                 }
             }).show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, NavPickUpSpotFragment::class.java.simpleName
             )
         }
 
@@ -421,7 +460,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
             )
 
             commonYesNoDialogFragment.show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, NavPickUpSpotFragment::class.java.simpleName
             )
         }
 
@@ -486,113 +525,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
         googleMap?.uiSettings?.isZoomControlsEnabled = true
         googleMap = map
         setUpMapCamera()
-
-//        getCurrentLocation()
-//        // Define the locations
-//        val startLocation = LatLng(23.033863, 72.585022)
-//        val endLocation = LatLng(21.740521, 72.148827)
-//
-//        // Add custom markers for start and end locations
-//        val startMarker = googleMap!!.addMarker(
-//            MarkerOptions()
-//                .position(startLocation)
-//                .title("Start Location")
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_marker)) // Custom marker icon
-//        )
-
-
-//
-//        // Add a polyline between the locations
-//        val polylineOptions = PolylineOptions()
-//            .add(startLocation)
-//            .add(endLocation)
-//            .color(R.color.polyline_color) // Set the color of the polyline
-//            .width(5f) // Set the width of the polyline
-//
-//        val polyline: Polyline = googleMap!!.addPolyline(polylineOptions)
-//        val bounds = LatLngBounds.Builder()
-//            .include(startLocation)
-//            .include(endLocation)
-//            .build()
-//        // Move the camera to the first location
-//        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100)
-//        googleMap!!.animateCamera(cameraUpdate)
-//
-        // Set a pin at a specific location
-
-//        if(lat.isEmpty() && long.isEmpty()) {
-////            location =
-////                LatLng(
-////                    20.5937, 78.9629
-////                )
-////            getAddress(location)
-////            getCurrentLocation()
-//        } else {
-//            location =
-//                LatLng(
-//                    lat.toDouble(), long
-//                        .toDouble()
-//                )
-//        }
-
-        // binding.editTextLocation.setText(address)
-
-//        setUpMapCamera()
-//        googleMap?.setOnCameraIdleListener {
-//            countDownTimer?.cancel()
-//            countDownTimer = object : CountDownTimer(2000, 1000) {
-//                override fun onTick(millisUntilFinished: Long) {
-//                }
-//                override fun onFinish() {
-//                    try {
-//                        val center = googleMap?.cameraPosition?.target
-//                        center?.let {
-//                            getAddress(it)
-//                        }
-//                    } catch (e : Exception) {
-//                        e.printStackTrace()
-//                    }
-//                }
-//            }
-//            countDownTimer?.start()
-//        }
     }
-
-//    private fun drawRoute(origin: LatLng, destination: LatLng) {
-//        GlobalScope.launch(Dispatchers.IO) {
-//            val apiKey = "YOUR_API_KEY_HERE"
-//            val geoApiContext = GeoApiContext.Builder()
-//                .apiKey(apiKey)
-//                .build()
-//
-//            try {
-//                val result: DirectionsResult = DirectionsApi.newRequest(geoApiContext)
-//                    .origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
-//                    .destination(com.google.maps.model.LatLng(destination.latitude, destination.longitude))
-//                    .await()
-//
-//                val route: DirectionsRoute = result.routes[0]
-//                val polylineOptions = PolylineOptions().color(R.color.purple_200).width(5f)
-//
-//                for (step in route.legs[0].steps) {
-//                    val decodedPath = PolyUtil.decode(step.polyline.encodePath)
-//                    polylineOptions.addAll(decodedPath)
-//                }
-//
-//                runOnUiThread {
-//                    mMap.addPolyline(polylineOptions)
-//                    val bounds = LatLngBounds.builder()
-//                        .include(origin)
-//                        .include(destination)
-//                        .build()
-//                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
-//                }
-//
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
 
     private fun showVerificationDialog() {
         RideVerificationDialogFragment {
@@ -607,8 +540,165 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                 )
             }
             rideVerificationResultDialogFragment.show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, NavPickUpSpotFragment::class.java.simpleName
             )
-        }.show(childFragmentManager, PickUpSpotFragment::class.java.simpleName)
+        }.show(childFragmentManager, NavPickUpSpotFragment::class.java.simpleName)
     }
+
+    /**
+     * Registers a number of example event listeners that show an on screen message when certain
+     * navigation events occur (e.g. the driver's route changes or the destination is reached).
+     */
+    private fun registerNavigationListeners() {
+        withNavigatorAsync {
+            arrivalListener =
+                Navigator.ArrivalListener { // Show an onscreen message
+                    showMessage("User has arrived at the destination!")
+
+                    // Stop turn-by-turn guidance and return to TOP_DOWN perspective of the map
+                    navigatorNav.stopGuidance()
+
+                    // Stop simulating vehicle movement.
+                    if (BuildConfig.DEBUG) {
+                        navigatorNav.simulator.unsetUserLocation()
+                    }
+                }
+            navigatorNav.addArrivalListener(arrivalListener)
+
+            routeChangedListener =
+                Navigator.RouteChangedListener { // Show an onscreen message when the route changes
+                    showMessage("onRouteChanged: the driver's route changed")
+                }
+            navigatorNav.addRouteChangedListener(routeChangedListener)
+        }
+    }
+
+    /**
+     * Runs [block] once navigator is initialized. Block is ignored if the navigator is never
+     * initialized (error, etc.).
+     *
+     * This ensures that calls using the navigator before the navigator is initialized gets executed
+     * after the navigator has been initialized.
+     */
+    private fun withNavigatorAsync(block: InitializedNavRunnable) {
+        val navigatorScope = navigatorScope
+        if (navigatorScope != null) {
+            navigatorScope.block()
+        } else {
+            pendingNavActions.add(block)
+        }
+    }
+
+    /** Starts the Navigation API, saving a reference to the ready Navigator instance. */
+    private fun initializeNavigationApi() {
+        NavigationApi.getNavigator(
+            (activity as HomeActivity),
+            object : NavigationApi.NavigatorListener {
+                override fun onNavigatorReady(navigator: Navigator) {
+                    val scope = InitializedNavScope(navigator)
+                    navigatorScope = scope
+                    pendingNavActions.forEach { block -> scope.block() }
+                    pendingNavActions.clear()
+                    navigateToPlace()
+                }
+
+                override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
+                    when (errorCode) {
+                        NavigationApi.ErrorCode.NOT_AUTHORIZED -> {
+                            // Note: If this message is displayed, you may need to check that
+                            // your API_KEY is specified correctly in AndroidManifest.xml
+                            // and is been enabled to access the Navigation API
+                            showErrorMessage(
+                                "Error loading Navigation API: Your API key is " +
+                                        "invalid or not authorized to use Navigation."
+                            )
+                        }
+                        NavigationApi.ErrorCode.TERMS_NOT_ACCEPTED -> {
+                            showErrorMessage(
+                                "Error loading Navigation API: User did not " +
+                                        "accept the Navigation Terms of Use."
+                            )
+                        }
+                        else -> showErrorMessage("Error loading Navigation API: $errorCode")
+                    }
+                }
+            },
+        )
+    }
+
+    /**
+     * Runs [block] once map is initialized. Block is ignored if map is never initialized.
+     *
+     * This ensures that calls using the map before the map is initialized gets executed after the map
+     * has been initialized.
+     */
+    private fun withMapAsync(block: InitializedMapScope.() -> Unit) {
+        navFragment.getMapAsync { map ->
+            object : InitializedMapScope {
+                override val map = map
+            }
+                .block()
+        }
+    }
+
+    private fun navigateToPlace() {
+        val waypoint: Waypoint = Waypoint.builder().setLatLng(pickupLocation?.latitude ?: 0.0, pickupLocation?.longitude ?: 0.0).build()
+        val waypointDestination: Waypoint = Waypoint.builder().setLatLng(endLocation?.latitude ?: 0.0, endLocation?.longitude ?: 0.0).build()
+//            if (place.types?.contains(Place.Type.GEOCODE) == true) {
+//                // An example of setting a destination via Lat-Lng.
+//                // Note: Setting LatLng destinations can result in poor routing quality/ETA calculation.
+//                // Wherever possible you should use a Place ID to describe the destination accurately.
+//                place.latLng?.let { Waypoint.builder().setLatLng(it.latitude, it.longitude).build() }
+//            } else {
+//                // Set a destination by using a Place ID (the recommended method)
+//                try {
+//                    Waypoint.builder().setPlaceIdString(place.id).build()
+//                } catch (e: Waypoint.UnsupportedPlaceIdException) {
+//                    showErrorMessage("Place ID was unsupported.")
+//                    return
+//                }
+//            }
+
+        withNavigatorAsync {
+            val points = arrayListOf<Waypoint>()
+            points.add(waypoint)
+            points.add(waypointDestination)
+            val pendingRoute = navigatorNav.setDestinations(points)
+
+            // Set an action to perform when a route is determined to the destination
+            pendingRoute.setOnResultListener { code ->
+                when (code) {
+                    Navigator.RouteStatus.OK -> {
+                        // Hide the toolbar to maximize the navigation UI
+//                        actionBar?.hide()
+
+                        // Enable voice audio guidance (through the device speaker)
+//                        navigator.setAudioGuidance(Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE)
+
+                        // Simulate vehicle progress along the route (for demo/debug builds)
+                        if (BuildConfig.DEBUG) {
+                            navigatorNav.simulator.simulateLocationsAlongExistingRoute(
+                                SimulationOptions().speedMultiplier(5f)
+                            )
+                        }
+
+                        // Start turn-by-turn guidance along the current route
+                        navigatorNav.startGuidance()
+                    }
+                    Navigator.RouteStatus.ROUTE_CANCELED -> {
+                        // Return to top-down perspective
+                        showErrorMessage("Route guidance cancelled.")
+                    }
+                    Navigator.RouteStatus.NO_ROUTE_FOUND,
+                    Navigator.RouteStatus.NETWORK_ERROR -> {
+                        // TODO: Add logic to handle when a route could not be determined
+                        showErrorMessage("Error starting guidance: $code")
+                    }
+                    else -> showErrorMessage("Error starting guidance: $code")
+                }
+            }
+        }
+    }
+
+
 }

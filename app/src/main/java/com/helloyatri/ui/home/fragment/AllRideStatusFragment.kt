@@ -33,7 +33,7 @@ class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
             EmergencyAssistanceBottomSheet(callBack = {
                 navigator.load(TripReportCrashFragment::class.java).add(false)
             }).show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, NavPickUpSpotFragment::class.java.simpleName
             )
         }, onEndHereClick = { position, item ->
             apiViewModel.tripConfigData()
@@ -131,7 +131,7 @@ class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
                                     response.data?.EVENTDATA?.let {
                                         apiViewModel.tripRequest.value = it
                                         apiViewModel._tripStartLiveData.value = false
-                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
+                                        navigator.load(NavPickUpSpotFragment::class.java).replace(true)
                                         apiViewModel.getActiveTripLiveData.value = null
                                     }
                                 } else if (trip.status == "FINISHED" && trip.paymentStatus == "PAID") {
@@ -146,7 +146,7 @@ class AllRideStatusFragment : BaseFragment<AllRideStatusFragmentBinding>() {
                                     response.data?.EVENTDATA?.let {
                                         apiViewModel.tripRequest.value = it
                                         apiViewModel._tripStartLiveData.value = true
-                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
+                                        navigator.load(NavPickUpSpotFragment::class.java).replace(true)
                                         apiViewModel.getActiveTripLiveData.value = null
                                     }
                                 } else {

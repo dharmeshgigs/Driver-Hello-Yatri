@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
@@ -39,6 +38,7 @@ import com.helloyatri.ui.home.fragment.AccountPaymentFragment
 import com.helloyatri.ui.home.fragment.AccountPreferencesFragment
 import com.helloyatri.ui.home.fragment.AccountSavedAddressFragment
 import com.helloyatri.ui.home.fragment.HomeFragment
+import com.helloyatri.ui.home.fragment.NavPickUpSpotFragment
 import com.helloyatri.ui.home.fragment.PickUpSpotFragment
 import com.helloyatri.ui.home.fragment.RideActivityFragment
 import com.helloyatri.ui.home.sidemenu.SideMenu
@@ -135,7 +135,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
         apiViewModel.acceptRequestLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    load(PickUpSpotFragment::class.java).add(true)
+                    load(NavPickUpSpotFragment::class.java).add(true)
                 }
 
                 else -> {}

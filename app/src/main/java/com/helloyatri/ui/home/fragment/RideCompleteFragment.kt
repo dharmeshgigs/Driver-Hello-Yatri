@@ -217,7 +217,7 @@ class RideCompleteFragment : BaseFragment<RideCompleteFragmentBinding>() {
             )
 
             commonYesNoDialogFragment.show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, RideCompleteFragment::class.java.simpleName
             )
         }
 

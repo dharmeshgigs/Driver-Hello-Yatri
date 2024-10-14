@@ -10,6 +10,11 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+ext {
+    navSdkVersion = "6.0.0"
+}
+
+
 android {
     signingConfigs {
         debug {
@@ -111,11 +116,11 @@ dependencies {
 
     // firebase
     implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+//    implementation 'com.google.android.gms:play-services-maps:18.2.0'
     implementation 'com.google.firebase:firebase-messaging:23.3.1'
     implementation 'com.google.firebase:firebase-auth:22.3.0'
     implementation "com.google.firebase:firebase-analytics-ktx:22.0.2"
-    implementation 'com.google.maps.android:android-maps-utils:2.3.0'
+//    implementation 'com.google.maps.android:android-maps-utils:2.3.0'
     implementation 'com.google.firebase:firebase-crashlytics:19.0.3'
 
     // Ktx
@@ -157,6 +162,8 @@ dependencies {
     implementation 'com.kizitonwose.calendar:view:2.5.2'
     implementation 'com.kizitonwose.calendar:compose:2.5.2'
     implementation 'com.pusher:pusher-java-client:2.4.4'
+
+    api "com.google.android.libraries.navigation:navigation:${navSdkVersion}"
 }
 
 // Allow references to generated code

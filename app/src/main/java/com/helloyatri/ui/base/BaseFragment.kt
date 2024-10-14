@@ -1,12 +1,8 @@
 package com.helloyatri.ui.base
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.location.Geocoder
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.google.android.gms.maps.model.LatLng
@@ -31,7 +26,6 @@ import com.helloyatri.utils.Validator
 import com.helloyatri.utils.location.LocationProvider
 import java.net.ConnectException
 import java.net.SocketTimeoutException
-import java.util.Locale
 import javax.inject.Inject
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {

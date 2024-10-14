@@ -1,19 +1,10 @@
 package com.helloyatri.ui.home.fragment
 
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.location.Geocoder
-import android.net.Uri
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
@@ -46,7 +37,6 @@ import com.helloyatri.utils.extension.visible
 import com.helloyatri.utils.getRidePickUpList
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeFragmentBinding>() {
@@ -161,88 +151,88 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
         }
 
-        apiViewModel.getActiveTripLiveData.observe(viewLifecycleOwner) { resource ->
-            resource?.let {
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        val response =
-                            Gson().fromJson(
-                                resource.data.toString(),
-                                ActiveTripResponse::class.java
-                            )
-                        var riderDetails: RiderDetails? = null
-                        var tripDetails: TripDetails? = null
-                        var tripRiderModel: TripRiderModel? = null
-                        response?.data?.trip?.let { trip ->
-                            response.data?.EVENTDATA?.let {
-                                it.riderDetails?.let { item ->
-                                    riderDetails = RiderDetails(
-                                        id = item.id,
-                                        name = item.name,
-                                        profile = item.profile,
-                                        paymentType = getString(R.string.dummy_cash_payment),
-                                        note = "",
-                                        mobile = item.mobile
-                                    )
-                                }
-                                it.tripDetails?.let { item ->
-                                    tripDetails = item
-                                    tripDetails?.estimatedFareTxt = trip.commonTotalFareTxt
-                                    tripDetails?.estimatedFare =
-                                        trip.commonTotalFare.doubleDefault("0.0")
-                                    tripDetails?.status = trip.status
-                                }
-
-                                riderDetails?.let { rd ->
-                                    tripDetails?.let { td ->
-                                        tripRiderModel = TripRiderModel(
-                                            riderDetails = rd,
-                                            tripDetails = td,
-                                            popupDetails = it.popupDetails
-                                        )
-                                    }
-                                }
-                            }
-                            tripRiderModel?.let {
-                                if (trip.status == "ACTIVE" || trip.status == "ARRIVED") {
-                                    response.data?.EVENTDATA?.let {
-                                        apiViewModel.tripRequest.value = it
-                                        apiViewModel._tripStartLiveData.value = false
-                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
-                                        apiViewModel.getActiveTripLiveData.value = null
-                                    }
-                                } else if (trip.status == "FINISHED" && trip.paymentStatus == "PAID") {
-                                    response.data?.EVENTDATA?.let {
-                                        apiViewModel.tripRequest.value = it
-                                        apiViewModel._tripStartLiveData.value = true
-                                        navigator.load(RideCompleteFragment::class.java)
-                                            .replace(false)
-                                        apiViewModel.getActiveTripLiveData.value = null
-                                    }
-                                } else if (trip.status == "ON_GOING") {
-                                    response.data?.EVENTDATA?.let {
-                                        apiViewModel.tripRequest.value = it
-                                        apiViewModel._tripStartLiveData.value = true
-                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
-                                        apiViewModel.getActiveTripLiveData.value = null
-                                    }
-                                } else {
-
-                                }
-                            }
-                        }
-                    }
-
-                    Status.ERROR -> {
-
-                    }
-
-                    Status.LOADING -> {
-
-                    }
-                }
-            }
-        }
+//        apiViewModel.getActiveTripLiveData.observe(viewLifecycleOwner) { resource ->
+//            resource?.let {
+//                when (resource.status) {
+//                    Status.SUCCESS -> {
+//                        val response =
+//                            Gson().fromJson(
+//                                resource.data.toString(),
+//                                ActiveTripResponse::class.java
+//                            )
+//                        var riderDetails: RiderDetails? = null
+//                        var tripDetails: TripDetails? = null
+//                        var tripRiderModel: TripRiderModel? = null
+//                        response?.data?.trip?.let { trip ->
+//                            response.data?.EVENTDATA?.let {
+//                                it.riderDetails?.let { item ->
+//                                    riderDetails = RiderDetails(
+//                                        id = item.id,
+//                                        name = item.name,
+//                                        profile = item.profile,
+//                                        paymentType = getString(R.string.dummy_cash_payment),
+//                                        note = "",
+//                                        mobile = item.mobile
+//                                    )
+//                                }
+//                                it.tripDetails?.let { item ->
+//                                    tripDetails = item
+//                                    tripDetails?.estimatedFareTxt = trip.commonTotalFareTxt
+//                                    tripDetails?.estimatedFare =
+//                                        trip.commonTotalFare.doubleDefault("0.0")
+//                                    tripDetails?.status = trip.status
+//                                }
+//
+//                                riderDetails?.let { rd ->
+//                                    tripDetails?.let { td ->
+//                                        tripRiderModel = TripRiderModel(
+//                                            riderDetails = rd,
+//                                            tripDetails = td,
+//                                            popupDetails = it.popupDetails
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                            tripRiderModel?.let {
+//                                if (trip.status == "ACTIVE" || trip.status == "ARRIVED") {
+//                                    response.data?.EVENTDATA?.let {
+//                                        apiViewModel.tripRequest.value = it
+//                                        apiViewModel._tripStartLiveData.value = false
+//                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
+//                                        apiViewModel.getActiveTripLiveData.value = null
+//                                    }
+//                                } else if (trip.status == "FINISHED" && trip.paymentStatus == "PAID") {
+//                                    response.data?.EVENTDATA?.let {
+//                                        apiViewModel.tripRequest.value = it
+//                                        apiViewModel._tripStartLiveData.value = true
+//                                        navigator.load(RideCompleteFragment::class.java)
+//                                            .replace(false)
+//                                        apiViewModel.getActiveTripLiveData.value = null
+//                                    }
+//                                } else if (trip.status == "ON_GOING") {
+//                                    response.data?.EVENTDATA?.let {
+//                                        apiViewModel.tripRequest.value = it
+//                                        apiViewModel._tripStartLiveData.value = true
+//                                        navigator.load(PickUpSpotFragment::class.java).replace(true)
+//                                        apiViewModel.getActiveTripLiveData.value = null
+//                                    }
+//                                } else {
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    Status.ERROR -> {
+//
+//                    }
+//
+//                    Status.LOADING -> {
+//
+//                    }
+//                }
+//            }
+//        }
 
         apiViewModel.locationLiveData.observe(this) {
             it?.let {
@@ -439,6 +429,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
     override fun onResume() {
         super.onResume()
-        apiViewModel.tripConfigData()
+//        apiViewModel.tripConfigData()
     }
 }

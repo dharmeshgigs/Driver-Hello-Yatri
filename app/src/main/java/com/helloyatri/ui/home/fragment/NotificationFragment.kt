@@ -29,7 +29,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
             NotificationDetailBottomSheet(it, callBack = {
                 // TODO: Invoke Read Notification API
             }).show(
-                childFragmentManager, PickUpSpotFragment::class.java.simpleName
+                childFragmentManager, NotificationFragment::class.java.simpleName
             )
         })
     }

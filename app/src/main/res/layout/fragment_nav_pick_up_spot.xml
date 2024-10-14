@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/backgroundColor">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <fragment
+        android:id="@+id/navigation_fragment"
+        android:name="com.google.android.libraries.navigation.SupportNavigationFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/layoutRideDetails"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"/>
+
+
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/imageViewStaticMap"-->
+<!--        android:layout_width="@dimen/_20sdp"-->
+<!--        android:layout_height="@dimen/_20sdp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/mapView"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/mapView"-->
+<!--        app:srcCompat="@drawable/map_pin" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/imageViewStaticMap"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/layoutRideDetails"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0"-->
+<!--        app:srcCompat="@drawable/image_route_map" />-->
+
+    <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_12sdp"
+        app:backgroundColor="@color/black"
+        app:cornerAll="@dimen/_8sdp"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toTopOf="@id/mapView">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLabelReachIn"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/label_have_to_reach_in"
+            android:textColor="@color/white"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/mapView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewMeetDriverAt"
+            style="@style/TextViewLufgaLightWhite15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:background="@drawable/bg_top_bottom_round_rect"
+            tools:text="@string/label_meet_rahul_patel_at_their_pick_up_spot"
+            android:textSize="@dimen/_8ssp"
+            app:layout_constraintEnd_toStartOf="@+id/textViewEstimatedTime"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewLabelReachIn"
+            app:layout_constraintVertical_bias="0" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewEstimatedTime"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dialog_round_rect_10"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            tools:text="@string/label__5_min"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewNavigateToFullScreen"
+        style="@style/TextViewLufgaLightWhite15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:background="@drawable/bg_round_rect_5"
+        android:drawableStart="@drawable/ic_white_small_gallary"
+        android:drawablePadding="@dimen/_7sdp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_6sdp"
+        android:paddingVertical="@dimen/_7sdp"
+        android:text="@string/label_navigate_in_full_screen"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="@id/navigation_fragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewCurrentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="@id/textViewNavigateToFullScreen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_current_location" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutRideDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/navigation_fragment">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewRideDetails"
+            style="@style/TextViewLufgaMedium.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@string/label_ride_details"
+            android:textColor="@color/black"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewRideDetails"
+            app:srcCompat="@drawable/ic_route" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewStartLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            tools:text="@string/dummy_cinemax_rectory_cottage_court_road"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewRoute"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewRoute"
+            app:layout_constraintTop_toTopOf="@id/imageViewRoute" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewDestinationLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            tools:text="@string/dummy_101_national_dr_san_bruno_ca_94580"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewDestinationLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewDestinationLocation"
+            app:layout_constraintTop_toTopOf="@id/imageViewDestinationLocation" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_line"
+            app:layout_constraintBottom_toTopOf="@id/imageViewDestinationLocation"
+            app:layout_constraintEnd_toEndOf="@id/imageViewRoute"
+            app:layout_constraintStart_toStartOf="@id/imageViewRoute"
+            app:layout_constraintTop_toBottomOf="@id/imageViewRoute" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewDestinationLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_9sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewRoute"
+            app:srcCompat="@drawable/ic_location" />
+
+        <View
+            android:id="@+id/viewDividerLocation"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewDestinationLocation" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageViewUserProfile"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_made_in_india"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewDividerLocation"
+            app:riv_corner_radius="@dimen/_50sdp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewUserName"
+            style="@style/TextViewLufgaMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="@string/dummy_aesha_mehta"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/textViewPaymentType"
+            app:layout_constraintEnd_toStartOf="@id/imageViewCall"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+            app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewPaymentType"
+            style="@style/TextViewLufgaRegularGrey13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="@string/dummy_cash_payment"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+            app:layout_constraintEnd_toStartOf="@id/imageViewCall"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/imageViewUserProfile"
+            app:layout_constraintTop_toBottomOf="@id/textViewUserName" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewUserProfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imageViewUserProfile"
+            app:srcCompat="@drawable/ic_blue_call_pickup" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewNote"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            tools:text="@string/dummy_note_note_message_show_here"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewCancelRide"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_7sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@drawable/bg_stroke_grey"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_13sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/label_cancel_ride"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textViewArrivedAtPoint"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewNote"
+            app:layout_constraintVertical_bias="0" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewArrivedAtPoint"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:background="@drawable/bg_top_round_rect_home_blue"
+            android:elevation="@dimen/_1sdp"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_13sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/label_arrived_at_point"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/textViewCancelRide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/textViewCancelRide"
+            app:layout_constraintTop_toTopOf="@id/textViewCancelRide" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutApprovedRide"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+        app:layout_constraintStart_toStartOf="@id/guideLineStart"
+        app:layout_constraintTop_toBottomOf="@id/layoutRideDetails">
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewApprovedRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_location" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewApprovedStartLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/dummy_cinemax_rectory_cottage_court_road"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewApprovedRoute"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewApprovedRoute"
+            app:layout_constraintTop_toTopOf="@id/imageViewApprovedRoute" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewApprovedDestinationLocation"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/dummy_101_national_dr_san_bruno_ca_94580"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewApprovedDestinationLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewApprovedDestinationLocation"
+            app:layout_constraintTop_toTopOf="@id/imageViewApprovedDestinationLocation" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_line"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/imageViewApprovedDestinationLocation"
+            app:layout_constraintEnd_toEndOf="@id/imageViewApprovedRoute"
+            app:layout_constraintStart_toStartOf="@id/imageViewApprovedRoute"
+            app:layout_constraintTop_toBottomOf="@id/imageViewApprovedRoute" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewApprovedDestinationLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_9sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewApprovedRoute"
+            app:srcCompat="@drawable/ic_location_add" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewEmergency"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_7sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@drawable/bg_top_round_rect_home_blue"
+            android:backgroundTint="@color/colorRed"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_13sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/label_emergency"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textViewEndTrip"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewApprovedDestinationLocation"
+            app:layout_constraintVertical_bias="0" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewEndTrip"
+            style="@style/TextViewLufgaRegularBlack15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:background="@drawable/bg_top_round_rect_home_blue"
+            android:elevation="@dimen/_1sdp"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_13sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:text="@string/label_end_trip_here"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/textViewEmergency"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/textViewEmergency"
+            app:layout_constraintTop_toTopOf="@id/textViewEmergency" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
