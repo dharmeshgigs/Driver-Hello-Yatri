@@ -65,6 +65,7 @@ object APIFactory {
         const val GET_TRIP_PAYMENTS = "getTripPaymentList"
         const val REPORT_CRASH = "reportCrash"
         const val GET_TRIP_CONFIG_DATA = "getTripConfigData"
+        const val GET_SCHEDULE_TRIPS = "getScheduledTrips"
     }
 
     object ResponseCode {

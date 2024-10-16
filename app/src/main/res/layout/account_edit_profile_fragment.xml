@@ -82,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_1sdp"
             android:paddingVertical="@dimen/_5sdp"
+            android:visibility="gone"
             android:text="@string/label_change_number"
             android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="@id/guideLineEnd"

@@ -49,22 +49,10 @@ class ForgotPasswordFragment : BaseFragment<AuthForgotPasswordFragmentBinding>()
                             OTPVerificationFragment.createBundle(
                                 phonenumber = binding.includedMobileNumber.editText.text.toString().trim(),
                                 countrycode = "+91 "+binding.includedMobileNumber.editText.text.toString().trim(),
-                                name = "Rahul",
+                                name = "",
                                 sourceScreen = ForgotPasswordFragment::class.java.simpleName
                             )
                         ).replace(true)
-//                        response?.data?.let {
-//                            navigator.load(OTPVerificationFragment::class.java).setBundle(
-//                                OTPVerificationFragment.createBundle(
-//                                    phonenumber = it.mobile,
-//                                    countrycode = it.mobile_txt,
-//                                    name = it.name,
-//                                    sourceScreen = ForgotPasswordFragment::class.java.simpleName
-//                                )
-//                            ).replace(true)
-//                        } ?: run {
-//                            showSomethingMessage()
-//                        }
                     } ?: run {
                         showSomethingMessage()
                     }
@@ -102,7 +90,7 @@ class ForgotPasswordFragment : BaseFragment<AuthForgotPasswordFragmentBinding>()
         includedTopContent.textViewWelcomeBack.text =
             getString(R.string.label_whats_your_mobile_number)
         includedTopContent.textViewYouHaveMissed.text =
-            getString(R.string.label_fill_your_information_below)
+            getString(R.string.label_enter_10_digit_mobile_number)
     }
 
     private fun setUpEditText() = with(binding) {

@@ -310,7 +310,11 @@ class ResetPasswordFragment : BaseFragment<AuthResetPasswordFragmentBinding>() {
                         )
                     )
                 } else {
-
+                    apiViewModel.resetPassword(
+                        Request(
+                            password = includedNewPassword.editText.text.toString().trim()
+                        )
+                    )
                 }
             } else {
                 showMessage(getString(R.string.enter_password))

@@ -86,7 +86,6 @@ fun Example1Page(callBack: (action: CalendarDay) -> Unit) {
                 }
             },
             contentHeightMode = ContentHeightMode.Wrap,
-
             monthHeader = {
                 MonthHeader(daysOfWeek = daysOfWeek)
             },
@@ -128,7 +127,7 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
             .background(color = if (isSelected) colorResource(R.color.buttonColor) else Color.Transparent)
             // Disable clicks on inDates/outDates
             .clickable(
-                enabled = day.position == DayPosition.MonthDate,
+                enabled = day.date <= LocalDate.now(),
                 showRipple = !isSelected,
                 onClick = { onClick(day) },
             ),
@@ -141,7 +140,7 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
         }
         Text(
             text = day.date.dayOfMonth.toString(),
-            color = textColor,
+            color = if (day.date <= LocalDate.now()) textColor else Color.Gray,
             fontSize = 14.sp,
         )
     }

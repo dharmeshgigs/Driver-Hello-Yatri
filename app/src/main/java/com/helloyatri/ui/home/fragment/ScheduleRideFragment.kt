@@ -2,57 +2,45 @@ package com.helloyatri.ui.home.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.google.gson.Gson
 import com.helloyatri.R
+import com.helloyatri.data.Request
 import com.helloyatri.data.model.GetCencellation
-import com.helloyatri.databinding.FragmentNotificationBinding
+import com.helloyatri.databinding.FragmentScheduleRideBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
+import com.helloyatri.ui.activity.IsolatedActivity
 import com.helloyatri.ui.base.BaseFragment
-import com.helloyatri.ui.home.adapter.ScheduleRideMainAdapter
-import com.helloyatri.utils.extension.hide
-import com.helloyatri.utils.getScheduleRideList
+import com.helloyatri.ui.home.adapter.ScheduleRideSubAdapter
+import com.helloyatri.ui.home.bottomsheet.CancelRideBottomSheet
+import com.helloyatri.utils.AppUtils.fareAmount
+import com.helloyatri.utils.AppUtils.openCallDialer
+import com.helloyatri.utils.extension.nullify
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
-    private val apiViewModel by viewModels<ApiViewModel>()
+class ScheduleRideFragment : BaseFragment<FragmentScheduleRideBinding>() {
 
+    private val apiViewModel by activityViewModels<ApiViewModel>()
+    private var cencellationDataList: ArrayList<String> = arrayListOf()
     private val scheduleRideMainAdapter by lazy {
-        ScheduleRideMainAdapter()
+        ScheduleRideSubAdapter()
     }
 
     override fun createViewBinding(
         inflater: LayoutInflater, container: ViewGroup?,
         attachToRoot: Boolean
-    ): FragmentNotificationBinding {
-        return FragmentNotificationBinding.inflate(layoutInflater)
+    ): FragmentScheduleRideBinding {
+        return FragmentScheduleRideBinding.inflate(layoutInflater)
     }
 
-    private var cencellationDataList: ArrayList<String> = arrayListOf()
-
     override fun bindData() {
-        binding.textViewMarkAllRead.hide()
-        apiViewModel.getAllScheduleRideAPI()
         apiViewModel.getCancelletionReasonAPI()
         initObservers()
         setUpClickListner()
-
+        setAdapter()
     }
-
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    fun onMessageEvent(event: MessageEvent) {
-//        if (event.message == "Cancle_Ride") {
-//            val cancelRideBottomSheet = CancelRideBottomSheet(cancelRideCallBack = {
-//
-//            }, cencellationDataList)
-//            cancelRideBottomSheet.show(childFragmentManager, cancelRideBottomSheet.tag)
-//        } else if (event.message == "Navigate_To") {
-//            navigator.load(PickUpSpotFragment::class.java).replace(false)
-//        }
-//
-//    }
 
     private fun setUpClickListner() {
 //        scheduleRideMainAdapter.setOnItemClickListener {
@@ -61,21 +49,6 @@ class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
     }
 
     private fun initObservers() {
-        apiViewModel.getAllScheduleRideLiveData.observe(this) { resourse ->
-            when (resourse.status) {
-                Status.SUCCESS -> {
-                    hideLoader()
-                }
-
-                Status.ERROR -> {
-                    hideLoader()
-                    setAdapter()
-                }
-
-                Status.LOADING -> showLoader()
-            }
-        }
-
         apiViewModel.getCanclletionReasonLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -98,7 +71,34 @@ class ScheduleRideFragment : BaseFragment<FragmentNotificationBinding>() {
     private fun setAdapter() = with(binding) {
         recyclerView.apply {
             adapter = scheduleRideMainAdapter
-            scheduleRideMainAdapter.setItems(requireActivity().getScheduleRideList(), 1)
+            scheduleRideMainAdapter.setItems(apiViewModel.scheduleTrips, 1)
+            scheduleRideMainAdapter.setOnViewItemClickListener { item, view ->
+                when (view.id) {
+                    R.id.textViewNavigateTo -> {
+                        navigator.loadActivity(
+                            IsolatedActivity::class.java,
+                            StartRideFromFragment::class.java
+                        ).start()
+                    }
+                    R.id.textViewCancelRide -> {
+                        CancelRideBottomSheet({
+                            activity?.apply {
+                                apiViewModel.cancelRide(
+                                    Request(
+                                        trip_id = item.id.fareAmount(),
+                                        cancel_reason = it
+                                    )
+                                )
+                            }
+                        }, cencellationDataList).show(
+                            childFragmentManager, HomeFragment::class.java.simpleName
+                        )
+                    }
+                    R.id.imageViewCall -> {
+                        activity?.openCallDialer(item.user?.mobile.nullify())
+                    }
+                }
+            }
         }
     }
 

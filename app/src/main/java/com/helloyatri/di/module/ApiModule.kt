@@ -44,6 +44,7 @@ object ApiModule {
         return Interceptor { chain ->
             val build = chain.request().newBuilder().addHeader(Session.API_KEY, session.apiKey)
                 .addHeader(Session.USER_SESSION, "Bearer " + session.userSession)
+                .addHeader(Session.ACCEPT, "application/json")
                 .header(Session.LANGUAGE, session.language).build()
             chain.proceed(build)
         }

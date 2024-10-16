@@ -68,6 +68,7 @@ interface Session {
     companion object {
         const val API_KEY = "api-key"
         const val USER_SESSION = "Authorization"
+        const val ACCEPT = "Accept"
         const val USER_ID = "USER_ID"
         const val DEVICE_TYPE = "A"
         const val LANGUAGE = "accept-language"

@@ -8,12 +8,9 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import com.google.gson.Gson
 import com.helloyatri.R
 import com.helloyatri.data.Request
-import com.helloyatri.data.model.ActiveTripResponse
 import com.helloyatri.data.model.Driver
 import com.helloyatri.data.model.DriverResponse
-import com.helloyatri.data.model.RiderDetails
-import com.helloyatri.data.model.TripDetails
-import com.helloyatri.data.model.TripRiderModel
+import com.helloyatri.data.model.GetCencellation
 import com.helloyatri.data.model.UpdateLocationResponse
 import com.helloyatri.databinding.HomeFragmentBinding
 import com.helloyatri.network.ApiViewModel
@@ -22,7 +19,7 @@ import com.helloyatri.ui.activity.IsolatedActivity
 import com.helloyatri.ui.base.BaseFragment
 import com.helloyatri.ui.home.HomeActivity
 import com.helloyatri.ui.home.adapter.AdapterRidesForPickups
-import com.helloyatri.utils.AppUtils.doubleDefault
+import com.helloyatri.ui.home.bottomsheet.CancelRideBottomSheet
 import com.helloyatri.utils.AppUtils.fairValue
 import com.helloyatri.utils.AppUtils.fareAmount
 import com.helloyatri.utils.Constants
@@ -34,7 +31,6 @@ import com.helloyatri.utils.extension.loadImageFromServerWithPlaceHolder
 import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.extension.visible
-import com.helloyatri.utils.getRidePickUpList
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,6 +39,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 
     private var isOnline = false
     private val apiViewModel by activityViewModels<ApiViewModel>()
+    private var cencellationDataList: ArrayList<String> = arrayListOf()
 
     private val adapterPickUp by lazy {
         AdapterRidesForPickups()
@@ -63,6 +60,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         getHomeDataAPI()
         setClickListener()
         setAdapter()
+        apiViewModel.getCancelletionReasonAPI()
     }
 
     private fun initObservers() {
@@ -243,6 +241,71 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 apiViewModel.updateCurrentLocation(request = request)
             }
         }
+
+        apiViewModel.getScheduleTripLiveData.observe(this) { resource ->
+            resource?.let {
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        if(apiViewModel.scheduleTrips.size > 3) {
+                            adapterPickUp.setItems(apiViewModel.scheduleTrips.subList(0,3),1)
+                        } else {
+                            adapterPickUp.setItems(apiViewModel.scheduleTrips,1)
+                        }
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }
+
+        apiViewModel.getCanclletionReasonLiveData.observe(this) { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    hideLoader()
+                    val response =
+                        Gson().fromJson(resource.data.toString(), GetCencellation::class.java)
+                    cencellationDataList.clear()
+                    cencellationDataList.addAll(response.data)
+                }
+
+                Status.ERROR -> {
+                    hideLoader()
+                }
+
+                Status.LOADING -> showLoader()
+            }
+        }
+
+        apiViewModel.cancleRideLiveData.observe(this) { resource ->
+            resource?.let {
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideLoader()
+                        apiViewModel.cancleRideLiveData.value = null
+                        getScheduleTrips()
+                    }
+
+                    Status.ERROR -> {
+                        hideLoader()
+                        val error =
+                            resource.message ?: getString(resource.resId!!)
+                        showErrorMessage(error)
+                        apiViewModel.cancleRideLiveData.value = null
+                    }
+
+                    Status.LOADING -> {
+                        showLoader()
+                    }
+                }
+            }
+        }
+
+        apiViewModel.scheduleTripAccepted.observe(this) {
+            if (it == true) {
+                getScheduleTrips()
+            }
+        }
     }
 
     private fun setData() = with(binding) {
@@ -290,8 +353,10 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                 ).build()
             it.acceptanceRatio?.let {
                 textViewPercent.text = it.toInt().toString().plus("%")
+                roundSeekBar.progress = it.toLong()
             } ?: run {
                 textViewPercent.text = "0%"
+                roundSeekBar.progress = 0L
             }
 
             textViewLabelTotalTripsWaiting.text = String.format(
@@ -342,7 +407,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
     private fun setAdapter() = with(binding) {
         recyclerViewPickUps.apply {
             adapter = adapterPickUp
-            adapterPickUp.setItems(requireActivity().getRidePickUpList(), 1)
+            adapterPickUp.setItems(arrayListOf(), 1)
             val snapHelper = PagerSnapHelper()
             snapHelper.attachToRecyclerView(this)
         }
@@ -362,8 +427,8 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
 
         textViewLabelViewAll.setOnClickListener {
-            navigator.loadActivity(IsolatedActivity::class.java, ScheduleRideFragment::class.java)
-                .start()
+            navigator.load(ScheduleRideFragment::class.java)
+                .replace(true)
         }
 
         imageViewNotification.setOnClickListener {
@@ -383,13 +448,27 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
 //            constraintLayoutRideRequest.hide()
         }
 
-        adapterPickUp.setOnViewItemClickListener { _, view ->
+        adapterPickUp.setOnViewItemClickListener { item, view ->
             when (view.id) {
                 R.id.textViewNavigateTo -> {
                     navigator.loadActivity(
                         IsolatedActivity::class.java,
                         StartRideFromFragment::class.java
                     ).start()
+                }
+                R.id.textViewCancelRide -> {
+                    CancelRideBottomSheet({
+                        activity?.apply {
+                            apiViewModel.cancelRide(
+                                Request(
+                                    trip_id = item.id.fareAmount(),
+                                    cancel_reason = it
+                                )
+                            )
+                        }
+                    }, cencellationDataList).show(
+                        childFragmentManager, HomeFragment::class.java.simpleName
+                    )
                 }
             }
         }
@@ -430,5 +509,11 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
     override fun onResume() {
         super.onResume()
 //        apiViewModel.tripConfigData()
+        getScheduleTrips()
+    }
+
+
+    fun getScheduleTrips() {
+        apiViewModel.getScheduleTrips()
     }
 }

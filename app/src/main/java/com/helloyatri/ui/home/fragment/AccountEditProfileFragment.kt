@@ -286,15 +286,15 @@ class AccountEditProfileFragment : BaseFragment<AccountEditProfileFragmentBindin
         }
 
         includedGender.editText.setOnClickListener {
-            commonFieldSelectionBottomSheetForGender.setOptionsList(
-                optionList = arrayListOf(
-                    CommonFieldSelection(options = "Male"),
-                    CommonFieldSelection(options = "Female"),
-                    CommonFieldSelection(options = "Other")
-                )
-            ).setTitle("Select Gender")
-                .setSelectedOption(includedGender.editText.trimmedText)
-                .show(childFragmentManager, null)
+//            commonFieldSelectionBottomSheetForGender.setOptionsList(
+//                optionList = arrayListOf(
+//                    CommonFieldSelection(options = "Male"),
+//                    CommonFieldSelection(options = "Female"),
+//                    CommonFieldSelection(options = "Other")
+//                )
+//            ).setTitle("Select Gender")
+//                .setSelectedOption(includedGender.editText.trimmedText)
+//                .show(childFragmentManager, null)
         }
 
         includedCityYouDriveIn.editText.setOnClickListener {

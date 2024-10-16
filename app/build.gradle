@@ -14,7 +14,6 @@ ext {
     navSdkVersion = "6.0.0"
 }
 
-
 android {
     signingConfigs {
         debug {
@@ -115,7 +114,7 @@ dependencies {
     implementation 'com.github.fondesa:kpermissions:2.0.1'
 
     // firebase
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
 //    implementation 'com.google.android.gms:play-services-maps:18.2.0'
     implementation 'com.google.firebase:firebase-messaging:23.3.1'
     implementation 'com.google.firebase:firebase-auth:22.3.0'

@@ -74,6 +74,8 @@
             app:layout_constraintStart_toStartOf="@id/guideLineStart"
             app:layout_constraintTop_toBottomOf="@id/includedNumberOfSeats" />
 
+
+
         <include
             android:id="@+id/includedVehicleFuelType"
             layout="@layout/include_select_category_edittext"

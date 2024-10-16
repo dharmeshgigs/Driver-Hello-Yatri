@@ -21,6 +21,7 @@ import com.helloyatri.utils.extension.nullify
 import com.helloyatri.utils.textdecorator.TextDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
+import java.util.Date
 
 @AndroidEntryPoint
 class AccountPaymentFragment : BaseFragment<AccountPaymentFragmentBinding>() {
@@ -166,6 +167,7 @@ class AccountPaymentFragment : BaseFragment<AccountPaymentFragmentBinding>() {
         }
 
         imageViewCalendar.setOnClickListener {
+//            showDatePickerDialog()
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
                 CalenderDialog {
                     onDateChanged(it)
@@ -201,7 +203,7 @@ class AccountPaymentFragment : BaseFragment<AccountPaymentFragmentBinding>() {
                 onDateChanged(convTime)
             }, year, month, day)
         }
-
+        datePickerDialog?.datePicker?.maxDate = Date().time
         datePickerDialog?.show()
     }
 

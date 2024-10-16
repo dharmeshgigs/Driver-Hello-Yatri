@@ -63,5 +63,6 @@ interface AuthRepo {
     suspend fun getTripPayments(request: Map<String, String>) : Resource<JsonObject>
     suspend fun tripReportCrash(request: RequestBody) : Resource<JsonObject>
     suspend fun tripConfigData() : Resource<JsonObject>
+    suspend fun getScheduleTrips() : Resource<JsonObject>
 
 }

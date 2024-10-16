@@ -39,7 +39,6 @@ import com.helloyatri.ui.home.fragment.AccountPreferencesFragment
 import com.helloyatri.ui.home.fragment.AccountSavedAddressFragment
 import com.helloyatri.ui.home.fragment.HomeFragment
 import com.helloyatri.ui.home.fragment.NavPickUpSpotFragment
-import com.helloyatri.ui.home.fragment.PickUpSpotFragment
 import com.helloyatri.ui.home.fragment.RideActivityFragment
 import com.helloyatri.ui.home.sidemenu.SideMenu
 import com.helloyatri.ui.home.sidemenu.SideMenuAdapter
@@ -65,6 +64,7 @@ class HomeActivity : BaseActivity(), PushEventListener {
     private lateinit var homeAcitivtyBinding: HomeAcitivtyBinding
     private val apiViewModel by viewModels<ApiViewModel>()
     private var locationProvider : LocationProvider? = null
+    private var isScheduleRide = false
 
     private val sideMenuAdapter by lazy {
         SideMenuAdapter()
@@ -133,12 +133,23 @@ class HomeActivity : BaseActivity(), PushEventListener {
             }
         }
         apiViewModel.acceptRequestLiveData.observe(this) { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    load(NavPickUpSpotFragment::class.java).add(true)
-                }
+            resource?.let {
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        if(!isScheduleRide){
+                            load(NavPickUpSpotFragment::class.java).add(true)
+                        } else {
+                            apiViewModel.scheduleTripAccepted.value = true
+                        }
+                        apiViewModel.acceptRequestLiveData.value = null
+                        isScheduleRide  = false
+                    }
 
-                else -> {}
+                    else -> {
+                        apiViewModel.acceptRequestLiveData.value = null
+                        isScheduleRide  = false
+                    }
+                }
             }
         }
         apiViewModel.declineRequestLiveData.observe(this) {}
@@ -233,9 +244,9 @@ class HomeActivity : BaseActivity(), PushEventListener {
             SideMenu(sideMenuName = "Ride Activity", sideMenuTag = SideMenuTag.RIDE_ACTIVITY)
         )
         sideMenuList.add(SideMenu(sideMenuName = "Payment", sideMenuTag = SideMenuTag.PAYMENT))
-        sideMenuList.add(
-            SideMenu(sideMenuName = "Saved Address", sideMenuTag = SideMenuTag.SAVED_ADDRESS)
-        )
+//        sideMenuList.add(
+//            SideMenu(sideMenuName = "Saved Address", sideMenuTag = SideMenuTag.SAVED_ADDRESS)
+//        )
         sideMenuList.add(
             SideMenu(sideMenuName = "Preferences", sideMenuTag = SideMenuTag.PREFERENCES)
         )
@@ -325,17 +336,28 @@ class HomeActivity : BaseActivity(), PushEventListener {
 
                     PusherManager.YOUR_EVENT_NAME -> {
                         it.let {
-                            apiViewModel.tripRequest.postValue(null)
-                            apiViewModel._pickupNoteLiveData.postValue(null)
-                            apiViewModel.verifyTripLiveData.postValue(null)
-                            apiViewModel._tripStartLiveData.postValue(false)
-                            apiViewModel._tripStatusUpdatedLiveData.postValue(null)
-                            apiViewModel.popUp = null
-                            apiViewModel._paymentCollectedLiveData.postValue(null)
-                            if (it.tripDetails?.driverId == appSession.user?.id) {
-                                showRequestDialog(it)
-                                apiViewModel.tripRequest.postValue(it)
+                            if(it.tripDetails?.scheduleRide == true) {
+                                if (it.tripDetails?.driverId == appSession.user?.id) {
+                                    isScheduleRide = true
+                                    showRequestDialog(it)
+                                } else {
+                                    isScheduleRide = false
+                                }
+                            } else {
+                                isScheduleRide = false
+                                apiViewModel.tripRequest.postValue(null)
+                                apiViewModel._pickupNoteLiveData.postValue(null)
+                                apiViewModel.verifyTripLiveData.postValue(null)
+                                apiViewModel._tripStartLiveData.postValue(false)
+                                apiViewModel._tripStatusUpdatedLiveData.postValue(null)
+                                apiViewModel.popUp = null
+                                apiViewModel._paymentCollectedLiveData.postValue(null)
+                                if (it.tripDetails?.driverId == appSession.user?.id) {
+                                    showRequestDialog(it)
+                                    apiViewModel.tripRequest.postValue(it)
+                                }
                             }
+
                         }
                     }
 

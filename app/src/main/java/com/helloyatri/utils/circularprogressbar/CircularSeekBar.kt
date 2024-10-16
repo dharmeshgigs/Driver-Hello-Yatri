@@ -149,7 +149,9 @@ class CircularSeekBar @JvmOverloads constructor(context: Context, attrs: Attribu
     var progress: Long = 0
         set(value) {
             val isNew = value != field
-            field = value.coerceIn(minProgress, maxProgress)/* if (!mUserTouchActive) {
+            field = value.coerceIn(minProgress, maxProgress)
+            refresh()
+            /* if (!mUserTouchActive) {
                  refresh()
              }*/
 

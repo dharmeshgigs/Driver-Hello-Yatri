@@ -15,6 +15,7 @@ import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.data.model.Trips
 import com.helloyatri.ui.usecases.HomeUseCases
 import com.helloyatri.ui.usecases.RideActivityUseCases
+import com.helloyatri.ui.usecases.ScheduleTripUseCases
 import com.helloyatri.ui.usecases.TripPaymentUseCases
 import com.helloyatri.ui.usecases.TripUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -316,15 +317,6 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
         }
     }
 
-    val getAllScheduleRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-
-    fun getAllScheduleRideAPI() {
-        run {
-            getAllScheduleRideLiveData.value = Resource.loading()
-            getAllScheduleRideLiveData.value = authRepo.getAllScheduleRide()
-        }
-    }
-
     val getCanclletionReasonLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
 
     fun getCancelletionReasonAPI() {
@@ -530,4 +522,18 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val locationLiveData by lazy { MutableLiveData<LatLng>() }
+
+    val getScheduleTripLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val scheduleTrips by lazy { mutableListOf<Trips>() }
+    val scheduleTripAccepted by lazy { MutableLiveData<Boolean?>() }
+    fun getScheduleTrips() {
+        run {
+            getScheduleTripLiveData.value = Resource.loading()
+            val response = authRepo.getScheduleTrips()
+            val scheduleTripUseCases = ScheduleTripUseCases()
+            scheduleTrips.clear()
+            scheduleTrips.addAll(scheduleTripUseCases.getScheduleTrips(response))
+            getScheduleTripLiveData.value = response
+        }
+    }
 }

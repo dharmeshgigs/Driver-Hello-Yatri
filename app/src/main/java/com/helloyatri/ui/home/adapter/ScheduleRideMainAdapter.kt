@@ -34,7 +34,7 @@ class ScheduleRideMainAdapter :
                 adapter = scheduleRideSubAdapter
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
 
-                item.subList?.let { scheduleRideSubAdapter.setItems(it, 1) }
+//                item.subList?.let { scheduleRideSubAdapter.setItems(it, 1) }
 //                scheduleRideSubAdapter.setOnItemClickPositionListener{ item1: RidePickUps, position: Int ->
 //                    onClickListener?.invoke(item)
 //                }

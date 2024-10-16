@@ -58,7 +58,8 @@ data class TripDetails(
     @SerializedName("total_amount_txt") var total_amount_txt: String? = null,
     @SerializedName("payment_collect_note") var payment_collect_note: String? = null,
     @SerializedName("payment_status") var payment_status: String? = null,
-    @SerializedName("status") var status: String? = null
+    @SerializedName("status") var status: String? = null,
+    @SerializedName("IS_SCHEDULED_RIDE") var scheduleRide: Boolean? = null
 )
 
 data class DropPoints (

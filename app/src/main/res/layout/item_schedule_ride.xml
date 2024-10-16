@@ -179,9 +179,10 @@
        android:id="@+id/textViewNotes"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="@string/label_note_note_message_show_here"
+       android:text=""
        style="@style/TextViewLufgaRegularBlack15"
        android:textSize="@dimen/_8ssp"
+       android:layout_marginTop="@dimen/_4sdp"
        app:layout_constraintTop_toBottomOf="@id/imageViewUserProfile"
        app:layout_constraintStart_toStartOf="@id/guideLineStart"
        app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
@@ -226,5 +227,20 @@
         app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
         app:layout_constraintStart_toEndOf="@id/textViewCancelRide"
         app:layout_constraintTop_toTopOf="@id/textViewCancelRide" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewFareTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_10ssp"
+        android:padding="@dimen/_8sdp"
+        android:gravity="center"
+        tools:text="Fare Total\n₹ 780"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_fare_total"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewMap" />
 
 </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>

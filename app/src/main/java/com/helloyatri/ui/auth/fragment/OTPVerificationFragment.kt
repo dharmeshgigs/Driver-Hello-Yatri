@@ -56,14 +56,7 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initObservers()
-
-//        apiViewModel.driverRegisterLiveData.get(this, {
-//            hideLoader()
-//
-//            navigator.load(DriverVerificationFragment::class.java).replace(false)
-//        })
     }
 
     private fun setData() = with(binding) {
@@ -73,7 +66,7 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
                 append(arguments?.getString("name"))
             })
         includedTopContent.textViewPhoneNumber.text = buildString {
-            append(arguments?.getString("countrycode"))
+            append(arguments?.getString("phonenumber"))
         }
     }
 
@@ -261,16 +254,14 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
 
     override fun bindData() {
         setUpText()
-
         setUpClickListener()
         setUpTextDecorator()
         setUpOTPView()
         setUpButtonVerify()
         countDownTimer()
-        if (!getSourceScreen.equals(ForgotPasswordFragment::class.java.simpleName)) {
-            setData()
-        }
-        //  getOtp()
+//        if (!getSourceScreen.equals(ForgotPasswordFragment::class.java.simpleName)) {
+//            setData()
+//        }
     }
 
     private fun setUpButtonVerify() = with(binding) {
@@ -299,16 +290,17 @@ class OTPVerificationFragment : BaseFragment<AuthVerificationFragmentBinding>() 
     private fun setUpText() = with(binding) {
         includedTopContent.textViewWelcomeBack.text =
             getString(R.string.label_enter_6_digit_verification_code)
+        includedTopContent.textViewYouHaveMissed.text =
+            getString(R.string.label_we_have_sent_you_a_six_digit_code_on_your_s)
         if (getSourceScreen.equals(ForgotPasswordFragment::class.java.simpleName)) {
             includedTopContent.textViewHello.text = getString(R.string.label_reset_password)
-            includedTopContent.textViewYouHaveMissed.text =
-                getString(R.string.label_fill_your_information_below)
         } else {
-            includedTopContent.textViewHello.text = getString(R.string.label_hello_s, "Rahul")
-            includedTopContent.textViewYouHaveMissed.text =
-                getString(R.string.label_we_have_sent_you_a_six_digit_code_on_your_s)
-            includedTopContent.textViewPhoneNumber.text =
-                arguments?.getString("countrycode").plus(" ") + arguments?.getString("phone")
+            includedTopContent.textViewHello.text =
+                (buildString {
+                    append("Hello, ")
+                    append(arguments?.getString("name"))
+                })
+            includedTopContent.textViewPhoneNumber.text = "+91-".plus("XXXXXXXXXX")
         }
     }
 

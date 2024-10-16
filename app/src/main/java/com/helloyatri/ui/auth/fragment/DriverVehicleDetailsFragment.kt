@@ -1,6 +1,7 @@
 package com.helloyatri.ui.auth.fragment
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -23,6 +24,7 @@ import com.helloyatri.ui.common.fieldselection.bottomsheet.CommonFieldSelectionB
 import com.helloyatri.ui.common.fieldselection.data.CommonFieldSelection
 import com.helloyatri.utils.Constants
 import com.helloyatri.utils.extension.nullify
+import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.extension.trimmedText
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -214,6 +216,8 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
         includedNumberOfSeats.editText.hint = getString(R.string.hint_select_no_of_seats)
         includedVehicleNumber.textViewTitle.text = getString(R.string.title_vehicle_number)
         includedVehicleNumber.editText.hint = getString(R.string.hint_eg_ga03r3712)
+        includedVehicleNumber.editText.filters = arrayOf(InputFilter.LengthFilter(10))
+        includedVehicleNumber.textViewHint.show()
         includedVehicleFuelType.textViewTitle.text = getString(R.string.title_vehicle_fuel_type)
         includedVehicleFuelType.editText.hint = getString(R.string.hint_select_fuel_type)
         includedVehicleModelYear.textViewTitle.text = getString(R.string.title_vehicle_model_year)
@@ -243,7 +247,9 @@ class DriverVehicleDetailsFragment : BaseFragment<AuthDriverVehicleDetailsFragme
 
     private fun checkEmptyEditText() = with(binding) {
         if (includedVehicleName.editText.trimmedText.isEmpty()
-                .not() && includedVehicleType.editText.trimmedText.isEmpty()
+                .not() && includedVehicleName.editText.trimmedText.length >= 9
+                    && includedVehicleName.editText.trimmedText.length <= 10
+                        && includedVehicleType.editText.trimmedText.isEmpty()
                 .not() && includedVehicleNumber.editText.trimmedText.isEmpty()
                 .not() && includedVehicleFuelType.editText.trimmedText.isEmpty()
                 .not() && includedVehicleModelYear.editText.trimmedText.isEmpty().not()

@@ -194,4 +194,8 @@ class ApiDataSource @Inject constructor(
     override suspend fun tripConfigData(): Resource<JsonObject> {
         return run2 { authService.tripConfigData() }
     }
+
+    override suspend fun getScheduleTrips(): Resource<JsonObject> {
+        return run2 { authService.getScheduleTrips() }
+    }
 }

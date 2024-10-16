@@ -152,4 +152,7 @@ interface AuthService {
 
     @GET(APIFactory.AuthApi.GET_TRIP_CONFIG_DATA)
     suspend fun tripConfigData() : Response<JsonObject>
+
+    @GET(APIFactory.AuthApi.GET_SCHEDULE_TRIPS)
+    suspend fun getScheduleTrips() : Response<JsonObject>
 }

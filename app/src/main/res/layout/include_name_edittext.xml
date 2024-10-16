@@ -33,4 +33,19 @@
         android:textSize="@dimen/_12ssp"
         app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewHint"
+        style="@style/TextViewLufgaRegularBlack15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textColor="@color/hintColor"
+        android:textSize="@dimen/_8ssp"
+        android:layout_marginTop="@dimen/_1sdp"
+        tools:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        android:text="Enter your number without space. Ex. MH03ZX1234 or 22BH6519A" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
