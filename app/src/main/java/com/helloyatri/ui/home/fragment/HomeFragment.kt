@@ -260,20 +260,22 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
         }
 
         apiViewModel.getCanclletionReasonLiveData.observe(this) { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    hideLoader()
-                    val response =
-                        Gson().fromJson(resource.data.toString(), GetCencellation::class.java)
-                    cencellationDataList.clear()
-                    cencellationDataList.addAll(response.data)
-                }
+            resource?.let {
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideLoader()
+                        val response =
+                            Gson().fromJson(resource.data.toString(), GetCencellation::class.java)
+                        cencellationDataList.clear()
+                        cencellationDataList.addAll(response.data)
+                    }
 
-                Status.ERROR -> {
-                    hideLoader()
-                }
+                    Status.ERROR -> {
+                        hideLoader()
+                    }
 
-                Status.LOADING -> showLoader()
+                    Status.LOADING -> showLoader()
+                }
             }
         }
 
@@ -473,10 +475,10 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             }
         }
 
-        textViewIntercityRides.setOnClickListener {
-            navigator.loadActivity(IsolatedActivity::class.java, IntercityRideFragment::class.java)
-                .start()
-        }
+//        textViewIntercityRides.setOnClickListener {
+//            navigator.loadActivity(IsolatedActivity::class.java, IntercityRideFragment::class.java)
+//                .start()
+//        }
     }
 
 

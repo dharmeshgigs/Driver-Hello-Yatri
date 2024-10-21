@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.fondesa.kpermissions.BuildConfig
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,10 +17,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
-import com.google.android.libraries.navigation.CustomControlPosition
 import com.google.android.libraries.navigation.NavigationApi
 import com.google.android.libraries.navigation.Navigator
-import com.google.android.libraries.navigation.RoutingOptions
 import com.google.android.libraries.navigation.SimulationOptions
 import com.google.android.libraries.navigation.SupportNavigationFragment
 import com.google.android.libraries.navigation.Waypoint
@@ -31,7 +28,6 @@ import com.helloyatri.data.Request
 import com.helloyatri.data.model.GetCencellation
 import com.helloyatri.data.model.TripRiderModel
 import com.helloyatri.databinding.FragmentNavPickUpSpotBinding
-import com.helloyatri.databinding.FragmentPickUpSpotBinding
 import com.helloyatri.network.ApiViewModel
 import com.helloyatri.network.Status
 import com.helloyatri.ui.base.BaseFragment
@@ -59,6 +55,7 @@ import com.helloyatri.utils.NavInfoReceivingService
 import com.helloyatri.utils.extension.hide
 import com.helloyatri.utils.extension.show
 import com.helloyatri.utils.textdecorator.TextDecorator
+import com.mukeshsolanki.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 

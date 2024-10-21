@@ -84,46 +84,36 @@ dependencies {
 
     // Appcompat, core and constraint layout
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.appcompat:appcompat-resources:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.appcompat:appcompat-resources:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
 
     // Hilt
     implementation "com.google.dagger:hilt-android:2.44"
-    implementation 'androidx.activity:activity:1.9.1'
+    implementation 'androidx.activity:activity-ktx:1.9.2'
     kapt "com.google.dagger:hilt-compiler:2.44"
-
-    // Lifecycle components
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-reactivestreams-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-common-java8:2.6.1'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 
-    // fondesa kpermission
-    implementation 'com.github.fondesa:kpermissions:2.0.1'
-
     // firebase
     implementation 'com.google.android.gms:play-services-location:21.3.0'
 //    implementation 'com.google.android.gms:play-services-maps:18.2.0'
-    implementation 'com.google.firebase:firebase-messaging:23.3.1'
-    implementation 'com.google.firebase:firebase-auth:22.3.0'
-    implementation "com.google.firebase:firebase-analytics-ktx:22.0.2"
+    implementation 'com.google.firebase:firebase-messaging:24.0.2'
+//    implementation 'com.google.firebase:firebase-auth:23.0.0'
+    implementation "com.google.firebase:firebase-analytics-ktx:22.1.2"
 //    implementation 'com.google.maps.android:android-maps-utils:2.3.0'
-    implementation 'com.google.firebase:firebase-crashlytics:19.0.3'
+    implementation 'com.google.firebase:firebase-crashlytics:19.2.0'
 
     // Ktx
-    implementation "androidx.fragment:fragment-ktx:1.5.6"
+    implementation "androidx.fragment:fragment-ktx:1.8.4"
 
     // sdp
     implementation 'com.intuit.sdp:sdp-android:1.1.1'
@@ -133,9 +123,6 @@ dependencies {
 
     // rounded imageview
     implementation 'com.makeramen:roundedimageview:2.3.0'
-
-    // string escape utils
-    implementation 'org.apache.commons:commons-lang3:3.4'
 
     // lottie
     implementation 'com.airbnb.android:lottie:6.4.1'
@@ -149,14 +136,6 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     kapt 'com.github.bumptech.glide:compiler:4.14.2'
-
-    implementation("androidx.compose.ui:ui:1.4.0")
-    implementation("androidx.compose.material:material:1.4.0")
-    implementation("androidx.compose.ui:ui-tooling:1.4.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.0")
-    implementation("androidx.compose.animation:animation:1.4.0")
-    implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-alpha02")
 
     implementation 'com.kizitonwose.calendar:view:2.5.2'
     implementation 'com.kizitonwose.calendar:compose:2.5.2'

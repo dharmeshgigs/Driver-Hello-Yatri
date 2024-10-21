@@ -202,8 +202,6 @@
                 app:layout_constraintEnd_toEndOf="@id/viewDivider"
                 app:layout_constraintStart_toEndOf="@id/viewVerticalSecondDivider"
                 app:layout_constraintTop_toTopOf="@id/viewVerticalSecondDivider" />
-
-
         </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
 
         <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
@@ -264,7 +262,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:maxValue="100"
                 app:primaryColor="@color/seekbarPrimaryColor"
-                app:progress="50"
+                app:progress="10"
                 app:progressStrokeWidth="8.0"
                 app:rotateAngle="270"
                 app:secondaryColor="@color/seekbarSecondaryColor"
@@ -318,7 +316,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewCurrentLocation" />
 
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewLabelChangeLocation"
                 style="@style/TextViewLufgaRegularBlack15"
@@ -358,8 +355,6 @@
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toEndOf="@id/textViewLabelChangeLocation"
                 app:layout_constraintTop_toTopOf="@id/textViewLabelChangeLocation" />
-
-
         </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -531,19 +526,19 @@
             tools:itemCount="10"
             tools:listitem="@layout/item_row_home_pickups" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textViewIntercityRides"
-            style="@style/TextViewLufgaMedium.18"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:text="@string/title_intercity_ride_request"
-            android:drawableEnd="@drawable/ic_right_arrow"
-            android:paddingVertical="@dimen/_5sdp"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
-            app:layout_constraintStart_toStartOf="@id/guideLineStart"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewPickUps" />
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/textViewIntercityRides"-->
+<!--            style="@style/TextViewLufgaMedium.18"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/_8sdp"-->
+<!--            android:text="@string/title_intercity_ride_request"-->
+<!--            android:drawableEnd="@drawable/ic_right_arrow"-->
+<!--            android:paddingVertical="@dimen/_5sdp"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"-->
+<!--            app:layout_constraintStart_toStartOf="@id/guideLineStart"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/recyclerViewPickUps" />-->
 
         <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
             android:id="@+id/constraintLayoutOfferView"
@@ -558,7 +553,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
             app:layout_constraintStart_toStartOf="@id/guideLineStart"
-            app:layout_constraintTop_toBottomOf="@id/textViewIntercityRides">
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewPickUps">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewOfferLabel"
@@ -594,7 +589,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewOfferLabel" />
 
-
             <com.helloyatri.utils.circularprogressbar.CircularSeekBar
                 android:id="@+id/roundSeekBarCompleteTrip"
                 style="@style/SeekBarStyle1"
@@ -608,9 +602,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:maxValue="100"
                 app:primaryColor="@color/seekbarGreenColor"
-                app:progress="30"
+                app:progress="0"
                 app:progressStrokeWidth="8.0"
-                app:rotateAngle="180"
+                app:rotateAngle="270"
                 app:secondaryColor="@color/seekbarSecondaryColor"
                 app:seekDirection="clockwise"
                 app:selectionScale="0.25"
@@ -653,10 +647,6 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewOfferText" />
-
-
         </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.core.widget.NestedScrollView>

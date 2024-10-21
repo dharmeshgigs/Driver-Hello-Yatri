@@ -35,11 +35,6 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.fondesa.kpermissions.extension.onAccepted
-import com.fondesa.kpermissions.extension.onDenied
-import com.fondesa.kpermissions.extension.onPermanentlyDenied
-import com.fondesa.kpermissions.extension.onShouldShowRationale
-import com.fondesa.kpermissions.extension.permissionsBuilder
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -47,7 +42,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.helloyatri.R
 import com.helloyatri.utils.Formatter.DD_MMM_YYYY
-import org.apache.commons.lang3.StringEscapeUtils
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -410,10 +404,6 @@ fun AppCompatImageView.load(strImage: String, isCenterCrop: Boolean = true) {
     }
 }
 
-fun AppCompatEditText.setEmojiText(str: String) {
-    this.setText(StringEscapeUtils.unescapeJava(str))
-}
-
 fun Fragment.removeFromFullScreen() {
     val window = requireActivity().window
     WindowCompat.setDecorFitsSystemWindows(window, true)
@@ -484,22 +474,6 @@ fun getDatePickerDialogFrom(
         onDateSelected(formatted, it)
     }
     return materialDatePicker
-}
-
-fun Fragment.requirePermission(permissionName: String, callback: (Boolean) -> Unit) {
-    val request = requireActivity().permissionsBuilder(permissionName).build()
-    request.onAccepted {
-        callback(true)
-    }.onDenied {
-
-    }.onPermanentlyDenied {
-        Log.d("Hello Yatri", "Permanent Denied")
-        callback(false)
-
-    }.onShouldShowRationale { _, nonce ->
-        nonce.use()
-    }
-    request.send()
 }
 
 fun Button.enableButton(isEnable: Boolean) {
