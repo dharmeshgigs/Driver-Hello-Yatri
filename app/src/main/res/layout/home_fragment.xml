@@ -474,7 +474,92 @@
 
         </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout
+            android:id="@+id/constraintLayoutRideRequest2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:elevation="@dimen/_1sdp"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingVertical="@dimen/_10sdp"
+            app:backgroundColor="@color/white"
+            app:cornerAll="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="@id/guideLineEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineStart"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayoutRideRequest">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewYouAreOffline2"
+                style="@style/TextViewLufgaRegularGrey13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="@string/label_you_are_offline"
+                android:textColor="@color/hintColor"
+                android:textSize="@dimen/_9ssp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewLabelTurnOnAndFindRide2"
+                style="@style/TextViewLufgaMedium.18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/_20sdp"
+                android:text="@string/label_turn_on_go_online_to_find_ride_request"
+                android:textColor="@color/black"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toStartOf="@id/textViewRideRequestOnlineOfflineStatus2"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewYouAreOffline2" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewRideRequestOnlineOfflineStatus2"
+                style="@style/TextViewLufgaRegularBlack15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_top_round_rect_home_blue"
+                android:elevation="@dimen/_1sdp"
+                android:paddingHorizontal="@dimen/_13sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:text="@string/label_go_online"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/textViewLabelTurnOnAndFindRide2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textViewLabelTurnOnAndFindRide2"
+                app:layout_constraintTop_toTopOf="@id/textViewLabelTurnOnAndFindRide2" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewLabelTotalTripsWaiting2"
+                style="@style/TextViewLufgaRegularBlack15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/_2sdp"
+                android:text="@string/label_dummy_20_trips_are_in_waiting"
+                android:textColor="@color/homeBgBlueColor"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewLabelTurnOnAndFindRide2" />
+
+        </com.helloyatri.utils.roundedconstraint.RoundedConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textViewScheduledPickups"
             style="@style/TextViewLufgaMedium.18"
             android:layout_width="wrap_content"

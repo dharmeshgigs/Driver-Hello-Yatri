@@ -246,14 +246,25 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             resource?.let {
                 when (resource.status) {
                     Status.SUCCESS -> {
-                        if(apiViewModel.scheduleTrips.size > 3) {
-                            adapterPickUp.setItems(apiViewModel.scheduleTrips.subList(0,3),1)
+                        if(apiViewModel.scheduleTrips.size > 0) {
+                            binding.textViewScheduledPickups.visible()
+                            binding.recyclerViewPickUps.visible()
+                            binding.textViewLabelViewAll.visible()
+                            if(apiViewModel.scheduleTrips.size > 3) {
+                                adapterPickUp.setItems(apiViewModel.scheduleTrips.subList(0,3),1)
+                            } else {
+                                adapterPickUp.setItems(apiViewModel.scheduleTrips,1)
+                            }
                         } else {
-                            adapterPickUp.setItems(apiViewModel.scheduleTrips,1)
+                            binding.textViewScheduledPickups.gone()
+                            binding.recyclerViewPickUps.gone()
+                            binding.textViewLabelViewAll.gone()
                         }
                     }
                     else -> {
-
+                        binding.textViewScheduledPickups.gone()
+                        binding.recyclerViewPickUps.gone()
+                        binding.textViewLabelViewAll.gone()
                     }
                 }
             }
