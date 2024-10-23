@@ -379,7 +379,7 @@ class PickUpSpotFragment : BaseFragment<FragmentPickUpSpotBinding>(), OnMapReady
                         Request(
                             trip_id = tripRiderModel?.tripDetails?.id?.toString() ?: "0",
                             cancel_reason = it
-                        )
+                        ),"Trip"
                     )
                 }
             }, cencellationDataList).show(

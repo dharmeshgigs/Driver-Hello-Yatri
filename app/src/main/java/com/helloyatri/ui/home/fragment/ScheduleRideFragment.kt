@@ -66,6 +66,29 @@ class ScheduleRideFragment : BaseFragment<FragmentScheduleRideBinding>() {
                 Status.LOADING -> showLoader()
             }
         }
+
+        apiViewModel.cancleRideScheduleLiveData.observe(this) { resource ->
+            resource?.let {
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideLoader()
+                        apiViewModel.cancleRideScheduleLiveData.value = null
+                    }
+
+                    Status.ERROR -> {
+                        hideLoader()
+                        val error =
+                            resource.message ?: getString(resource.resId!!)
+                        showErrorMessage(error)
+                        apiViewModel.cancleRideScheduleLiveData.value = null
+                    }
+
+                    Status.LOADING -> {
+                        showLoader()
+                    }
+                }
+            }
+        }
     }
 
     private fun setAdapter() = with(binding) {
@@ -87,7 +110,8 @@ class ScheduleRideFragment : BaseFragment<FragmentScheduleRideBinding>() {
                                     Request(
                                         trip_id = item.id.fareAmount(),
                                         cancel_reason = it
-                                    )
+                                    ),
+                                    "Schedule"
                                 )
                             }
                         }, cencellationDataList).show(

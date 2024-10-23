@@ -415,7 +415,7 @@ class NavPickUpSpotFragment : BaseFragment<FragmentNavPickUpSpotBinding>(), OnMa
                         Request(
                             trip_id = tripRiderModel?.tripDetails?.id?.toString() ?: "0",
                             cancel_reason = it
-                        )
+                        ),"Trip"
                     )
                 }
             }, cencellationDataList).show(

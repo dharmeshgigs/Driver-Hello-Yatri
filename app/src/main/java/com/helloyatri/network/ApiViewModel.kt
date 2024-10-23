@@ -363,10 +363,24 @@ class ApiViewModel @Inject constructor(private val authRepo: AuthRepo) : ParentV
     }
 
     val cancleRideLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
-    fun cancelRide(request: Request) {
-        run {
-            cancleRideLiveData.value = Resource.loading()
-            cancleRideLiveData.value = authRepo.cancelRide(request)
+    val cancleRideHomeLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    val cancleRideScheduleLiveData by lazy { MutableLiveData<Resource<JsonObject>>() }
+    fun cancelRide(request: Request, screen: String) {
+        if(screen.equals("home", true)) {
+            run {
+                cancleRideHomeLiveData.value = Resource.loading()
+                cancleRideHomeLiveData.value = authRepo.cancelRide(request)
+            }
+        } else if(screen.equals("Schedule", true)) {
+            run {
+                cancleRideScheduleLiveData.value = Resource.loading()
+                cancleRideScheduleLiveData.value = authRepo.cancelRide(request)
+            }
+        } else {
+            run {
+                cancleRideLiveData.value = Resource.loading()
+                cancleRideLiveData.value = authRepo.cancelRide(request)
+            }
         }
     }
 

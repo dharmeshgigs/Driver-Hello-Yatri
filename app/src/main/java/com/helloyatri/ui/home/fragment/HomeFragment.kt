@@ -290,12 +290,12 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
             }
         }
 
-        apiViewModel.cancleRideLiveData.observe(this) { resource ->
+        apiViewModel.cancleRideHomeLiveData.observe(this) { resource ->
             resource?.let {
                 when (resource.status) {
                     Status.SUCCESS -> {
                         hideLoader()
-                        apiViewModel.cancleRideLiveData.value = null
+                        apiViewModel.cancleRideHomeLiveData.value = null
                         getScheduleTrips()
                     }
 
@@ -304,7 +304,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                         val error =
                             resource.message ?: getString(resource.resId!!)
                         showErrorMessage(error)
-                        apiViewModel.cancleRideLiveData.value = null
+                        apiViewModel.cancleRideHomeLiveData.value = null
                     }
 
                     Status.LOADING -> {
@@ -476,7 +476,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>() {
                                 Request(
                                     trip_id = item.id.fareAmount(),
                                     cancel_reason = it
-                                )
+                                ),"home"
                             )
                         }
                     }, cencellationDataList).show(
